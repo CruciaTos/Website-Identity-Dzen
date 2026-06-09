@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionIndex } from "@/components/ui/SectionIndex";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { StaggerContainer, StaggerItem } from "@/components/ui/StaggerContainer";
+import { IntegrationLogoMarquee } from "@/components/sections/IntegrationMarquee";
 import {
   RectGridIcon,
   ClockCircleIcon,
@@ -68,17 +69,19 @@ export function Systems() {
     >
       <Container>
         {/* Header */}
-        <FadeIn className="mb-20">
+        <FadeIn className="mb-12">
           <SectionIndex number="05" tag="Integration Catalogue" className="mb-6" />
           <div className="flex items-end justify-between gap-12 max-md:flex-col">
             <h2 className="font-serif text-display-3 font-normal text-stone-100">
               Systems we connect.
             </h2>
-            <p className="font-sans text-body font-light text-stone-400 leading-[1.7] max-w-[360px]">
-              
-            </p>
           </div>
+          
         </FadeIn>
+
+        <div className="mb-20">
+          <IntegrationLogoMarquee maxWidth={1200} fade={30} />
+        </div>
 
         {/* Systems grid */}
         <StaggerContainer
@@ -91,6 +94,7 @@ export function Systems() {
             </StaggerItem>
           ))}
         </StaggerContainer>
+        
       </Container>
     </section>
   );

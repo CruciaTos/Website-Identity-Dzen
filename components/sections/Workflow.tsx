@@ -64,7 +64,7 @@ export function Workflow() {
             </div>
             <div className="max-w-[360px] flex-shrink-0">
               <p className="font-sans text-body font-light text-stone-400 leading-[1.7]">
-                We don&apos;t replace your systems. We make them intelligent. Our integration layer sits between your existing tools — adding orchestration, automation, and AI decision-making without disrupting what already works.
+                
               </p>
             </div>
           </div>

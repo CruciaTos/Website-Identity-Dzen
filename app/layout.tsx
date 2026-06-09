@@ -3,6 +3,7 @@ import { DM_Sans, DM_Serif_Display, IBM_Plex_Mono } from "next/font/google";
 import { siteMetadata, structuredData } from "@/lib/metadata";
 import "@/app/globals.css";
 
+
 // ─── Font loading ─────────────────────────────────────────────────────────────
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -41,6 +42,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
         />
       </head>
       <body className="bg-bg-primary text-stone-100 font-sans font-light leading-relaxed overflow-x-hidden antialiased">

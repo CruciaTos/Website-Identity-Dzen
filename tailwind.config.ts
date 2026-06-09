@@ -63,6 +63,10 @@ const config: Config = {
           "0%":   { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        "marquee-reverse": {
+          "0%":   { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0)" },
+        },
         "pulse-dot": {
           "0%, 100%": { opacity: "1" },
           "50%":      { opacity: "0.3" },
@@ -73,9 +77,11 @@ const config: Config = {
         },
       },
       animation: {
-        ticker:      "ticker 30s linear infinite",
-        "pulse-dot": "pulse-dot 2s ease-in-out infinite",
-        "fade-in":   "fade-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+        ticker:            "ticker 30s linear infinite",
+        "marquee":         "ticker 40s linear infinite",
+        "marquee-reverse": "marquee-reverse 38s linear infinite",
+        "pulse-dot":       "pulse-dot 2s ease-in-out infinite",
+        "fade-in":         "fade-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards",
       },
 
       // ─── Transitions ──────────────────────────────────────────
