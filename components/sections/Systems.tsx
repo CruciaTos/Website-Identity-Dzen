@@ -75,7 +75,7 @@ export function Systems() {
               Systems we connect.
             </h2>
             <p className="font-sans text-body font-light text-stone-400 leading-[1.7] max-w-[360px]">
-              We have pre-built connectors, integration patterns, and deployment experience across the most common enterprise platforms. New connectors built in 3–5 days.
+              
             </p>
           </div>
         </FadeIn>
