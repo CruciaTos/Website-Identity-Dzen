@@ -1,58 +1,141 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { LogoMark } from "@/components/ui/Icons";
-import { Badge } from "@/components/ui/Badge";
-import { Container } from "@/components/ui/Container";
 import { FOOTER_LINKS, COMPLIANCE_BADGES } from "@/lib/data";
 
-export function Footer() {
+// ── Inline sub-components (no extra files needed) ──────────────────────────
+
+function MagLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  function onMove(e: React.MouseEvent) {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width / 2) * 0.22;
+    const y = (e.clientY - r.top - r.height / 2) * 0.22;
+    el.style.transform = `translate(${x}px,${y}px)`;
+  }
+  function onLeave() {
+    if (ref.current) ref.current.style.transform = "";
+  }
+
   return (
-    <footer className="bg-bg-panel border-t border-border pt-16 pb-10">
-      <Container>
-        {/* Top grid */}
-        <div className="grid grid-cols-[3fr_1fr_1fr_1fr_1fr] gap-16 pb-16 border-b border-border max-[1100px]:grid-cols-2 max-[1100px]:gap-10 max-[600px]:grid-cols-1">
-          {/* Brand */}
-          <div>
-            <Link
-              href="/"
-              aria-label="DZen home"
-              className="inline-flex items-center gap-[10px] no-underline"
+    <a
+      ref={ref}
+      href={href}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="
+        relative inline-block font-sans text-[12px] font-light text-stone-400 no-underline
+        transition-colors duration-200 hover:text-stone-100
+        after:content-[''] after:absolute after:left-0 after:bottom-[-2px]
+        after:h-px after:w-0 after:bg-[#c9a96e]
+        after:transition-[width] after:duration-300 after:ease-[cubic-bezier(.65,0,.35,1)]
+        hover:after:w-full
+      "
+    >
+      {children}
+    </a>
+  );
+}
+
+// ── Main footer ─────────────────────────────────────────────────────────────
+
+export function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+  const orbRef = useRef<HTMLDivElement>(null);
+
+  // Cursor orb + marquee lighting
+  useEffect(() => {
+    const footer = footerRef.current;
+    const orb = orbRef.current;
+    if (!footer || !orb) return;
+
+    function onMove(e: MouseEvent) {
+      orb!.style.left = `${e.clientX}px`;
+      orb!.style.top = `${e.clientY}px`;
+      orb!.style.opacity = "1";
+
+      const items = footer!.querySelectorAll<HTMLElement>(".marquee-item");
+      items.forEach((el) => {
+        const b = el.getBoundingClientRect();
+        const cx = b.left + b.width / 2;
+        const cy = b.top + b.height / 2;
+        const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+        el.classList.toggle("lit", dist < 260);
+      });
+    }
+
+    function onLeave() {
+      orb!.style.opacity = "0";
+      footer!.querySelectorAll(".marquee-item").forEach((el) => el.classList.remove("lit"));
+    }
+
+    footer.addEventListener("mousemove", onMove);
+    footer.addEventListener("mouseleave", onLeave);
+    return () => {
+      footer.removeEventListener("mousemove", onMove);
+      footer.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  // Scroll fade-up
+  useEffect(() => {
+    const els = footerRef.current?.querySelectorAll<HTMLElement>(".fade-up") ?? [];
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add("visible"); io.unobserve(e.target); } }),
+      { threshold: 0.15 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <>
+      {/* floating glow orb — fixed so it tracks across viewport */}
+      <div
+        ref={orbRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed z-0 w-[320px] h-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 transition-opacity duration-400"
+        style={{ background: "radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%)" }}
+      />
+
+      <footer
+        ref={footerRef}
+        className="relative bg-[#0f0e0d] border-t border-white/[.07] overflow-hidden"
+      >
+        {/* ── CTA strip ────────────────────────────────────── */}
+        <div className="fade-up text-center px-6 py-20 border-b border-white/[.07]">
+          <p className="font-mono text-[10px] tracking-[.18em] uppercase text-[#c9a96e] mb-6">
+            Ready to connect your stack?
+          </p>
+          <h2 className="text-[clamp(2rem,5vw,3.75rem)] font-bold tracking-[-0.025em] text-stone-100 leading-[1.1] mb-8">
+            Your systems,<br />working together.
+          </h2>
+          <button className="group relative inline-flex items-center gap-2.5 border border-white/[.07] text-stone-400 font-mono text-[11px] tracking-[.1em] uppercase px-7 py-[14px] overflow-hidden transition-[color,border-color] duration-300 hover:text-[#0f0e0d] hover:border-[#c9a96e]">
+            <span className="absolute inset-0 bg-[#c9a96e] scale-x-0 origin-left transition-transform duration-400 ease-[cubic-bezier(.65,0,.35,1)] group-hover:scale-x-100" />
+            <span className="relative z-10">Start a conversation</span>
+            <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        {/* ── Link grid ────────────────────────────────────── */}
+        <div className="grid grid-cols-4 gap-0 px-12 py-16 border-b border-white/[.07] max-[1100px]:grid-cols-2 max-[1100px]:gap-10 max-[1100px]:px-6 max-[600px]:grid-cols-1">
+          {Object.entries(FOOTER_LINKS).map(([title, links], colIdx) => (
+            <div
+              key={title}
+              className="fade-up px-6"
+              style={{ transitionDelay: `${(colIdx + 1) * 80}ms` }}
             >
-              <div className="w-7 h-7 bg-accent flex items-center justify-center flex-shrink-0">
-                <LogoMark className="w-[14px] h-[14px]" />
-              </div>
-              <span className="font-sans text-[15px] font-medium tracking-[0.06em] uppercase text-stone-100">
-                DZen
-              </span>
-            </Link>
-
-            <p className="font-sans text-[13px] font-light text-stone-400 leading-[1.7] mt-4 max-w-[280px]">
-              Intelligent workflow integration for mid-market and enterprise businesses. Your systems, working together.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-2">
-              {COMPLIANCE_BADGES.map((badge) => (
-                <Badge key={badge} variant="muted">
-                  {badge}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {/* Link columns */}
-          {Object.entries(FOOTER_LINKS).map(([title, links]) => (
-            <div key={title}>
-              <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-stone-500 mb-5">
+              <div className="font-mono text-[9px] tracking-[.16em] uppercase text-stone-600 mb-5">
                 {title}
               </div>
-              <ul className="list-none flex flex-col gap-[10px]" role="list">
+              <ul className="list-none flex flex-col gap-2" role="list">
                 {links.map((link) => (
                   <li key={link}>
-                    <a
-                      href="#"
-                      className="font-sans text-[13px] font-light text-stone-400 no-underline hover:text-stone-100 transition-colors duration-200"
-                    >
-                      {link}
-                    </a>
+                    <MagLink href="#">{link}</MagLink>
                   </li>
                 ))}
               </ul>
@@ -60,9 +143,9 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex items-center justify-between pt-8 flex-wrap gap-4">
-          <span className="font-mono text-[10px] tracking-[0.08em] text-stone-500">
+        {/* ── Bottom bar (moved back inside footer) ────────── */}
+        <div className="flex items-center justify-between px-12 py-6 flex-wrap gap-4 max-[600px]:px-6 max-[600px]:flex-col max-[600px]:items-start">
+          <span className="font-mono text-[10px] tracking-[.08em] text-stone-600">
             © 2025 DZen, Inc. All rights reserved.
           </span>
           <div className="flex gap-6">
@@ -70,14 +153,41 @@ export function Footer() {
               <a
                 key={item}
                 href="#"
-                className="font-mono text-[10px] tracking-[0.08em] text-stone-500 no-underline hover:text-stone-400 transition-colors duration-200"
+                className="font-mono text-[10px] tracking-[.08em] text-stone-600 no-underline transition-colors duration-200 hover:text-stone-400"
               >
                 {item}
               </a>
             ))}
           </div>
         </div>
-      </Container>
-    </footer>
+
+        {/* ── Marquee at the very bottom (star removed, lit state at 50% opacity) ───── */}
+        <div
+          aria-hidden="true"
+          className="border-t border-white/[.07] overflow-hidden py-10 cursor-default select-none"
+        >
+          <div className="flex whitespace-nowrap animate-marquee">
+            {[...Array(4)].flatMap((_, i) =>
+              ["DZen", "Workflow", "Integration", "Enterprise"].map((word) => (
+                <span
+                  key={`${i}-${word}`}
+                  className="marquee-item text-[clamp(5rem,10vw,8rem)] font-bold tracking-[-0.03em] text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.12)] px-10 transition-all duration-300 [&.lit]:text-stone-100/50 [&.lit]:[-webkit-text-stroke:0px_transparent]"
+                >
+                  {word}
+                </span>
+              ))
+            )}
+          </div>
+        </div>
+      </footer>
+
+      {/* Global styles for marquee animation + fade-up */}
+      <style>{`
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .animate-marquee { animation: marquee 22s linear infinite; }
+        .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+        .fade-up.visible { opacity: 1; transform: none; }
+      `}</style>
+    </>
   );
 }
