@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Custom Selection ─────────────────────────────────────── */
+::selection {
+  background: #8F7860;
+  color: #121416;
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────── */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 2px;
+  background: rgba(216, 211, 203, 0.08);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #8F7860;
+}
+
+/* ─── Noise texture ────────────────────────────────────────── */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* ─── Hero grid background ─────────────────────────────────── */
+.hero-grid-bg {
+  background-image:
+    linear-gradient(rgba(191, 184, 174, 1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(191, 184, 174, 1) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
