@@ -1,4 +1,4 @@
-// File: C:\Soham\Kamachya_Goshti\Website Identity\axion-nextjs\axion\app\layout.tsx
+// File: C:\Soham\Kamachya_Goshti\Website Identity\axion-nextjs\axion\Dzen\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

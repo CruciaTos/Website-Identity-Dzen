@@ -73,6 +73,18 @@ export const structuredData = {
   logo: `${BASE_URL}/logo.png`,
   description:
     "Intelligent workflow integration for mid-market and enterprise businesses.",
+  founder: [
+    {
+      "@type": "Person",
+      name: "Soham Boridkar",
+      telephone: "+919321559182",
+    },
+    {
+      "@type": "Person",
+      name: "Smit Mhatre",
+      telephone: "+919324976982",
+    },
+  ],
   contactPoint: {
     "@type": "ContactPoint",
     email: "hello@DZen.io",
