@@ -14,6 +14,7 @@ import { CTA }                 from "@/components/sections/CTA";
 
 
 export default function HomePage() {
+  
   return (
     <>
       <Navbar />
@@ -22,10 +23,10 @@ export default function HomePage() {
         <Hero />
         <Ticker />
         <Credibility />
-        <Workflow />
+        <Systems />
         <CapabilitiesSection />
         <CaseStudies />
-        <Systems />
+        <Workflow />
         <Process />
         <Testimonials />
         <Security />

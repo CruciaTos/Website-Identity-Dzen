@@ -51,3 +51,6 @@ node_modules
 /.next
 /.next
 /.next/cache
+/.next
+*.gz
+/.next/cache/webpack/client-development

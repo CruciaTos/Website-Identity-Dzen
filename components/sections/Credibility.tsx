@@ -25,7 +25,7 @@ export function Credibility() {
             </div>
             <div className="max-w-[380px] flex-shrink-0">
               <p className="font-sans text-body font-light text-stone-400 leading-[1.7]">
-                DZen works exclusively with mid-market and enterprise companies where operational efficiency, data integrity, and system reliability are non-negotiable. We measure success in margins, cycle times, and audit trails — not demos.
+                
               </p>
             </div>
           </div>

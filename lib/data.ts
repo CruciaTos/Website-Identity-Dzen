@@ -35,28 +35,28 @@ export const TICKER_ITEMS: string[] = [
 // ─── Founding principles (replaces fabricated stats) ─────────────────────────
 export const STATS: Stat[] = [
   {
-    value: "14",
-    accent: "d",
-    label: "Target time from discovery to first production deployment",
-    description: "Time to value",
-  },
-  {
-    value: "Zero",
+    value:"Roburst",
     accent: "",
-    label: "Downtime deployments — staged rollout with full rollback capability",
-    description: "Deployment standard",
+    label: "unified workflows across all your systems with operational stability",
+    description: "System reliability",
   },
   {
-    value: "100",
-    accent: "%",
-    label: "Of automated decisions are logged, auditable, and human-reviewable",
-    description: "Auditability",
-  },
-  {
-    value: "SOC 2",
+    value: "Agentic",
     accent: "",
-    label: "Security and governance baseline for every engagement, from day one",
-    description: "Compliance standard",
+    label: "integrated optimisations to remove redundant workflows",
+    description: "Efficiency gain",
+  },
+  {
+    value: "Governed",
+    accent: "",
+    label: "reactive system to handle criticalities with human oversight",
+    description: "Human Authority",
+  },
+  {
+    value: "Built to Scale",
+    accent: "",
+    label: "for parallel growth with long term support and optimization",
+    description: "Scalability",
   },
 ];
 
