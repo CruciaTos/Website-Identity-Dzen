@@ -53,9 +53,9 @@ export const STATS: Stat[] = [
     description: "Human Authority",
   },
   {
-    value: "Built to Scale",
+    value: "Scalable",
     accent: "",
-    label: "for parallel growth with long term support and optimization",
+    label: "built for parallel growth with long term support and optimization",
     description: "Scalability",
   },
 ];

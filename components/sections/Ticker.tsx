@@ -6,7 +6,7 @@ export function Ticker() {
 
   return (
     <div
-      className="bg-bg-panel border-t border-border border-b py-[14px] overflow-hidden"
+      className="bg-bg-panel border-t border-border border-b py-[24px] overflow-hidden"
       role="marquee"
       aria-label="DZen services ticker"
     >
@@ -17,12 +17,12 @@ export function Ticker() {
         {items.map((item, i) => (
           <div
             key={`${item}-${i}`}
-            className="inline-flex items-center gap-6 px-8 flex-shrink-0"
+            className="inline-flex items-center gap-8 px-10 flex-shrink-0"
           >
-            <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-stone-500">
+            <span className="font-sans text-[13px] tracking-[0.14em] uppercase text-stone-200 font-semibold">
               {item}
             </span>
-            <div className="w-[3px] h-[3px] bg-accent flex-shrink-0" aria-hidden="true" />
+            <div className="w-[4px] h-[4px] bg-accent flex-shrink-0" aria-hidden="true" />
           </div>
         ))}
       </div>

@@ -423,7 +423,7 @@ const LOGOS: LogoEntry[] = [
 function LogoItem({ label, component: Logo }: Omit<LogoEntry, "id">) {
   return (
     <div
-      className="flex-shrink-0 flex items-center justify-center px-10 opacity-40 hover:opacity-90 transition-opacity duration-800 [&>svg]:!h-16"
+      className="flex-shrink-0 flex items-center justify-center px-12 opacity-100 [&>svg]:!h-20"
       aria-label={label}
       title={label}
     >
@@ -521,13 +521,13 @@ export function IntegrationMarquee() {
     <section
       id="integrations"
       aria-label="Systems we connect"
-      className="py-[80px] bg-bg-secondary border-t border-border overflow-hidden"
+      className="py-[110px] bg-bg-secondary border-t border-border overflow-hidden"
     >
       {/* Heading still uses the regular Container with padding */}
-      <Container className="mb-12">
+      <Container className="mb-16">
         <FadeIn>
-          <SectionIndex number="05" tag="Integration Catalogue" className="mb-4" />
-          <p className="font-sans text-body font-light text-stone-400 leading-[1.7] max-w-[440px]">
+          <SectionIndex number="02" tag="Integration Catalogue" className="mb-4" />
+          <p className="font-sans text-lg font-light text-stone-400 leading-[1.7] max-w-[440px]">
             Pre-built connectors across every major enterprise platform.
           </p>
         </FadeIn>

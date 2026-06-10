@@ -193,19 +193,19 @@ function AuditVisual({ inView }: { inView: boolean }) {
   ];
   return (
     <div className="p-6 h-full flex flex-col justify-center gap-3">
-      <p className="font-mono text-[9px] tracking-[.14em] uppercase mb-1" style={{ color: GOLD_MID }}>Automation Potential Score</p>
+      <p className="font-sans text-[11px] tracking-[.14em] uppercase mb-2 font-semibold" style={{ color: GOLD_MID }}>Automation Potential Score</p>
       {rows.map((r, i) => (
-        <motion.div key={r.name} className="flex items-center gap-3"
+          <motion.div key={r.name} className="flex items-center gap-3"
           initial={{ opacity: 0, x: -8 }} animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.45, delay: 0.15 + i * 0.08, ease: EASE_OUT }}>
-          <span className="font-mono text-[9px] text-stone-500 w-4 flex-shrink-0">{String(i + 1).padStart(2, "0")}</span>
+          <span className="font-sans text-[11px] text-stone-400 w-6 flex-shrink-0">{String(i + 1).padStart(2, "0")}</span>
           <div className="flex-1 h-[2px] rounded-full bg-ink/[.08] overflow-hidden">
             <motion.div className="h-full rounded-full"
               style={{ background: `linear-gradient(90deg, ${GOLD}, rgba(143,120,96,0.5))`, transformOrigin: "left" }}
               initial={{ scaleX: 0 }} animate={inView ? { scaleX: r.score } : {}}
               transition={{ duration: 0.7, delay: 0.3 + i * 0.09, ease: EASE_OUT }} />
           </div>
-          <span className="font-mono text-[9px] text-stone-400 whitespace-nowrap w-28 text-right truncate">{r.name}</span>
+          <span className="font-sans text-[12px] text-stone-300 whitespace-nowrap w-32 text-right truncate">{r.name}</span>
         </motion.div>
       ))}
     </div>
@@ -222,13 +222,13 @@ function BlueprintVisual({ inView }: { inView: boolean }) {
   const maxHours = 14;
   return (
     <div className="p-5 h-full flex flex-col justify-center gap-2.5">
-      <p className="font-mono text-[9px] tracking-[.14em] uppercase mb-1" style={{ color: GOLD_MID }}>Impact Ranking</p>
+      <p className="font-sans text-[11px] tracking-[.14em] uppercase mb-2 font-semibold" style={{ color: GOLD_MID }}>Impact Ranking</p>
       {items.map((item, i) => (
         <motion.div key={item.label} initial={{ opacity: 0, y: 6 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.4, delay: 0.1 + i * 0.1, ease: EASE_OUT }}>
           <div className="flex items-center gap-3 mb-1">
-            <span className="font-mono text-[9px] text-stone-400 flex-1">{item.label}</span>
-            <span className="font-mono text-[8px] px-1.5 py-px rounded-sm"
+            <span className="font-sans text-[12px] text-stone-300 flex-1">{item.label}</span>
+            <span className="font-sans text-[10px] px-2 py-px rounded-sm font-semibold"
               style={{ color: item.priority === "HIGH" ? GOLD : item.priority === "DESIGN" ? "rgba(143,120,96,0.7)" : INK_DIM, backgroundColor: item.priority === "HIGH" ? GOLD_DIM : "rgba(18,20,22,0.04)" }}>
               {item.hours ? `${item.hours}h/wk` : item.priority}
             </span>
@@ -256,7 +256,7 @@ function BuildVisual({ inView }: { inView: boolean }) {
   ];
   return (
     <div className="p-6 h-full flex flex-col justify-center gap-2">
-      <p className="font-mono text-[9px] tracking-[.14em] uppercase mb-1" style={{ color: GOLD_MID }}>Architecture Stack</p>
+      <p className="font-sans text-[11px] tracking-[.14em] uppercase mb-1 font-semibold" style={{ color: GOLD_MID }}>Architecture Stack</p>
       {layers.map(({ label, sub, opacity }, i) => (
         <motion.div key={label} className="relative flex items-center gap-3 px-3 py-2.5 rounded-sm overflow-hidden"
           style={{ background: `rgba(143,120,96,${opacity * 0.055})` }}
@@ -264,8 +264,8 @@ function BuildVisual({ inView }: { inView: boolean }) {
           transition={{ duration: 0.5, delay: 0.12 + i * 0.1, ease: EASE_OUT }}>
           <div className="w-[2px] h-7 rounded-full flex-shrink-0" style={{ backgroundColor: `rgba(143,120,96,${opacity})` }} />
           <div>
-            <div className="font-mono text-[10px] tracking-[.06em] uppercase" style={{ color: `rgba(143,120,96,${opacity})` }}>{label}</div>
-            <div className="font-mono text-[8px] text-stone-500 mt-0.5">{sub}</div>
+            <div className="font-sans text-[11px] tracking-[.06em] uppercase" style={{ color: `rgba(143,120,96,${opacity})` }}>{label}</div>
+            <div className="font-sans text-[10px] text-stone-500 mt-0.5">{sub}</div>
           </div>
         </motion.div>
       ))}
@@ -282,16 +282,16 @@ function DeployVisual({ inView }: { inView: boolean }) {
     { time: "09:18", event: "Zero downtime confirmed", pulse: true },
   ];
   return (
-    <div className="p-5 h-full flex flex-col justify-center gap-1.5 font-mono">
-      <p className="text-[9px] tracking-[.14em] uppercase mb-2" style={{ color: GOLD_MID }}>Deployment Log</p>
+    <div className="p-6 h-full flex flex-col justify-center gap-2 font-sans">
+      <p className="text-[11px] tracking-[.14em] uppercase mb-2 font-semibold" style={{ color: GOLD_MID }}>Deployment Log</p>
       {events.map((e, i) => (
         <motion.div key={e.event} className="flex items-center gap-2.5 text-[10px]"
           initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.3, delay: 0.2 + i * 0.13 }}>
-          <span className="text-stone-500 w-9 flex-shrink-0 tabular-nums">{e.time}</span>
-          <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0")}
+          <span className="text-stone-400 w-12 flex-shrink-0 tabular-nums">{e.time}</span>
+          <span className={cn("w-2 h-2 rounded-full flex-shrink-0")}
             style={{ backgroundColor: e.ok || e.pulse ? GOLD : INK_FAINT, opacity: e.pulse ? 1 : 0.55 }} />
-          <span className="text-stone-400">{e.event}</span>
+          <span className="text-stone-300 text-[13px]">{e.event}</span>
         </motion.div>
       ))}
     </div>
@@ -307,13 +307,13 @@ function SupportVisual({ inView }: { inView: boolean }) {
   ];
   return (
     <div className="p-6 h-full flex flex-col justify-center gap-3.5">
-      <p className="font-mono text-[9px] tracking-[.14em] uppercase mb-0.5" style={{ color: GOLD_MID }}>Live System Health</p>
+      <p className="font-sans text-[11px] tracking-[.14em] uppercase mb-0.5 font-semibold" style={{ color: GOLD_MID }}>Live System Health</p>
       {metrics.map(({ label, value, bar }, i) => (
         <motion.div key={label} initial={{ opacity: 0, x: -8 }} animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.4, delay: 0.12 + i * 0.1, ease: EASE_OUT }}>
           <div className="flex items-center justify-between mb-1">
-            <span className="font-mono text-[9px] text-stone-400">{label}</span>
-            <span className="font-mono text-[10px]" style={{ color: GOLD }}>{value}</span>
+            <span className="font-sans text-[11px] text-stone-400">{label}</span>
+            <span className="font-sans text-[12px] font-semibold" style={{ color: GOLD }}>{value}</span>
           </div>
           <div className="h-[2px] rounded-full bg-ink/[.08] overflow-hidden">
             <motion.div className="h-full rounded-full"
@@ -338,7 +338,7 @@ function ScaleVisual({ inView }: { inView: boolean }) {
   ];
   return (
     <div className="p-6 h-full flex flex-col">
-      <p className="font-mono text-[9px] tracking-[.14em] uppercase mb-3" style={{ color: GOLD_MID }}>Automation Coverage</p>
+      <p className="font-sans text-[11px] tracking-[.14em] uppercase mb-3 font-semibold" style={{ color: GOLD_MID }}>Automation Coverage</p>
       <div className="flex items-end gap-2 flex-1 pb-1">
         {weeks.map(({ label, v }, i) => (
           <div key={label} className="flex-1 flex flex-col items-center gap-1.5 justify-end h-full">
@@ -351,7 +351,7 @@ function ScaleVisual({ inView }: { inView: boolean }) {
       </div>
       <div className="flex gap-2 mt-2">
         {weeks.map(({ label }) => (
-          <div key={label} className="flex-1 text-center font-mono text-[7.5px] text-stone-500">{label}</div>
+          <div key={label} className="flex-1 text-center font-sans text-[10px] text-stone-500">{label}</div>
         ))}
       </div>
     </div>
@@ -402,23 +402,23 @@ function PhaseBlock({ phase, phaseIndex, onVisible }: { phase: Phase; phaseIndex
             initial={{ opacity: 0, y: 18 }}
             animate={contentInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.55, ease: EASE_OUT }}>
-            <p className="font-mono text-[8px] tracking-[.22em] uppercase mb-4" style={{ color: "rgba(143,120,96,0.75)" }}>
+            <p className="font-sans text-[9px] tracking-[.22em] uppercase mb-4 font-semibold" style={{ color: "rgba(143,120,96,0.85)" }}>
               Phase {phase.index}
             </p>
             <h3 className="text-[clamp(1.8rem,3.4vw,2.75rem)] font-bold tracking-[-0.03em] text-stone-100 leading-[1.07] mb-5">
               {phase.title}
             </h3>
-            <p className="text-[14px] font-light leading-[1.75] max-w-[420px]" style={{ color: INK_DIM }}>
+            <p className="text-[16px] font-normal leading-[1.6] max-w-[560px] text-stone-300">
               {PHASE_HOOKS[phaseIndex]}
             </p>
             <div className="flex flex-wrap gap-2 mt-8">
               {phase.items.map((item) => (
                 <span key={item.name}
-                  className="font-mono text-[9.5px] tracking-[.06em] px-3 py-1.5 rounded-sm transition-colors duration-200"
+                  className="font-sans text-[12px] tracking-[.04em] px-3 py-2 rounded-sm transition-colors duration-200 font-medium"
                   style={{
-                    border: "1px solid rgba(18,20,22,0.10)",
-                    color: INK_DIM,
-                    background: "rgba(250,250,248,0.55)",
+                    border: "1px solid rgba(18,20,22,0.12)",
+                    color: "rgba(18,20,22,0.65)",
+                    background: "rgba(250,250,248,0.85)",
                   }}>
                   {item.name}
                 </span>
@@ -500,13 +500,13 @@ function TimelineNav({ activeIndex }: { activeIndex: number }) {
                     <path d="M1 3L3 5L7 1" stroke={GOLD} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ) : (
-                  <span className={cn("font-mono text-[8px] transition-colors duration-300", isActive ? "text-accent" : "text-stone-500 group-hover:text-stone-400")}>
+                  <span className={cn("font-sans text-[9px] transition-colors duration-300", isActive ? "text-accent" : "text-stone-500 group-hover:text-stone-400")}>
                     {phase.index}
                   </span>
                 )}
               </div>
               <span className={cn(
-                "font-mono text-[7px] tracking-[.1em] uppercase mt-1.5 transition-colors duration-300",
+                "font-sans text-[10px] tracking-[.12em] uppercase mt-1.5 transition-colors duration-300",
                 isActive || isPast ? "text-accent" : "text-stone-500 group-hover:text-stone-400"
               )}>
                 {phase.navLabel}
@@ -540,7 +540,7 @@ function ROISection() {
       <motion.div key={playKey} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55, ease: EASE_OUT }}>
         <div className="mb-10">
-          <span className="font-mono text-[8.5px] tracking-[.2em] uppercase" style={{ color: "rgba(143,120,96,0.75)" }}>Outcomes</span>
+          <span className="font-sans text-[9px] tracking-[.2em] uppercase font-semibold" style={{ color: "rgba(143,120,96,0.75)" }}>Outcomes</span>
           <h3 className="text-[clamp(1.6rem,3.2vw,2.4rem)] font-bold tracking-[-0.025em] text-stone-100 leading-[1.08] mt-3">Results compound over time.</h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(18,20,22,0.10)" }}>
@@ -553,7 +553,7 @@ function ROISection() {
               <div className="text-[clamp(1.8rem,3.8vw,2.5rem)] font-bold tracking-[-0.04em] leading-none tabular-nums" style={{ color: GOLD }}>
                 <AnimatedStat value={value} suffix={suffix} inView={inView} />
               </div>
-              <div className="font-mono text-[8px] tracking-[.14em] uppercase text-stone-500 leading-[1.5]">{label}</div>
+              <div className="font-sans text-[9px] tracking-[.14em] uppercase text-stone-500 leading-[1.5]">{label}</div>
             </motion.div>
           ))}
         </div>
@@ -680,7 +680,7 @@ export function CapabilitiesSection() {
               animate={headerInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, ease: EASE_OUT }}
               className="mb-24 max-w-[520px]">
-              <p className="font-mono text-[9px] tracking-[.2em] uppercase mb-5" style={{ color: GOLD }}>How We Work</p>
+              <p className="font-sans text-[10px] tracking-[.2em] uppercase mb-5 font-semibold" style={{ color: GOLD }}>How We Work</p>
               <h2 className="text-[clamp(2rem,4.5vw,3.5rem)] font-bold tracking-[-0.035em] text-stone-100 leading-[1.06] mb-5">
                 From operational chaos<br />to automated clarity.
               </h2>

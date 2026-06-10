@@ -9,10 +9,10 @@ interface SectionHeaderProps {
 export function SectionIndex({ number, tag, className }: SectionHeaderProps) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <span className="font-mono text-[10px] text-stone-500 tracking-widest">
+      <span className="font-mono text-[11px] text-stone-300 tracking-widest font-semibold">
         {number}
       </span>
-      <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-accent px-2 py-1 border border-accent/15 bg-accent/[0.15]">
+      <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-accent px-3 py-1.5 border border-accent/40 bg-accent/[0.25] font-semibold">
         {tag}
       </span>
     </div>

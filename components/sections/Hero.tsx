@@ -95,12 +95,12 @@ export function Hero() {
               </Button>
             </div>
 
-            <div className="flex items-center gap-[10px] text-stone-500" aria-label="Scroll to explore">
+            <div className="flex items-center gap-[10px] text-stone-200" aria-label="Scroll to explore">
               <div
                 className="w-[6px] h-[6px] bg-accent animate-pulse-dot"
                 aria-hidden="true"
               />
-              <span className="font-mono text-[10px] tracking-[0.14em] uppercase">
+              <span className="font-sans text-[11px] tracking-[0.14em] uppercase font-semibold">
                 Scroll to explore
               </span>
             </div>

@@ -55,7 +55,7 @@ export function Workflow() {
         <FadeIn>
           <div className="flex items-start justify-between gap-12 mb-24 max-md:flex-col">
             <div>
-              <SectionIndex number="02" tag="Workflow Architecture" className="mb-6" />
+              <SectionIndex number="05" tag="Workflow Architecture" className="mb-6" />
               <h2 className="font-serif text-display-3 font-normal text-stone-100">
                 Every system you run,
                 <br />

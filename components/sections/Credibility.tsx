@@ -33,13 +33,13 @@ export function Credibility() {
 
         {/* Principles grid */}
         <StaggerContainer
-          className="grid grid-cols-4 border-t border-l border-border max-[900px]:grid-cols-2 max-[480px]:grid-cols-1"
+          className="grid grid-cols-4 auto-rows-fr border-t border-l border-border max-[900px]:grid-cols-2 max-[480px]:grid-cols-1"
           staggerDelay={0.1}
           aria-label="Engagement principles"
         >
           {STATS.map((stat) => (
             <StaggerItem key={stat.description}>
-              <article className="p-12 px-10 border-r border-b border-border relative overflow-hidden transition-colors duration-300 hover:bg-bg-panel group">
+              <article className="p-12 px-10 border-r border-b border-border relative overflow-hidden transition-colors duration-300 hover:bg-bg-panel group h-full flex flex-col">
                 {/* Hover glow */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"

@@ -31,25 +31,25 @@ function SystemCategoryCard({ icon, name, items }: SystemCategory) {
 
   return (
     <motion.article
-      className="bg-bg-panel border border-border p-10 px-9 transition-colors duration-300 cursor-default"
+      className="bg-bg-panel border border-border p-12 px-11 transition-colors duration-300 cursor-default"
       whileHover={{ borderColor: "rgba(18,20,22,0.18)", backgroundColor: "#E6DAC9" }}
     >
-      <div className="w-9 h-9 flex items-center justify-center border border-border-strong text-accent mb-6">
+      <div className="w-11 h-11 flex items-center justify-center border border-border-strong text-accent mb-8">
         <Icon />
       </div>
 
-      <h3 className="font-sans text-[16px] font-normal text-stone-100 mb-4 tracking-[-0.01em]">
+      <h3 className="font-sans text-[20px] font-semibold text-stone-100 mb-6 tracking-[-0.015em]">
         {name}
       </h3>
 
-      <ul className="flex flex-col gap-2 list-none" role="list">
+      <ul className="flex flex-col gap-3 list-none" role="list">
         {items.map((item) => (
           <li
             key={item}
-            className="font-sans text-[13px] font-light text-stone-400 flex items-center gap-[10px]"
+            className="font-sans text-[14px] font-light text-stone-400 flex items-center gap-[10px]"
           >
             <span
-              className="w-[3px] h-[3px] bg-stone-500 flex-shrink-0 inline-block"
+              className="w-[4px] h-[4px] bg-stone-500 flex-shrink-0 inline-block"
               aria-hidden="true"
             />
             {item}
@@ -70,7 +70,7 @@ export function Systems() {
       <Container>
         {/* Header */}
         <FadeIn className="mb-12">
-          <SectionIndex number="05" tag="Integration Catalogue" className="mb-6" />
+          <SectionIndex number="02" tag="Systems" className="mb-6" />
           <div className="flex items-end justify-between gap-12 max-md:flex-col">
             <h2 className="font-serif text-display-3 font-normal text-stone-100">
               Systems we connect.
