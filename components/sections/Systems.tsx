@@ -70,7 +70,7 @@ export function Systems() {
       <Container>
         {/* Header */}
         <FadeIn className="mb-12">
-          <SectionIndex number="05" tag="Integration Catalogue" className="mb-6" />
+          <SectionIndex number="04" tag="Integration Catalogue" className="mb-6" />
           <div className="flex items-end justify-between gap-12 max-md:flex-col">
             <h2 className="font-serif text-display-3 font-normal text-stone-100">
               Systems we connect.

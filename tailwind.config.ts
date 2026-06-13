@@ -10,32 +10,33 @@ const config: Config = {
     extend: {
       // ─── Colors ───────────────────────────────────────────────
       colors: {
-        bg: {
-          primary:   "#EFE6D8",
-          secondary: "#FAFAF8",
-          tertiary:  "#E6DAC9",
-          panel:     "#F7F1E8",
-        },
-        beige: "#EFE6D8",
-        offwhite: "#FAFAF8",
-        ink: "#121416",
-        stone: {
-          100: "#121416",
-          200: "#24211D",
-          300: "#4A4239",
-          400: "#6D6257",
-          500: "#8F7860",
-        },
-        accent: {
-          DEFAULT: "#8F7860",
-          light:   "#A8947E",
-          dim:     "rgba(143, 120, 96, 0.15)",
-        },
-        border: {
-          DEFAULT: "rgba(18, 20, 22, 0.10)",
-          strong:  "rgba(18, 20, 22, 0.18)",
-        },
-      },
+  bg: {
+    primary:   "#121416",
+    secondary: "#0A0B0D",
+    tertiary:  "#1C1E22",
+    panel:     "#191B1F",
+  },
+  beige: "#EFE6D8",
+  offwhite: "#FAFAF8",
+  ink: "#121416",
+  stone: {
+    100: "#F5F1EA",
+    200: "#D9D4CC",
+    300: "#B0A89B",
+    400: "#968D7F",
+    500: "#8F7860",
+    600: "#6D6257",
+  },
+  accent: {
+    DEFAULT: "#8F7860",
+    light:   "#A8947E",
+    dim:     "rgba(143, 120, 96, 0.15)",
+  },
+  border: {
+    DEFAULT: "rgba(216, 211, 203, 0.10)",
+    strong:  "rgba(216, 211, 203, 0.18)",
+  },
+},
 
       // ─── Typography ───────────────────────────────────────────
       fontFamily: {
@@ -78,23 +79,13 @@ const config: Config = {
           "0%":   { opacity: "0", transform: "translateY(24px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        "dzen-marquee-forward": {
-          "0%":   { transform: "translateX(0)" },
-          "100%": { transform: "translateX(calc(-100% / 3))" },
-        },
-        "dzen-marquee-reverse": {
-          "0%":   { transform: "translateX(calc(-100% / 3))" },
-          "100%": { transform: "translateX(0)" },
-        },
       },
       animation: {
-        ticker:                  "ticker 30s linear infinite",
-        "marquee":               "ticker 40s linear infinite",
-        "marquee-reverse":       "marquee-reverse 38s linear infinite",
-        "pulse-dot":             "pulse-dot 2s ease-in-out infinite",
-        "fade-in":               "fade-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards",
-        "dzen-marquee-forward":  "dzen-marquee-forward 65s linear infinite",
-        "dzen-marquee-reverse":  "dzen-marquee-reverse 55s linear infinite",
+        ticker:            "ticker 30s linear infinite",
+        "marquee":         "ticker 40s linear infinite",
+        "marquee-reverse": "marquee-reverse 38s linear infinite",
+        "pulse-dot":       "pulse-dot 2s ease-in-out infinite",
+        "fade-in":         "fade-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards",
       },
 
       // ─── Transitions ──────────────────────────────────────────

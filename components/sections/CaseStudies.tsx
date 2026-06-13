@@ -145,7 +145,7 @@ export function CaseStudies() {
         <FadeIn>
           <div className="flex items-end justify-between mb-20 gap-12 max-md:flex-col max-md:items-start">
             <div>
-              <SectionIndex number="04" tag="Results" className="mb-6" />
+              <SectionIndex number="05" tag="Results" className="mb-6" />
               <h2 className="font-serif text-display-3 font-normal text-stone-100">
                 Outcomes, not promises.
               </h2>

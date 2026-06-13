@@ -42,11 +42,10 @@ export function Process() {
     >
       <Container>
         <FadeIn>
-          <SectionIndex number="06" tag="Engagement Model" className="mb-6" />
+          <SectionIndex number="06" tag="Why Us" className="mb-6" />
           <h2 className="font-serif text-display-3 font-normal text-stone-100 max-w-[640px]">
-            A methodology built for
+            For your every operational need.
             <br />
-            operational environments.
           </h2>
         </FadeIn>
 

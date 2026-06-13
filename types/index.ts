@@ -71,3 +71,33 @@ export interface WorkflowNode {
   label: string;
   name: string;
 }
+
+// ─── Target Areas ────────────────────────────────────────────────────────────
+export interface TargetArea {
+  icon: string;
+  title: string;
+  description: string;
+  painPoints: string[];
+  potential: number; // 0-100, automation-potential score
+}
+
+// ─── Optimisation Comparison ─────────────────────────────────────────────────
+export interface ComparisonMetric {
+  value: string;
+  percent: number; // 0-100, relative bar width
+}
+
+export interface ComparisonRow {
+  label: string;
+  before: ComparisonMetric;
+  after: ComparisonMetric;
+  improvement: string;
+}
+
+// ─── Contact ──────────────────────────────────────────────────────────────────
+export interface ContactDetail {
+  label: string;
+  value: string;
+  href?: string;
+  note?: string;
+}

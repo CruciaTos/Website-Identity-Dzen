@@ -1,39 +1,32 @@
-import { Navbar }              from "@/components/layout/Navbar";
-import { Footer }              from "@/components/layout/Footer";
-import { Hero }                from "@/components/sections/Hero";
-import { Ticker }              from "@/components/sections/Ticker";
-import { Credibility }         from "@/components/sections/Credibility";
-import { Workflow }            from "@/components/sections/Workflow";
-import { CapabilitiesSection } from "@/components/sections/CapabilitiesSection";
-import { CaseStudies }         from "@/components/sections/CaseStudies";
-import { Systems }             from "@/components/sections/Systems";
-import { Process }             from "@/components/sections/Process";
-import { Testimonials }        from "@/components/sections/Testimonials";
-import { Security }            from "@/components/sections/Security";
-import { CTA }                 from "@/components/sections/CTA";
+import { Navbar }                 from "@/components/layout/Navbar";
+import { Footer }                 from "@/components/layout/Footer";
+import { Hero }                   from "@/components/sections/Hero";
+import { Ticker }                 from "@/components/sections/Ticker";
+import { TargetAreas }            from "@/components/sections/TargetAreas";
+import { CapabilitiesSection }    from "@/components/sections/CapabilitiesSection";
+import { Systems }                from "@/components/sections/Systems";
+import { CaseStudies }            from "@/components/sections/CaseStudies";
+import { OptimisationComparison } from "@/components/sections/OptimisationComparison";
+import { Contact }                from "@/components/sections/Contact";
 
 
 export default function HomePage() {
-  
   return (
     <>
       <Navbar />
 
       <main id="main-content">
-        <Hero />
+        <Hero />                    {/* 1. Hero Page */}
         <Ticker />
-        <Credibility />
-        <Systems />
-        <CapabilitiesSection />
-        <CaseStudies />
-        <Workflow />
-        <Process />
-        <Testimonials />
-        <Security />
-        <CTA />
+        <TargetAreas />             {/* 2. Areas we can target */}
+        <CapabilitiesSection />     {/* 3. Methodology (6 Phase) */}
+        <Systems />                 {/* 4. Connected Systems */}
+        <CaseStudies />             {/* 5. Case Studies / Project Demos */}
+        <OptimisationComparison />  {/* 6. Optimisation Comparison Chart */}
+        <Contact />                 {/* 7. Contact Info */}
       </main>
 
-      <Footer />
+      <Footer />                    {/* 8. Footer */}
     </>
   );
 }

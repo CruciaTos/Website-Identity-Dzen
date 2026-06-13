@@ -8,14 +8,18 @@ import type {
   SecurityPillar,
   Testimonial,
   WorkflowNode,
+  TargetArea,
+  ComparisonRow,
+  ContactDetail,
 } from "@/types";
 
 // ─── Navigation ──────────────────────────────────────────────────────────────
 export const NAV_LINKS: NavLink[] = [
-  { label: "Platform", href: "#workflow" },
-  { label: "Services", href: "#services" },
-  { label: "Approach", href: "#process" },
-  { label: "Security", href: "#security" },
+  { label: "Platform",    href: "#hero"         },
+  { label: "Services",    href: "#areas"        },
+  { label: "Methodology", href: "#capabilities" },
+  { label: "Projects",    href: "#cases"        },
+  { label: "Contact",     href: "#contact"      },
 ];
 
 // ─── Ticker items ─────────────────────────────────────────────────────────────
@@ -347,3 +351,137 @@ export const FOOTER_LINKS = {
     "Briefing Configurator",
   ],
 };
+
+// ─── Target Areas ("Areas we can target") ─────────────────────────────────────
+export const TARGET_AREAS: TargetArea[] = [
+  {
+    icon: "bar-chart",
+    title: "Finance & Accounting",
+    description:
+      "Invoice processing, reconciliation, and reporting cycles that run on spreadsheets and manual review.",
+    painPoints: [
+      "Manual invoice matching",
+      "Month-end close delays",
+      "Disconnected ledgers across systems",
+    ],
+    potential: 92,
+  },
+  {
+    icon: "envelope",
+    title: "Sales & CRM Operations",
+    description:
+      "Lead routing, follow-ups, and pipeline hygiene that fall through the cracks between tools.",
+    painPoints: [
+      "Manual lead handoffs",
+      "Inconsistent follow-up timing",
+      "CRM data entry backlog",
+    ],
+    potential: 85,
+  },
+  {
+    icon: "chat",
+    title: "Customer Support",
+    description:
+      "Ticket triage, response drafting, and escalation routing across support channels.",
+    painPoints: [
+      "Slow first-response times",
+      "Repetitive ticket triage",
+      "Knowledge scattered across tools",
+    ],
+    potential: 88,
+  },
+  {
+    icon: "clock-circle",
+    title: "HR & People Operations",
+    description:
+      "Onboarding, payroll prep, and compliance tracking spread across disconnected systems.",
+    painPoints: [
+      "Manual onboarding checklists",
+      "Payroll data re-entry",
+      "Compliance deadline tracking",
+    ],
+    potential: 80,
+  },
+  {
+    icon: "layers",
+    title: "Operations & Supply Chain",
+    description:
+      "Order tracking, vendor coordination, and exception handling across operational systems.",
+    painPoints: [
+      "Manual order status updates",
+      "Vendor coordination by email",
+      "Exception handling backlog",
+    ],
+    potential: 83,
+  },
+  {
+    icon: "line-chart",
+    title: "Data & Reporting",
+    description:
+      "Recurring reports assembled by hand from multiple sources, every week, on a deadline.",
+    painPoints: [
+      "Manual data pulls",
+      "Recurring report assembly",
+      "Delayed anomaly detection",
+    ],
+    potential: 94,
+  },
+];
+
+// ─── Optimisation Comparison ("Before / After DZen") ───────────────────────────
+export const COMPARISON_ROWS: ComparisonRow[] = [
+  {
+    label: "Invoice Reconciliation",
+    before: { value: "14 hrs / week", percent: 100 },
+    after:  { value: "1 hr / week",   percent: 7 },
+    improvement: "93% time saved",
+  },
+  {
+    label: "Cross-Department Approvals",
+    before: { value: "4 days",  percent: 100 },
+    after:  { value: "6 hours", percent: 6 },
+    improvement: "94% faster",
+  },
+  {
+    label: "Weekly Finance Reports",
+    before: { value: "6 hours",    percent: 100 },
+    after:  { value: "12 minutes", percent: 3 },
+    improvement: "97% faster",
+  },
+  {
+    label: "Support Ticket First Response",
+    before: { value: "24 hours", percent: 100 },
+    after:  { value: "2 hours",  percent: 8 },
+    improvement: "92% faster",
+  },
+  {
+    label: "Manual Data Entry Errors",
+    before: { value: "8% error rate",   percent: 100 },
+    after:  { value: "0.3% error rate", percent: 4 },
+    improvement: "96% reduction",
+  },
+];
+
+// ─── Contact Details ────────────────────────────────────────────────────────
+export const CONTACT_DETAILS: ContactDetail[] = [
+  {
+    label: "General Enquiries",
+    value: "hello@DZen.io",
+    href: "mailto:hello@DZen.io",
+  },
+  {
+    label: "Response Time",
+    value: "Within 24 hours",
+    note: "Mon–Fri, 9am–6pm IST",
+  },
+  {
+    label: "Location",
+    value: "Maharashtra, India",
+    note: "Remote-first · engagements worldwide",
+  },
+  {
+    label: "LinkedIn",
+    value: "linkedin.com/company/DZen",
+    href: "https://linkedin.com/company/DZen",
+  },
+];

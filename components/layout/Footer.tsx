@@ -240,8 +240,7 @@ export function Footer() {
               ["DZen", "Workflow", "Integration", "Enterprise"].map((word) => (
                 <span
                   key={`${i}-${word}`}
-                  className="marquee-item text-[clamp(5rem,10vw,8rem)] font-bold tracking-[-0.03em] text-transparent [-webkit-text-stroke:1px_rgba(18,20,22,0.14)] px-10 transition-all duration-300 [&.lit]:text-stone-100/40 [&.lit]:[-webkit-text-stroke:0px_transparent]"
-                >
+                  className="marquee-item text-[clamp(5rem,10vw,8rem)] font-bold tracking-[-0.03em] text-transparent [-webkit-text-stroke:1px_rgba(216,211,203,0.14)] px-10 transition-all duration-300 [&.lit]:text-stone-100/40 [&.lit]:[-webkit-text-stroke:0px_transparent]"  >
                   {word}
                 </span>
               ))

@@ -11,7 +11,7 @@ import { AboutOverlay } from "@/components/sections/AboutOverlay";
 import { NAV_LINKS } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-const SECTION_IDS = ["workflow", "services", "process", "security"];
+const SECTION_IDS = ["hero", "areas", "capabilities", "cases", "contact"];
 
 interface NavbarProps {
   theme: "dark" | "light";
