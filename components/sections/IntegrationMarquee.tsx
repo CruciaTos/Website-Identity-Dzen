@@ -1,12 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { SectionIndex } from "@/components/ui/SectionIndex";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   SVG logo definitions — inline, brand-accurate, original aspect ratios
-   Each logo is normalised to a 40px height; width scales from its native ratio.
+   LOGO SOURCES
+   ─────────────────────────────────────────────────────────────────────────────
+   • SI(slug)  → Simple Icons CDN (mono SVGs — coloured via fill injection)
+   • DV(name)  → Devicons CDN    (full-colour SVGs — rendered as-is)
+   • Inline    → SVG string      (for brands missing from both CDNs)
+
+   ✅ TO SWAP IN YOUR OWN FILES
+      Set  src: "/logos/brand.svg"  and  colorize: false  for full-colour images.
+      Set  src: "/logos/brand.svg"  and  monoColor: "#hex"  for mono/black logos.
 ───────────────────────────────────────────────────────────────────────────── */
 
 function SAPLogo() {
@@ -368,13 +376,20 @@ function AtlassianLogo() {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   Logo set — all brands, one row
+   Logo registry
 ───────────────────────────────────────────────────────────────────────────── */
 
 interface LogoEntry {
   id: string;
   label: string;
-  component: React.FC;
+  /** CDN URL (SI / DV) or omit if using inlineSvg */
+  src?: string;
+  /** Raw SVG string for brands not in any CDN */
+  inlineSvg?: string;
+  /** Hex colour to inject as fill into a mono (black) Simple Icons SVG */
+  monoColor?: string;
+  /** Inline React component for the logo (optional, for future use) */
+  component?: React.ComponentType;
 }
 
 const LOGOS: LogoEntry[] = [
@@ -416,24 +431,84 @@ const LOGOS: LogoEntry[] = [
 ];
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   Logo item — padded slot, vertically centred, hover opacity lift
-   NOTE: `[&>svg]:!h-10` forces all SVGs to 40px height (increase by at least 8px)
+   LogoImg
+   ────────────────────────────────────────────────────────────────────────────
+   Three render paths:
+   1. inlineSvg  → dangerouslySetInnerHTML (full-colour, no fetch)
+   2. src + monoColor → fetch SVG text, inject fill="#hex", render as data-URI
+   3. src only   → plain <img> (Devicons full-colour)
 ───────────────────────────────────────────────────────────────────────────── */
 
-function LogoItem({ label, component: Logo }: Omit<LogoEntry, "id">) {
-  return (
-    <div
-      className="flex-shrink-0 flex items-center justify-center px-10 opacity-40 hover:opacity-90 transition-opacity duration-800 [&>svg]:!h-16"
-      aria-label={label}
-      title={label}
-    >
-      <Logo />
-    </div>
-  );
+function LogoImg({ logo }: { logo: LogoEntry }) {
+  const [coloured, setColoured] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!logo.src || !logo.monoColor) return;
+    let cancelled = false;
+
+    fetch(logo.src)
+      .then((r) => r.text())
+      .then((text) => {
+        if (cancelled) return;
+        const filled = text.replace(/<svg /, `<svg fill="${logo.monoColor}" `);
+        setColoured(
+          "data:image/svg+xml;charset=utf-8," + encodeURIComponent(filled)
+        );
+      })
+      .catch(() => {
+        if (!cancelled) setColoured(logo.src ?? null);
+      });
+
+    return () => { cancelled = true; };
+  }, [logo.src, logo.monoColor]);
+
+  const imgStyle: React.CSSProperties = {
+    width: "100%",
+    height: "100%",
+    objectFit: "contain",
+    display: "block",
+    userSelect: "none",
+  };
+
+  // Path 1 — inline SVG (no fetch needed, full-colour)
+  if (logo.inlineSvg) {
+    return (
+      <div
+        aria-label={logo.label}
+        style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+        dangerouslySetInnerHTML={{ __html: logo.inlineSvg }}
+      />
+    );
+  }
+
+  // Path 2 — mono SVG with injected colour
+  if (logo.monoColor) {
+    const src = coloured ?? logo.src;
+    return src ? <img src={src} alt={logo.label} draggable={false} style={imgStyle} /> : null;
+  }
+
+  // Path 3 — full-colour CDN image
+  return logo.src ? (
+    <img src={logo.src} alt={logo.label} draggable={false} style={imgStyle} />
+  ) : null;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   Marquee track — CSS animation, pause-on-hover via group
+   Marquee animation
+───────────────────────────────────────────────────────────────────────────── */
+
+const MARQUEE_STYLES = `
+  @keyframes dzen-marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(calc(-100% / 3)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dzen-marquee-track { animation: none !important; }
+  }
+`;
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MarqueeTrack
 ───────────────────────────────────────────────────────────────────────────── */
 
 function MarqueeTrack() {
@@ -442,14 +517,41 @@ function MarqueeTrack() {
   return (
     <div className="group overflow-hidden">
       <div
-        className="dzen-marquee-track flex w-max group-hover:[animation-play-state:paused]"
-        style={{
-          animation: "dzen-marquee 100s linear infinite",
-          willChange: "transform",
-        }}
+        className="dzen-marquee-track flex w-max items-center group-hover:[animation-play-state:paused]"
+        style={{ animation: "dzen-marquee 80s linear infinite", willChange: "transform" }}
       >
         {set.map((logo, i) => (
-          <LogoItem key={`${logo.id}-${i}`} label={logo.label} component={logo.component} />
+          <div
+            key={`${logo.id}-${i}`}
+            className="flex-shrink-0 flex flex-col items-center justify-center gap-2"
+            style={{ padding: "0 28px", minWidth: "88px" }}
+            title={logo.label}
+            aria-label={logo.label}
+          >
+            <div
+              style={{
+                width: 44,
+                height: 44,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <LogoImg logo={logo} />
+            </div>
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 500,
+                color: "var(--color-text-secondary, #9ca3af)",
+                whiteSpace: "nowrap",
+                letterSpacing: "0.01em",
+              }}
+            >
+              {logo.label}
+            </span>
+          </div>
         ))}
       </div>
     </div>
@@ -457,24 +559,19 @@ function MarqueeTrack() {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   IntegrationLogoMarquee — constrained to the same width as the content by
-   default. Use `maxWidth` to make the marquee horizontally smaller and centered,
-   `bleed` to extend it equally left/right, and `fade` to adjust edge crop.
+   IntegrationLogoMarquee — public API unchanged
 ───────────────────────────────────────────────────────────────────────────── */
 
 interface IntegrationLogoMarqueeProps {
-  /** Max width of the visible marquee viewport. Use this to make it smaller. */
   maxWidth?: number | string;
-  /** Pixels to extend the marquee beyond the container on both left and right. */
   bleed?: number;
-  /** Percentage used for the left/right CSS mask fade. */
   fade?: number;
 }
 
 export function IntegrationLogoMarquee({
   maxWidth = "100%",
   bleed = 0,
-  fade = 15,
+  fade = 12,
 }: IntegrationLogoMarqueeProps) {
   const safeBleed = Math.max(0, bleed);
   const safeFade = Math.min(Math.max(fade, 0), 49);
@@ -482,23 +579,10 @@ export function IntegrationLogoMarquee({
 
   return (
     <>
-      {/* Keyframe injection */}
-      <style>{`
-        @keyframes dzen-marquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(calc(-100% / 3)); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .dzen-marquee-track {
-            animation: none !important;
-          }
-        }
-      `}</style>
-
-      {/* Container width matches content; inner viewport can be narrowed or bled outward. */}
+      <style>{MARQUEE_STYLES}</style>
       <Container className="overflow-visible !px-0">
         <div
-          className="relative overflow-hidden"
+          className="relative overflow-hidden py-4"
           style={{
             width: `calc(100% + ${safeBleed * 2}px)`,
             maxWidth: `calc(${resolvedMaxWidth} + ${safeBleed * 2}px)`,
@@ -516,19 +600,22 @@ export function IntegrationLogoMarquee({
   );
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   Page section — unchanged
+───────────────────────────────────────────────────────────────────────────── */
+
 export function IntegrationMarquee() {
   return (
     <section
       id="integrations"
       aria-label="Systems we connect"
-      className="py-[80px] bg-bg-secondary border-t border-border overflow-hidden"
+      className="py-[100px] bg-bg-secondary border-t border-border overflow-hidden"
     >
-      {/* Heading still uses the regular Container with padding */}
-      <Container className="mb-12">
+      <Container className="mb-14">
         <FadeIn>
           <SectionIndex number="05" tag="Integration Catalogue" className="mb-4" />
           <p className="font-sans text-body font-light text-stone-400 leading-[1.7] max-w-[440px]">
-            Pre-built connectors across every major enterprise platform.
+            Pre-built connectors across every major platform — from social and AI tools to enterprise data.
           </p>
         </FadeIn>
       </Container>
