@@ -1,17 +1,12 @@
 import type { ReactNode } from "react";
-import { DM_Sans, DM_Serif_Display, IBM_Plex_Mono } from "next/font/google";
+import { DM_Sans, DM_Serif_Display, IBM_Plex_Mono, Noto_Sans_Devanagari, Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { siteMetadata, structuredData } from "@/lib/metadata";
 import "@/app/globals.css";
-
+import { cn } from "@/lib/utils";
 
 // ─── Font loading ─────────────────────────────────────────────────────────────
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
-  variable: "--font-sans",
-  display: "swap",
-});
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const dmSerifDisplay = DM_Serif_Display({
   subsets: ["latin"],
@@ -28,6 +23,19 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const zaslia = localFont({
+  src: "../public/fonts/zaslia/Zaslia.otf",
+  variable: "--font-zaslia",
+  display: "swap",
+});
+
+const devanagariFont = Noto_Sans_Devanagari({
+  subsets: ["devanagari"],
+  weight: ["300", "400", "500"],
+  variable: "--font-devanagari",
+  display: "swap",
+});
+
 // ─── Metadata export ──────────────────────────────────────────────────────────
 export const metadata = siteMetadata;
 
@@ -36,7 +44,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${dmSerifDisplay.variable} ${ibmPlexMono.variable}`}
+      className={cn(dmSerifDisplay.variable, ibmPlexMono.variable, zaslia.variable, devanagariFont.variable, "font-sans", geist.variable)}
     >
       <head>
         <script

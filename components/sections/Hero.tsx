@@ -1,129 +1,231 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/Button";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { Container } from "@/components/ui/Container";
+import { DotField } from "@/components/ui/DotField";
 
-export function Hero() {
+type TextPosition =
+  | { preset: "center" | "top-left" | "top-right" | "bottom-left" | "bottom-right" }
+  | {
+    top?: number | string;
+    left?: number | string;
+    right?: number | string;
+    bottom?: number | string;
+    preset?: never;
+  };
+
+interface HeroProps {
+  textPosition?: TextPosition;
+  className?: string;
+}
+
+const SVAYATTA_EN = "Svayatta";
+const SVAYATTA_DEV = "स्वयत्ता";
+const TOGGLE_INTERVAL_MS = 10_000;
+
+export function Hero({ textPosition = { preset: "center" }, className }: HeroProps) {
+  const [isDevanagari, setIsDevanagari] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(
+      () => setIsDevanagari((prev) => !prev),
+      TOGGLE_INTERVAL_MS,
+    );
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section
       id="hero"
       aria-label="DZen hero — Intelligent Workflow Integration"
-      className="min-h-screen flex flex-col justify-end pt-16 relative overflow-hidden hero-noir-bg"
+      className={`min-h-screen flex flex-col items-start justify-center relative overflow-hidden ${className ?? ""}`}
+      style={{ backgroundColor: "#010b13" }}
     >
-      {/* Fabric / leather fold highlights */}
-      <div className="hero-noir-folds" aria-hidden="true">
-        <div className="hero-noir-fold hero-noir-fold-a" />
-        <div className="hero-noir-fold hero-noir-fold-b" />
-        <div className="hero-noir-fold hero-noir-fold-c" />
-        <div className="hero-noir-fold hero-noir-fold-d" />
+      {/* DotField interactive background — candy blue dots on onyx */}
+      <DotField
+        gap={90}
+        radius={1.7}
+        maxRadius={3}
+        proximity={180}
+        repelStrength={40}
+        spring={0.06}
+        damping={0.85}
+        dotColor="rgba(178, 213, 229, 0.36)"
+        activeColor="#B2D5E5"
+      />
+
+      {/* Noise overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ opacity: 0.025 }}
+        aria-hidden="true"
+      />
+
+      {/* Horizontal rule — dark steel */}
+      <div
+        className="absolute left-0 right-0 h-px"
+        style={{ top: "64px", backgroundColor: "rgba(178, 213, 229, 0.1)" }}
+        aria-hidden="true"
+      />
+
+      {/* Content block — now left‑aligned */}
+      <div className="relative z-10 flex flex-col items-start text-left px-6 w-full">
+
+        {/* Eyebrow */}
+        <motion.p
+          className="font-mono uppercase tracking-[0.22em] text-[11px] mb-10"
+          style={{ color: "rgba(178, 213, 229, 0.55)", letterSpacing: "0.22em" }}
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+        >
+          One of India's First Agentic Integration Company
+        </motion.p>
+
+        {/* Headline — no longer shifted right */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.0, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h1
+            className="font-zaslia m-0 p-0 leading-none select-none"
+            style={{
+              fontSize: "clamp(72px, 15vw, 192px)",
+              fontWeight: 500,
+              color: "#7ec3e2ff",
+              letterSpacing: "-0.025em",
+              lineHeight: 0.95,
+            }}
+            aria-label="DZEN Svayatta"
+          >
+            {"DZEN "}
+
+            <span
+              style={{
+                display: "inline-block",
+                minWidth: "4.8em",
+                textAlign: "left",
+                verticalAlign: "baseline",
+              }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={isDevanagari ? "svayatta-dev" : "svayatta-en"}
+                  className={isDevanagari ? "font-devanagari" : "font-zaslia"}
+                  style={{
+                    display: "inline-block",
+                    verticalAlign: "baseline",
+                    fontSize: isDevanagari ? "0.9em" : "1em",
+                    fontWeight: isDevanagari ? 300 : 500,
+                  }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  aria-hidden="true"
+                >
+                  {isDevanagari ? SVAYATTA_DEV : SVAYATTA_EN}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+          </h1>
+        </motion.div>
+
+        {/* Body paragraph */}
+        <motion.p
+          className="font-sans mt-10 max-w-[560px] leading-[1.75]"
+          style={{
+            fontSize: "17px",
+            fontWeight: 300,
+            color: "rgba(178, 213, 229, 0.55)",
+          }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
+          We integrate AI into the operational fabric of your business — connecting the systems you
+          already run, automating the decisions you already make, and delivering intelligence where
+          it creates measurable value.
+        </motion.p>
+
+        {/* CTA buttons — left aligned */}
+        <motion.div
+          className="flex gap-3 mt-12 flex-wrap justify-start"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <a
+            href="#cta"
+            className="font-sans text-[13px] tracking-[0.08em] uppercase px-6 py-3 border transition-colors duration-200"
+            style={{
+              color: "#B2D5E5",
+              borderColor: "rgba(178, 213, 229, 0.25)",
+              backgroundColor: "transparent",
+              fontWeight: 400,
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
+                "rgba(178, 213, 229, 0.08)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent";
+            }}
+          >
+            Request a Discovery Call
+          </a>
+          <a
+            href="#services"
+            className="font-sans text-[13px] tracking-[0.08em] uppercase px-6 py-3 transition-colors duration-200"
+            style={{
+              color: "rgba(178, 213, 229, 0.55)",
+              backgroundColor: "transparent",
+              fontWeight: 400,
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.color = "#B2D5E5";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.color = "rgba(178, 213, 229, 0.55)";
+            }}
+          >
+            See What We Build →
+          </a>
+        </motion.div>
       </div>
 
-      {/* Grid background */}
-      <div
-        className="absolute inset-0 opacity-[0.03] hero-noir-grid pointer-events-none"
+      {/* Vertical divider — moved to the left */}
+      <motion.div
+        className="absolute bottom-0 left-12 w-px"
+        style={{ height: "80px", backgroundColor: "rgba(178, 213, 229, 0.12)" }}
         aria-hidden="true"
+        initial={{ scaleY: 0, originY: 1 }}
+        animate={{ scaleY: 1 }}
+        transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
       />
 
-      {/* Noise / grain overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.05] noise-overlay mix-blend-overlay pointer-events-none"
-        aria-hidden="true"
-      />
-
-      {/* Vignette */}
-      <div className="hero-noir-vignette" aria-hidden="true" />
-
-      {/* Horizontal rule below nav */}
-      <div
-        className="absolute top-[120px] left-0 right-0 h-px bg-white/[0.06]"
-        aria-hidden="true"
-      />
-
-      {/* Warm glow */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center bottom, rgba(201,169,110,0.16) 0%, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
-
-      <Container className="relative z-10 pb-[100px] max-md:pb-16">
-        {/* Eyebrow */}
-        <motion.div
-          className="flex items-center gap-4 mb-16"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+      {/* Scroll label — left aligned */}
+      <motion.div
+        className="absolute bottom-6 left-6 flex items-center gap-[10px]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.9 }}
+        aria-label="Scroll to explore"
+      >
+        <div
+          className="w-[5px] h-[5px] rounded-full animate-pulse"
+          style={{ backgroundColor: "rgba(178, 213, 229, 0.3)" }}
+          aria-hidden="true"
+        />
+        <span
+          className="font-mono text-[10px] tracking-[0.16em] uppercase"
+          style={{ color: "rgba(178, 213, 229, 0.4)" }}
         >
-          <div className="w-12 h-px bg-[#C9A96E]" aria-hidden="true" />
-          <span className="font-mono text-[11px] font-normal tracking-[0.16em] uppercase text-[#C9A96E]">
-            DZen — Workflow Intelligence Platform
-          </span>
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          className="font-serif text-display-1 font-normal leading-[0.95] tracking-[-0.02em] text-[#FAF6EF] mb-12"
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Your systems
-          <br />
-          <em className="not-italic text-white/40">already know</em>
-          <br />
-          the answer.
-        </motion.h1>
-
-        {/* Sub row */}
-        <motion.div
-          className="grid grid-cols-[5fr_1fr_4fr] gap-6 items-end border-t border-white/10 pt-10 max-[900px]:grid-cols-1"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {/* Description */}
-          <p className="font-sans text-body-lg font-light text-white/55 leading-[1.7] max-w-[480px]">
-            We integrate AI into the operational fabric of your business — connecting the systems you already run, automating the decisions you already make, and delivering intelligence where it creates measurable value.
-          </p>
-
-          {/* Divider */}
-          <div className="flex justify-center items-center max-[900px]:hidden" aria-hidden="true">
-            <div className="w-px h-20 bg-white/15" />
-          </div>
-
-          {/* CTA column */}
-          <div className="flex flex-col gap-6 items-start">
-            <div className="flex gap-3 flex-wrap">
-              <Button as="a" href="#cta" variant="primary" size="md">
-                Request a Discovery Call
-              </Button>
-              <Button
-                as="a"
-                href="#services"
-                variant="ghost"
-                size="md"
-                className="border-white/15 text-white/65 hover:text-white hover:border-white/40"
-              >
-                See What We Build
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-[10px] text-white/40" aria-label="Scroll to explore">
-              <div
-                className="w-[6px] h-[6px] bg-[#C9A96E] animate-pulse-dot"
-                aria-hidden="true"
-              />
-              <span className="font-mono text-[10px] tracking-[0.14em] uppercase">
-                Scroll to explore
-              </span>
-            </div>
-          </div>
-        </motion.div>
-      </Container>
+          Scroll to explore
+        </span>
+      </motion.div>
     </section>
   );
 }

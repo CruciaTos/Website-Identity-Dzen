@@ -18,12 +18,12 @@ import { SYSTEM_CATEGORIES } from "@/lib/data";
 import type { SystemCategory } from "@/types";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  "rect-grid":   RectGridIcon,
+  "rect-grid": RectGridIcon,
   "clock-circle": ClockCircleIcon,
-  "envelope":    EnvelopeIcon,
-  "bar-chart":   BarChartIcon,
-  "line-chart":  LineChartIcon,
-  "layers":      LayersIcon,
+  "envelope": EnvelopeIcon,
+  "bar-chart": BarChartIcon,
+  "line-chart": LineChartIcon,
+  "layers": LayersIcon,
 };
 
 function SystemCategoryCard({ icon, name, items }: SystemCategory) {
@@ -76,11 +76,11 @@ export function Systems() {
               Systems we connect.
             </h2>
           </div>
-          
+
         </FadeIn>
 
         <div className="mb-20">
-          <IntegrationLogoMarquee maxWidth={1200} fade={30} />
+          <IntegrationLogoMarquee maxWidth={1200} />
         </div>
 
         {/* Systems grid */}
@@ -94,7 +94,7 @@ export function Systems() {
             </StaggerItem>
           ))}
         </StaggerContainer>
-        
+
       </Container>
     </section>
   );

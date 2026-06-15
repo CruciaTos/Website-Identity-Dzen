@@ -2,130 +2,219 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Sun, Moon } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  Navbar as NavbarShell,
+  NavBody,
+  MobileNav,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "../ui/resizable-navbar";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useScrolled } from "@/hooks/useScrolled";
-import { Button } from "@/components/ui/Button";
-import { LogoMark } from "@/components/ui/Icons";
 import { AboutOverlay } from "@/components/sections/AboutOverlay";
 import { NAV_LINKS } from "@/lib/data";
-import { cn } from "@/lib/utils";
 
 const SECTION_IDS = ["hero", "areas", "capabilities", "cases", "contact"];
+const EASE = [0.22, 1, 0.36, 1] as const;
 
-interface NavbarProps {
-  theme: "dark" | "light";
-  toggleTheme: () => void;
-}
-
-export function Navbar({ theme, toggleTheme }: NavbarProps) {
+export function Navbar() {
   const scrolled = useScrolled(40);
   const activeSection = useActiveSection(SECTION_IDS);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <>
-      <nav
-        role="navigation"
-        aria-label="Main navigation"
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50",
-          "h-16 flex items-center justify-between px-12 max-md:px-6",
-          "bg-bg-primary/92 backdrop-blur-[20px]",
-          "border-b transition-[border-color] duration-300 ease-out-expo",
-          scrolled ? "border-stone-100/[0.14]" : "border-stone-100/[0.08]"
-        )}
+      <motion.div
+        className="fixed top-0 left-0 right-0 z-50"
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: EASE }}
       >
-        {/* Logo */}
-        <Link
-          href="/"
-          aria-label="DZen home"
-          className="flex items-center gap-[10px] no-underline group"
+        <NavbarShell
+          className="transition-[background-color,border-color] duration-300"
+          style={{
+            backgroundColor: scrolled ? "rgba(2, 2, 2, 0.82)" : "transparent",
+            borderBottom: scrolled
+              ? "1px solid rgba(178, 213, 229, 0.12)"
+              : "1px solid transparent",
+            backdropFilter: scrolled ? "blur(20px)" : "none",
+            WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
+          }}
         >
-          <div className="w-7 h-7 bg-accent flex items-center justify-center flex-shrink-0">
-            <LogoMark className="w-[14px] h-[14px]" />
-          </div>
-          <span className="font-sans text-[15px] font-medium tracking-[0.06em] uppercase text-stone-100">
-            DZen
-          </span>
-        </Link>
-
-        {/* Nav links */}
-        <ul
-          className="flex items-center gap-10 list-none max-md:hidden"
-          role="list"
-        >
-          {NAV_LINKS.map(({ label, href }) => {
-            const sectionId = href.replace("#", "");
-            const isActive = activeSection === sectionId;
-            return (
-              <li key={href}>
-                <a
-                  href={href}
-                  className={cn(
-                    "font-sans text-[13px] font-normal tracking-[0.02em] no-underline",
-                    "transition-colors duration-200 relative py-1",
-                    isActive
-                      ? "text-stone-100"
-                      : "text-stone-400 hover:text-stone-100"
-                  )}
-                >
-                  {label}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-accent rounded-full" />
-                  )}
-                </a>
-              </li>
-            );
-          })}
-
-          {/* Founders — opens overlay (renamed from About to match AI iteration) */}
-          <li>
-            <button
-              onClick={() => setAboutOpen(true)}
-              className={cn(
-                "font-sans text-[13px] font-normal tracking-[0.02em]",
-                "text-stone-400 hover:text-stone-100 transition-colors duration-200",
-                "bg-transparent border-none cursor-pointer p-0 relative py-1"
-              )}
-              aria-haspopup="dialog"
-              aria-expanded={aboutOpen}
+          {/* ---------- Desktop ---------- */}
+          <NavBody>
+            {/* Logo */}
+            <Link
+              href="/"
+              aria-label="DZen home"
+              className="flex items-center gap-2.5 no-underline"
             >
-              Founders
-              <span className="absolute -top-1 -right-2 w-1.5 h-1.5 rounded-full bg-accent/80 opacity-80" />
-            </button>
-          </li>
-        </ul>
+              <span
+                className="w-[6px] h-[6px] rounded-full flex-shrink-0"
+                style={{ backgroundColor: "rgba(178, 213, 229, 0.55)" }}
+                aria-hidden="true"
+              />
+              <span
+                className="font-zaslia text-[19px] leading-none tracking-[-0.01em]"
+                style={{ color: "#B2D5E5", fontWeight: 500 }}
+              >
+                DZEN
+              </span>
+            </Link>
 
-        {/* CTA & Theme Toggle */}
-        <div className="flex items-center gap-3">
-          {/* Theme toggler */}
-          <button
-            onClick={toggleTheme}
-            className="p-2 border border-stone-100/10 bg-stone-950/40 text-stone-400 hover:text-accent hover:border-accent/40 transition-colors flex items-center justify-center cursor-pointer"
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-          >
-            {theme === "dark" ? (
-              <Sun className="w-[14px] h-[14px] transition-transform duration-300 hover:rotate-45" />
-            ) : (
-              <Moon className="w-[14px] h-[14px] transition-transform duration-300 hover:-rotate-12" />
-            )}
-          </button>
+            {/* Navigation links + Founders button */}
+            <ul className="flex items-center gap-9 list-none">
+              {NAV_LINKS.map(({ label, href }) => {
+                const sectionId = href.replace("#", "");
+                const isActive = activeSection === sectionId;
+                return (
+                  <li key={href}>
+                    <a
+                      href={href}
+                      className="font-mono text-[11px] uppercase tracking-[0.18em] no-underline transition-colors duration-200 flex items-center gap-[7px] py-1"
+                      style={{
+                        color: isActive ? "#B2D5E5" : "rgba(178, 213, 229, 0.5)",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) e.currentTarget.style.color = "#B2D5E5";
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive)
+                          e.currentTarget.style.color = "rgba(178, 213, 229, 0.5)";
+                      }}
+                    >
+                      <span
+                        className="w-[3px] h-[3px] rounded-full transition-opacity duration-200"
+                        style={{
+                          backgroundColor: "#B2D5E5",
+                          opacity: isActive ? 1 : 0,
+                        }}
+                        aria-hidden="true"
+                      />
+                      {label}
+                    </a>
+                  </li>
+                );
+              })}
 
-          <Button
-            as="a"
-            href="#"
-            variant="ghost"
-            size="sm"
-            className="max-md:hidden"
-          >
-            Schedule a Briefing
-          </Button>
-          <Button as="a" href="#cta" variant="primary" size="sm">
-            Get Started →
-          </Button>
-        </div>
-      </nav>
+              <li>
+                <button
+                  onClick={() => setAboutOpen(true)}
+                  className="font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0 py-1"
+                  style={{ color: "rgba(178, 213, 229, 0.5)" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#B2D5E5")}
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "rgba(178, 213, 229, 0.5)")
+                  }
+                  aria-haspopup="dialog"
+                  aria-expanded={aboutOpen}
+                >
+                  Founders
+                </button>
+              </li>
+            </ul>
+
+            {/* Desktop CTA */}
+            <a
+              href="#cta"
+              className="hidden md:inline-flex font-sans text-[13px] tracking-[0.08em] uppercase px-5 py-2.5 border transition-colors duration-200"
+              style={{
+                color: "#B2D5E5",
+                borderColor: "rgba(178, 213, 229, 0.25)",
+                backgroundColor: "transparent",
+                fontWeight: 400,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(178, 213, 229, 0.08)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+              }}
+            >
+              Get Started →
+            </a>
+          </NavBody>
+
+          {/* ---------- Mobile ---------- */}
+          <MobileNav>
+            <MobileNavHeader>
+              {/* Logo (mobile) */}
+              <Link
+                href="/"
+                aria-label="DZen home"
+                className="flex items-center gap-2.5 no-underline"
+              >
+                <span
+                  className="w-[6px] h-[6px] rounded-full flex-shrink-0"
+                  style={{ backgroundColor: "rgba(178, 213, 229, 0.55)" }}
+                  aria-hidden="true"
+                />
+                <span
+                  className="font-zaslia text-[19px] leading-none tracking-[-0.01em]"
+                  style={{ color: "#B2D5E5", fontWeight: 500 }}
+                >
+                  DZEN
+                </span>
+              </Link>
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            </MobileNavHeader>
+
+            <MobileNavMenu
+              isOpen={isMobileMenuOpen}
+              onClose={() => setIsMobileMenuOpen(false)}
+            >
+              {NAV_LINKS.map(({ label, href }) => {
+                const sectionId = href.replace("#", "");
+                const isActive = activeSection === sectionId;
+                return (
+                  <a
+                    key={href}
+                    href={href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block font-mono text-[12px] uppercase tracking-[0.18em] no-underline"
+                    style={{
+                      color: isActive ? "#B2D5E5" : "rgba(178, 213, 229, 0.55)",
+                    }}
+                  >
+                    {label}
+                  </a>
+                );
+              })}
+
+              <button
+                onClick={() => {
+                  setAboutOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="font-mono text-[12px] uppercase tracking-[0.18em] text-left bg-transparent border-none cursor-pointer p-0"
+                style={{ color: "rgba(178, 213, 229, 0.55)" }}
+              >
+                Founders
+              </button>
+
+              <div className="flex w-full flex-col gap-4 mt-4">
+                <a
+                  href="#cta"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="font-sans text-[13px] tracking-[0.08em] uppercase px-5 py-3 border text-center"
+                  style={{
+                    color: "#B2D5E5",
+                    borderColor: "rgba(178, 213, 229, 0.25)",
+                  }}
+                >
+                  Get Started →
+                </a>
+              </div>
+            </MobileNavMenu>
+          </MobileNav>
+        </NavbarShell>
+      </motion.div>
 
       <AboutOverlay open={aboutOpen} onClose={() => setAboutOpen(false)} />
     </>
