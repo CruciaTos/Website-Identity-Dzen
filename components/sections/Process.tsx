@@ -12,7 +12,7 @@ function Step({ index, title, description, duration }: ProcessStep) {
   return (
     <motion.article
       className="p-10 px-8 pb-12 border-r border-b border-border relative transition-colors duration-300 cursor-default hover:bg-bg-panel"
-      whileHover={{ backgroundColor: "#F7F1E8" }}
+      whileHover={{ backgroundColor: "var(--color-bg-panel)" }}
     >
       <div className="font-mono text-[32px] font-light text-stone-500 leading-none tracking-[-0.02em] mb-10">
         {index}
@@ -42,11 +42,10 @@ export function Process() {
     >
       <Container>
         <FadeIn>
-          <SectionIndex number="06" tag="Engagement Model" className="mb-6" />
+          <SectionIndex number="06" tag="Why Us" className="mb-6" />
           <h2 className="font-serif text-display-3 font-normal text-stone-100 max-w-[640px]">
-            A methodology built for
+            For your every operational need.
             <br />
-            operational environments.
           </h2>
         </FadeIn>
 

@@ -18,12 +18,12 @@ import { SYSTEM_CATEGORIES } from "@/lib/data";
 import type { SystemCategory } from "@/types";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  "rect-grid":   RectGridIcon,
+  "rect-grid": RectGridIcon,
   "clock-circle": ClockCircleIcon,
-  "envelope":    EnvelopeIcon,
-  "bar-chart":   BarChartIcon,
-  "line-chart":  LineChartIcon,
-  "layers":      LayersIcon,
+  "envelope": EnvelopeIcon,
+  "bar-chart": BarChartIcon,
+  "line-chart": LineChartIcon,
+  "layers": LayersIcon,
 };
 
 function SystemCategoryCard({ icon, name, items }: SystemCategory) {
@@ -32,7 +32,7 @@ function SystemCategoryCard({ icon, name, items }: SystemCategory) {
   return (
     <motion.article
       className="bg-bg-panel border border-border p-10 px-9 transition-colors duration-300 cursor-default"
-      whileHover={{ borderColor: "rgba(18,20,22,0.18)", backgroundColor: "#E6DAC9" }}
+      whileHover={{ borderColor: "rgba(216,211,203,0.16)", backgroundColor: "var(--color-bg-tertiary)" }}
     >
       <div className="w-9 h-9 flex items-center justify-center border border-border-strong text-accent mb-6">
         <Icon />
@@ -70,17 +70,17 @@ export function Systems() {
       <Container>
         {/* Header */}
         <FadeIn className="mb-12">
-          <SectionIndex number="05" tag="Integration Catalogue" className="mb-6" />
+          <SectionIndex number="04" tag="Integration Catalogue" className="mb-6" />
           <div className="flex items-end justify-between gap-12 max-md:flex-col">
             <h2 className="font-serif text-display-3 font-normal text-stone-100">
               Systems we connect.
             </h2>
           </div>
-          
+
         </FadeIn>
 
         <div className="mb-20">
-          <IntegrationLogoMarquee maxWidth={1200} fade={30} />
+          <IntegrationLogoMarquee maxWidth={1200} />
         </div>
 
         {/* Systems grid */}
@@ -94,7 +94,7 @@ export function Systems() {
             </StaggerItem>
           ))}
         </StaggerContainer>
-        
+
       </Container>
     </section>
   );
