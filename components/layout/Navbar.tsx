@@ -10,6 +10,7 @@ import {
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
+  NavbarButton, // new import from the demo
 } from "../ui/resizable-navbar";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useScrolled } from "@/hooks/useScrolled";
@@ -25,6 +26,10 @@ export function Navbar() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const scrollToCta = () => {
+    document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
       <motion.div
@@ -34,19 +39,17 @@ export function Navbar() {
         transition={{ duration: 0.8, ease: EASE }}
       >
         <NavbarShell
-          className="transition-[background-color,border-color] duration-300"
-          style={{
-            backgroundColor: scrolled ? "rgba(2, 2, 2, 0.82)" : "transparent",
-            borderBottom: scrolled
-              ? "1px solid rgba(178, 213, 229, 0.12)"
-              : "1px solid transparent",
-            backdropFilter: scrolled ? "blur(20px)" : "none",
-            WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-          }}
+          className={`
+            w-full transition-all duration-500
+            ${scrolled
+              ? "bg-black/40 backdrop-blur-xl border-b border-white/10 shadow-sm shadow-black/10"
+              : "bg-transparent border-b border-transparent"
+            }
+          `}
         >
           {/* ---------- Desktop ---------- */}
           <NavBody>
-            {/* Logo */}
+            {/* Logo – kept exactly as before */}
             <Link
               href="/"
               aria-label="DZen home"
@@ -65,7 +68,7 @@ export function Navbar() {
               </span>
             </Link>
 
-            {/* Navigation links + Founders button */}
+            {/* Navigation links + Founders button – unchanged */}
             <ul className="flex items-center gap-9 list-none">
               {NAV_LINKS.map(({ label, href }) => {
                 const sectionId = href.replace("#", "");
@@ -117,31 +120,20 @@ export function Navbar() {
               </li>
             </ul>
 
-            {/* Desktop CTA */}
-            <a
-              href="#cta"
-              className="hidden md:inline-flex font-sans text-[13px] tracking-[0.08em] uppercase px-5 py-2.5 border transition-colors duration-200"
-              style={{
-                color: "#B2D5E5",
-                borderColor: "rgba(178, 213, 229, 0.25)",
-                backgroundColor: "transparent",
-                fontWeight: 400,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(178, 213, 229, 0.08)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-              }}
+            {/* Desktop CTA – replaced with NavbarButton from the demo */}
+            <NavbarButton
+              variant="primary"
+              onClick={scrollToCta}
+              className="hidden md:inline-flex"
             >
               Get Started →
-            </a>
+            </NavbarButton>
           </NavBody>
 
           {/* ---------- Mobile ---------- */}
           <MobileNav>
             <MobileNavHeader>
-              {/* Logo (mobile) */}
+              {/* Mobile logo – unchanged */}
               <Link
                 href="/"
                 aria-label="DZen home"
@@ -199,17 +191,17 @@ export function Navbar() {
               </button>
 
               <div className="flex w-full flex-col gap-4 mt-4">
-                <a
-                  href="#cta"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-sans text-[13px] tracking-[0.08em] uppercase px-5 py-3 border text-center"
-                  style={{
-                    color: "#B2D5E5",
-                    borderColor: "rgba(178, 213, 229, 0.25)",
+                {/* Mobile CTA – replaced with NavbarButton */}
+                <NavbarButton
+                  variant="primary"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    scrollToCta();
                   }}
+                  className="w-full"
                 >
                   Get Started →
-                </a>
+                </NavbarButton>
               </div>
             </MobileNavMenu>
           </MobileNav>

@@ -1,14 +1,11 @@
 "use client";
 
-import dynamic from 'next/dynamic';
 import { useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 
-const Dither = dynamic(() => import('@/components/ui/Dither'), { ssr: false });
-
 // ── Design tokens ────────────────────────────────────────────────────────────
 const C = {
-  bg: "#010B13",
+  bg: "#000b12ff",
   accent: "#7EC3E2",
   accentSoft: "#B2D5E5",
   textPrimary: "#FFFFFF",
@@ -137,7 +134,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         position: "relative",
         backgroundColor: isExpanded ? C.cardBgHover : C.cardBg,
         border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`,
-        borderRadius: "16px",
+        borderRadius: "0px", // ← rectangle, no rounded corners
         overflow: "hidden",
         cursor: "default",
         isolation: "isolate",
@@ -185,7 +182,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         <h3
           style={{
             fontFamily: "var(--font-sans)",
-            fontSize: "clamp(15px, 1.5vw, 21px)",
+            fontSize: "clamp(18px, 1.5vw, 24px)", // +3
             fontWeight: 600,
             color: C.textPrimary,
             letterSpacing: "-0.022em",
@@ -200,7 +197,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         <p
           style={{
             fontFamily: "var(--font-sans)",
-            fontSize: "13px",
+            fontSize: "16px", // +3
             fontWeight: 300,
             color: C.textMuted,
             lineHeight: "1.72",
@@ -265,7 +262,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
                     <span
                       style={{
                         fontFamily: "var(--font-mono)",
-                        fontSize: "11px",
+                        fontSize: "14px", // +3
                         letterSpacing: "0.07em",
                         color: "rgba(178,213,229,0.75)",
                         lineHeight: 1,
@@ -301,7 +298,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
                 <span
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontSize: "9px",
+                    fontSize: "12px", // +3
                     letterSpacing: "0.15em",
                     textTransform: "uppercase",
                     color: "rgba(178,213,229,0.38)",
@@ -415,29 +412,6 @@ export function TargetMarkets() {
         overflow: "hidden",
       }}
     >
-      {/* ── Dither animated background ── */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          zIndex: 0,
-          opacity: 0.18,
-        }}
-      >
-        <Dither
-          waveColor={[0.05, 0.18, 0.28]}
-          waveSpeed={0.03}
-          waveFrequency={2.5}
-          waveAmplitude={0.28}
-          colorNum={4}
-          pixelSize={3}
-          enableMouseInteraction={false}
-        />
-      </div>
-
-      {/* Ambient glow */}
       <div
         aria-hidden="true"
         style={{
@@ -456,9 +430,9 @@ export function TargetMarkets() {
 
       <div
         style={{
-          maxWidth: "1280px",
+          maxWidth: "1440px",             // ↑ wider container, less wasted side space
           margin: "0 auto",
-          padding: "0 clamp(24px, 4.5vw, 48px)",
+          padding: "0 clamp(20px, 3vw, 40px)", // ← reduced lateral padding
           position: "relative",
           zIndex: 1,
         }}
@@ -486,7 +460,7 @@ export function TargetMarkets() {
             <span
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "10px",
+                fontSize: "13px", // +3
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 color: C.accent,
@@ -499,7 +473,7 @@ export function TargetMarkets() {
           <h2
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "clamp(28px, 4.2vw, 54px)",
+              fontSize: "clamp(31px, 4.2vw, 57px)", // +3
               fontWeight: 700,
               color: C.textPrimary,
               letterSpacing: "-0.026em",
@@ -514,7 +488,7 @@ export function TargetMarkets() {
           <p
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "15px",
+              fontSize: "18px", // +3
               fontWeight: 300,
               color: C.textMuted,
               lineHeight: "1.72",
@@ -550,6 +524,7 @@ export function TargetMarkets() {
         </div>
       </div>
 
+      {/* Responsive: on tablet/mobile, collapse to stacked layout */}
       <style>{`
         @media (max-width: 900px) {
           .tm-grid {

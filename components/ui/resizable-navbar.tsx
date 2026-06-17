@@ -148,3 +148,33 @@ export function MobileNavMenu({
     </AnimatePresence>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/*  NavbarButton – CTA / action button                                */
+/* ------------------------------------------------------------------ */
+interface NavbarButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary";
+}
+
+export function NavbarButton({
+  variant = "primary",
+  className = "",
+  children,
+  ...props
+}: NavbarButtonProps) {
+  const baseClasses =
+    "font-sans text-[13px] tracking-[0.08em] uppercase px-5 py-2.5 rounded-full border transition-colors duration-200 inline-flex items-center justify-center";
+  const primaryClasses =
+    "text-[#B2D5E5] border-[rgba(178,213,229,0.25)] bg-transparent hover:bg-[rgba(178,213,229,0.08)]";
+  const secondaryClasses =
+    "text-[rgba(178,213,229,0.7)] border-transparent hover:border-[rgba(178,213,229,0.25)] hover:text-[#B2D5E5]";
+
+  return (
+    <button
+      className={`${baseClasses} ${variant === "primary" ? primaryClasses : secondaryClasses} ${className}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}

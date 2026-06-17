@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { DotField } from "@/components/ui/DotField";
 
 type TextPosition =
@@ -25,7 +25,10 @@ const TOGGLE_INTERVAL_MS = 10_000;
 
 export function Hero({ textPosition = { preset: "center" }, className }: HeroProps) {
   const [isDevanagari, setIsDevanagari] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
 
+  // ── Language toggle ────────────────────────────────────────────────
   useEffect(() => {
     const id = setInterval(
       () => setIsDevanagari((prev) => !prev),
@@ -34,12 +37,31 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
     return () => clearInterval(id);
   }, []);
 
+  // ── Dynamic scaling: expose actual h1 size as a CSS variable ──────
+  useEffect(() => {
+    const section = sectionRef.current;
+    const h1 = headlineRef.current;
+    if (!section || !h1) return;
+
+    const updateSize = () => {
+      const size = window.getComputedStyle(h1).fontSize; // e.g. "148.5px"
+      section.style.setProperty("--h1-size", size);
+    };
+
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(h1);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="hero"
       aria-label="DZen hero — Intelligent Workflow Integration"
       className={`min-h-screen flex flex-col items-start justify-center relative overflow-hidden ${className ?? ""}`}
-      style={{ backgroundColor: "#010b13" }}
+      style={{ backgroundColor: "#000b12ff" }}
     >
       {/* ── 1. Background video (behind everything) ────────────────────── */}
       <video
@@ -58,9 +80,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
         <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
 
-      {/* ── 2. Full‑screen glassmorphism blur overlay ────────────────────
-           Covers the entire image, giving a uniform frosted look.
-           The built‑in gradient keeps the original darkening mood. */}
+      {/* ── 2. Full‑screen glassmorphism blur overlay ──────────────────── */}
       <div
         className="absolute inset-0 pointer-events-none z-10"
         aria-hidden="true"
@@ -76,8 +96,8 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
       <div className="absolute inset-0 z-20" aria-hidden="true">
         <DotField
           gap={60}
-          radius={1.7}
-          maxRadius={3}
+          radius={0.8}
+          maxRadius={2}
           proximity={180}
           repelStrength={40}
           spring={0.06}
@@ -87,9 +107,9 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
         />
       </div>
 
-      {/* ── 4. Text content (on top of everything, no background) ──────── */}
+      {/* ── 4. Text content (allows pointer events to pass through to dots) ──────── */}
       <div
-        className="absolute z-30"
+        className="absolute z-30 pointer-events-none"
         style={{
           top: "50%",
           left: "1.5rem",
@@ -100,10 +120,14 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
         }}
       >
         <div className="flex flex-col items-start text-left w-full">
-          {/* Eyebrow (decorative spacing placeholder) */}
+          {/* Eyebrow */}
           <motion.p
-            className="font-mono uppercase tracking-[0.22em] text-[11px] mb-10"
-            style={{ color: "white", letterSpacing: "0.22em" }}
+            className="font-mono uppercase tracking-[0.22em]"
+            style={{
+              color: "white",
+              fontSize: "clamp(10px, calc(var(--h1-size) * 0.065), 13px)",
+              marginBottom: "clamp(1rem, calc(var(--h1-size) * 0.14), 2.5rem)",
+            }}
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
@@ -116,9 +140,10 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
             transition={{ duration: 1.0, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1
+              ref={headlineRef}
               className="font-zaslia m-0 p-0 leading-none select-none"
               style={{
-                fontSize: "clamp(72px, 15vw, 192px)",
+                fontSize: "clamp(82px, 25vw, 202px)",   // size for the Svayatta part
                 fontWeight: 500,
                 color: "#7ec3e2ff",
                 letterSpacing: "-0.025em",
@@ -126,7 +151,18 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
               }}
               aria-label="DZEN Svayatta"
             >
-              {"DZEN "}
+              {/* DZEN – smaller, sits next to Svayatta */}
+              <span
+                style={{
+                  fontSize: "0.7em",        // reduced relative to h1 size
+                  verticalAlign: "baseline",
+                  fontWeight: 500,
+                }}
+              >
+                DZEN{" "}
+              </span>
+
+              {/* Svayatta – large, toggles between Devanagari and Latin */}
               <span
                 style={{
                   display: "inline-block",
@@ -142,7 +178,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
                     style={{
                       display: "inline-block",
                       verticalAlign: "baseline",
-                      fontSize: isDevanagari ? "0.9em" : "1em",
+                      fontSize: isDevanagari ? "0.9em" : "1em", // relative to h1 size
                       fontWeight: isDevanagari ? 300 : 500,
                     }}
                     initial={{ opacity: 0, y: 10 }}
@@ -160,11 +196,12 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
 
           {/* Body paragraph */}
           <motion.p
-            className="font-sans mt-10 max-w-[560px] leading-[1.75]"
+            className="font-sans max-w-[560px] leading-[1.75]"
             style={{
-              fontSize: "17px",
-              fontWeight: 300,
               color: "white",
+              fontWeight: 300,
+              fontSize: "clamp(14px, calc(var(--h1-size) * 0.095), 18px)",
+              marginTop: "clamp(1.5rem, calc(var(--h1-size) * 0.16), 3rem)",
             }}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -175,21 +212,26 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
             it creates measurable value.
           </motion.p>
 
-          {/* CTA buttons */}
+          {/* CTA buttons – re‑enable pointer events so they remain clickable */}
           <motion.div
-            className="flex gap-3 mt-12 flex-wrap justify-start"
+            className="flex gap-3 flex-wrap justify-start"
+            style={{
+              marginTop: "clamp(2rem, calc(var(--h1-size) * 0.2), 4rem)",
+            }}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             <a
               href="#cta"
-              className="font-sans text-[13px] tracking-[0.08em] uppercase px-6 py-3 border transition-colors duration-200"
+              className="font-sans tracking-[0.08em] uppercase border transition-colors duration-200 pointer-events-auto"
               style={{
                 color: "white",
                 borderColor: "rgba(255, 255, 255, 0.25)",
                 backgroundColor: "transparent",
                 fontWeight: 400,
+                fontSize: "clamp(11px, calc(var(--h1-size) * 0.07), 14px)",
+                padding: "clamp(0.5rem, calc(var(--h1-size) * 0.03), 0.85rem) clamp(1rem, calc(var(--h1-size) * 0.065), 1.6rem)",
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.backgroundColor =
@@ -203,11 +245,13 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
             </a>
             <a
               href="#services"
-              className="font-sans text-[13px] tracking-[0.08em] uppercase px-6 py-3 transition-colors duration-200"
+              className="font-sans tracking-[0.08em] uppercase transition-colors duration-200 pointer-events-auto"
               style={{
                 color: "white",
                 backgroundColor: "transparent",
                 fontWeight: 400,
+                fontSize: "clamp(11px, calc(var(--h1-size) * 0.07), 14px)",
+                padding: "clamp(0.5rem, calc(var(--h1-size) * 0.03), 0.85rem) clamp(1rem, calc(var(--h1-size) * 0.065), 1.6rem)",
               }}
             >
               See What We Build →
@@ -242,7 +286,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
 
       {/* ── 8. Scroll indicator (bottom left) ──────────────────────────── */}
       <motion.div
-        className="absolute bottom-6 left-6 flex items-center gap-[10px] z-50"
+        className="absolute bottom-6 left-6 flex items-center gap-[10px] z-50 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.9 }}
@@ -254,8 +298,12 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
           aria-hidden="true"
         />
         <span
-          className="font-mono text-[10px] tracking-[0.16em] uppercase"
-          style={{ color: "rgba(255, 255, 255, 0.4)" }}
+          className="font-mono uppercase"
+          style={{
+            color: "rgba(255, 255, 255, 0.4)",
+            fontSize: "clamp(9px, calc(var(--h1-size) * 0.05), 11px)",
+            letterSpacing: "0.16em",
+          }}
         >
           Scroll to explore
         </span>
