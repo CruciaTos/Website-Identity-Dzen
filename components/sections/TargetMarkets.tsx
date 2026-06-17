@@ -134,7 +134,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         position: "relative",
         backgroundColor: isExpanded ? C.cardBgHover : C.cardBg,
         border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`,
-        borderRadius: "0px", // ← rectangle, no rounded corners
+        borderRadius: "0px",
         overflow: "hidden",
         cursor: "default",
         isolation: "isolate",
@@ -182,7 +182,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         <h3
           style={{
             fontFamily: "var(--font-sans)",
-            fontSize: "clamp(18px, 1.5vw, 24px)", // +3
+            fontSize: "clamp(18px, 1.5vw, 24px)",
             fontWeight: 600,
             color: C.textPrimary,
             letterSpacing: "-0.022em",
@@ -197,7 +197,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         <p
           style={{
             fontFamily: "var(--font-sans)",
-            fontSize: "16px", // +3
+            fontSize: "16px",
             fontWeight: 300,
             color: C.textMuted,
             lineHeight: "1.72",
@@ -262,7 +262,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
                     <span
                       style={{
                         fontFamily: "var(--font-mono)",
-                        fontSize: "14px", // +3
+                        fontSize: "14px",
                         letterSpacing: "0.07em",
                         color: "rgba(178,213,229,0.75)",
                         lineHeight: 1,
@@ -298,7 +298,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
                 <span
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontSize: "12px", // +3
+                    fontSize: "12px",
                     letterSpacing: "0.15em",
                     textTransform: "uppercase",
                     color: "rgba(178,213,229,0.38)",
@@ -407,7 +407,7 @@ export function TargetMarkets() {
       aria-label="Target markets — operational functions DZen optimizes"
       style={{
         position: "relative",
-        backgroundColor: C.bg,
+        backgroundColor: "transparent", // ← transparent background
         padding: "clamp(88px, 11vw, 144px) 0",
         overflow: "hidden",
       }}
@@ -430,9 +430,9 @@ export function TargetMarkets() {
 
       <div
         style={{
-          maxWidth: "1440px",             // ↑ wider container, less wasted side space
+          maxWidth: "1440px",
           margin: "0 auto",
-          padding: "0 clamp(20px, 3vw, 40px)", // ← reduced lateral padding
+          padding: "0 clamp(20px, 3vw, 40px)",
           position: "relative",
           zIndex: 1,
         }}
@@ -460,7 +460,7 @@ export function TargetMarkets() {
             <span
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "13px", // +3
+                fontSize: "13px",
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 color: C.accent,
@@ -473,7 +473,7 @@ export function TargetMarkets() {
           <h2
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "clamp(31px, 4.2vw, 57px)", // +3
+              fontSize: "clamp(31px, 4.2vw, 57px)",
               fontWeight: 700,
               color: C.textPrimary,
               letterSpacing: "-0.026em",
@@ -488,7 +488,7 @@ export function TargetMarkets() {
           <p
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "18px", // +3
+              fontSize: "18px",
               fontWeight: 300,
               color: C.textMuted,
               lineHeight: "1.72",

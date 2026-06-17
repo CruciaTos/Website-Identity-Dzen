@@ -622,7 +622,7 @@ export function CaseStudies() {
       aria-label="Real-world AI deployments"
       style={{
         padding: "120px 0",
-        backgroundColor: C.bg,
+        backgroundColor: "transparent", // ← transparent background
         borderTop: `1px solid ${C.border}`,
       }}
     >

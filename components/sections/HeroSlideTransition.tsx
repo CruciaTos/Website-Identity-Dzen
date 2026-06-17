@@ -28,7 +28,8 @@ export function HeroSlideTransition() {
 
   return (
     <div ref={containerRef} style={{ position: "relative" }}>
-      {/* Sticky hero pin */}
+      {/* Sticky hero pin — note this section is transparent and reveals the
+          single shared global video background, not a section-local one. */}
       <div
         style={{
           position: "sticky",
@@ -61,7 +62,9 @@ export function HeroSlideTransition() {
         }}
       />
 
-      {/* TargetMarkets slides up as a cover panel */}
+      {/* TargetMarkets slides up as a cover panel. It is translucent, not an
+          opaque background swap — the same global video reads through it,
+          preserving the single continuous environment as sections change. */}
       <motion.div
         style={{
           translateY: coverY,

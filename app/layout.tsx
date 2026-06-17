@@ -3,6 +3,7 @@ import { Geist, DM_Serif_Display, IBM_Plex_Mono, Noto_Sans_Devanagari } from "ne
 import localFont from "next/font/local";
 import { siteMetadata, structuredData } from "@/lib/metadata";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
+import { GlobalVideoBackground } from "@/components/ui/GlobalVideoBackground";
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
 
@@ -67,9 +68,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
         />
       </head>
-      <body className="bg-bg-primary text-stone-100 font-sans font-light leading-relaxed overflow-x-hidden antialiased">
+      <body className="text-stone-100 font-sans font-light leading-relaxed overflow-x-hidden antialiased">
         <SmoothScroll>
-          {children}
+          {/* Relative wrapper – height grows with total page content.
+              The video background inside it stretches to match. */}
+          <div className="relative min-h-screen">
+            {/* Persistent video background (now absolute, scrolls with content) */}
+            <GlobalVideoBackground />
+
+            {/* Actual page content – must be above the glass overlay */}
+            <div className="relative z-10">{children}</div>
+          </div>
         </SmoothScroll>
       </body>
     </html>

@@ -22,7 +22,6 @@ export default function HomePage() {
         <Systems />                 {/* 4. Connected Systems */}
 
         <GrowthImpact />
-        <OptimisationComparison />  {/* 6. Optimisation Comparison Chart */}
         <Contact />                 {/* 7. Contact Info */}
       </main>
 
