@@ -233,7 +233,7 @@ export function CapabilitiesSection() {
       ref={containerRef}
       id="capabilities"
       aria-label="How We Operate"
-      className="relative bg-bg-primary border-t border-stone-900 py-24 select-none"
+      className="relative border-t border-stone-900 py-24 select-none"
     >
       {/* Corner watermarks */}
       <div aria-hidden className="absolute top-4 left-6 font-mono text-[7px] text-stone-800 pointer-events-none">

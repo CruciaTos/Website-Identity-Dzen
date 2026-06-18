@@ -5,7 +5,8 @@ import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { Hero } from "@/components/sections/Hero";
 import { CaseStudies } from "@/components/sections/CaseStudies";
 
-const SCROLL_DISTANCE_VH = 120;
+// Scroll distance stays the same as before (half of original).
+const SCROLL_DISTANCE_VH = 175;
 
 export function HeroSlideTransition() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -21,15 +22,24 @@ export function HeroSlideTransition() {
     restDelta: 0.0001,
   });
 
-  const heroScale = useTransform(smoothProgress, [0, 0.85], [1, 0.96]);
-  const heroOpacity = useTransform(smoothProgress, [0, 0.5, 0.85], [1, 0.7, 0]);
-  const coverY = useTransform(smoothProgress, [0, 1], ["100vh", "0vh"]);
-  const wipeLineOpacity = useTransform(smoothProgress, [0, 0.05, 0.88, 1], [0, 1, 1, 0]);
+  // Hero fades out completely by progress 0.4 (unchanged).
+  const heroScale = useTransform(smoothProgress, [0, 0.65], [1, 0.96]);
+  const heroOpacity = useTransform(smoothProgress, [0, 0.65], [1, 0]);
+
+  // Market section (CaseStudies) starts sliding up when the hero is 80 % gone.
+  // At progress 0.32, hero opacity = 0.2  (80 % faded).
+  const coverY = useTransform(smoothProgress, [0.32, 1], ["100vh", "0vh"]);
+
+  // Wipe line appears just before the cover begins moving.
+  const wipeLineOpacity = useTransform(
+    smoothProgress,
+    [0.3, 0.32, 0.95, 1],
+    [0, 1, 1, 0]
+  );
 
   return (
     <div ref={containerRef} style={{ position: "relative" }}>
-      {/* Sticky hero pin — note this section is transparent and reveals the
-          single shared global video background, not a section-local one. */}
+      {/* Sticky hero pin */}
       <div
         style={{
           position: "sticky",
@@ -52,7 +62,7 @@ export function HeroSlideTransition() {
         </motion.div>
       </div>
 
-      {/* Scroll spacer — gives scroll room for the transition */}
+      {/* Scroll spacer */}
       <div
         aria-hidden="true"
         style={{
@@ -62,9 +72,7 @@ export function HeroSlideTransition() {
         }}
       />
 
-      {/* CaseStudies slides up as a cover panel. It is translucent, not an
-          opaque background swap — the same global video reads through it,
-          preserving the single continuous environment as sections change. */}
+      {/* CaseStudies cover — slides up while the last 20 % of the hero fades away */}
       <motion.div
         style={{
           translateY: coverY,
@@ -73,7 +81,7 @@ export function HeroSlideTransition() {
           willChange: "transform",
         }}
       >
-        {/* Wipe line — leading edge of the slide cover */}
+        {/* Wipe line */}
         <motion.div
           aria-hidden="true"
           style={{

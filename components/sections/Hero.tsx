@@ -65,9 +65,9 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
       {/* ── 1. DotField (interactive, behind content) ─────────────────── */}
       <div className="absolute inset-0 z-20" aria-hidden="true">
         <DotField
-          gap={60}
-          radius={0.8}
-          maxRadius={2}
+          gap={30}
+          radius={0.4}
+          maxRadius={1}
           proximity={180}
           repelStrength={40}
           spring={0.06}

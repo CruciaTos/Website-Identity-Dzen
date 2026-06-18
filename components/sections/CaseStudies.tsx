@@ -6,9 +6,7 @@ import { SectionIndex } from "@/components/ui/SectionIndex";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Hero-exact colour tokens
-   #00080eff  onyx bg  ·  #B2D5E5 candy blue  ·  #7ec3e2 headline blue
-   (backgrounds now transparent)
+   Colour tokens
 ───────────────────────────────────────────────────────────────────────── */
 const C = {
   bg: "transparent",
@@ -24,7 +22,6 @@ const C = {
 } as const;
 
 const SPRING = "cubic-bezier(0.22,1,0.36,1)";
-const EASE_FM = [0.22, 1, 0.36, 1] as const;
 
 /* ─────────────────────────────────────────────────────────────────────────
    Data
@@ -82,276 +79,63 @@ const CASES: RealCase[] = [
     accent: "#5aabce",
     source: "NDTV Travel — 2025",
   },
+  {
+    id: "04",
+    org: "Bengaluru Traffic Police",
+    tag: "AI Public Shaming",
+    domain: "Traffic Enforcement · Smart City",
+    headline: "AI‑powered billboard shames drivers with pending challans in real‑time.",
+    body: "A digital board on MG Road displays vehicle photos, registration numbers, and pending fine amounts. Updated live from traffic databases, it uses public accountability to nudge violators into paying their dues.",
+    metrics: [
+      { value: "Real‑time", label: "Challan updates" },
+      { value: "Public", label: "Display board" },
+      { value: "MG Road", label: "Pilot location" },
+    ],
+    accent: "#6fc5e0",
+    source: "NDTV Auto — 2026",
+  },
 ];
 
-
-
 /* ─────────────────────────────────────────────────────────────────────────
-   Desktop horizontal expandable card (metric boxes removed, text white)
+   Marquee card
 ───────────────────────────────────────────────────────────────────────── */
-function CaseCard({
+function MarqueeExpandingCard({
   c,
-  isActive,
-  isCompressed,
-  onEnter,
+  isExpanded,
+  onHover,
 }: {
   c: RealCase;
-  isActive: boolean;
-  isCompressed: boolean;
-  onEnter: () => void;
+  isExpanded: boolean;
+  onHover: (id: string | null) => void;
 }) {
   return (
     <div
-      onMouseEnter={onEnter}
+      onMouseEnter={() => onHover(c.id)}
+      onMouseLeave={() => onHover(null)}
       style={{
-        flex: isActive ? 2.9 : isCompressed ? 0.55 : 1,
-        transition: `flex 0.60s ${SPRING}, border-color 0.35s ease`,
+        flex: isExpanded ? "0 0 clamp(360px, 42vw, 500px)" : "0 0 clamp(280px, 35vw, 360px)",
+        transition: `flex 0.65s ${SPRING}, border-color 0.45s ease`,
         position: "relative",
         overflow: "hidden",
         backgroundColor: C.bgCard,
-        border: `1px solid ${isActive ? C.borderHi : C.border}`,
+        border: `1px solid ${isExpanded ? C.borderHi : C.border}`,
         cursor: "default",
-        minWidth: 0,
         display: "flex",
         flexDirection: "column",
+        height: "100%",
       }}
     >
-      {/* Dot-grid texture */}
+      {/* Dot‑grid texture */}
       <div
         aria-hidden
         style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
-          opacity: 0.014,
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          opacity: 0.4,
           backgroundImage:
             "radial-gradient(circle, rgba(178,213,229,0.9) 1px, transparent 1px)",
           backgroundSize: "22px 22px",
-        }}
-      />
-
-      {/* Ghost number – unchanged */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          bottom: "-44px", right: "-10px",
-          fontSize: "clamp(130px,15vw,240px)",
-          color: C.ghost,
-          fontFamily: "serif",
-          lineHeight: 1,
-          letterSpacing: "-0.05em",
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
-      >
-        {c.id}
-      </div>
-
-      {/* Left accent bar */}
-      <div
-        style={{
-          position: "absolute", left: 0, top: 0, bottom: 0, width: "3px",
-          backgroundColor: isActive ? c.accent : `${c.accent}40`,
-          transition: "background-color 0.42s ease",
-        }}
-      />
-
-      {/* Radial glow */}
-      <div
-        style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
-          opacity: isActive ? 1 : 0,
-          transition: "opacity 0.5s ease",
-          background: `radial-gradient(ellipse at top left, ${c.accent}0D 0%, transparent 58%)`,
-        }}
-      />
-
-      {/* ── Full content ── */}
-      <div
-        style={{
-          position: "absolute", inset: 0,
-          padding: "48px 40px 48px 48px",
-          display: "flex", flexDirection: "column",
-          opacity: isCompressed ? 0 : 1,
-          transition: "opacity 0.28s ease",
-          pointerEvents: isCompressed ? "none" : "auto",
-          zIndex: 1,
-          overflow: "hidden",
-        }}
-      >
-        {/* Tag row */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "24px", flexWrap: "wrap" }}>
-          <span
-            className="font-mono"
-            style={{
-              fontSize: "12.5px",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              padding: "5px 12px",
-              border: `1px solid ${c.accent}38`,
-              backgroundColor: `${c.accent}0D`,
-              color: "#a9bdf8ff",          // ← pure white
-            }}
-          >
-            {c.tag}
-          </span>
-          <span
-            className="font-mono"
-            style={{
-              fontSize: "12.5px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "#a9bdf8ff",          // ← pure white (was C.faint)
-            }}
-          >
-            {c.domain}
-          </span>
-        </div>
-
-        {/* Org label */}
-        <div
-          className="font-mono"
-          style={{
-            fontSize: "13px",
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "#a9bdf8ff",            // ← pure white (was C.dim)
-            marginBottom: "12px",
-          }}
-        >
-          {c.org}
-        </div>
-
-        {/* Headline */}
-        <h3
-          className="font-serif"
-          style={{
-            fontSize: "clamp(23px, 2.5vw, 39px)",
-            fontWeight: 400,
-            color: "#a9bdf8ff",            // ← pure white (was C.blue)
-            lineHeight: 1.2,
-            letterSpacing: "-0.025em",
-            maxWidth: "520px",
-            margin: 0,
-          }}
-        >
-          {c.headline}
-        </h3>
-
-        {/* ── Expanded content (no metric boxes) ── */}
-        <AnimatePresence>
-          {isActive && (
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
-              transition={{ duration: 0.42, ease: EASE_FM }}
-              style={{ marginTop: "28px", flex: 1, display: "flex", flexDirection: "column" } as CSSProperties}
-            >
-              <div style={{ height: "1px", backgroundColor: C.border, marginBottom: "24px" }} />
-
-              <p
-                className="font-sans"
-                style={{
-                  fontSize: "17px",
-                  fontWeight: 300,
-                  color: "#a9bdf8ff",      // ← pure white (was C.dim)
-                  lineHeight: 1.75,
-                  marginBottom: "28px",
-                  maxWidth: "520px",
-                }}
-              >
-                {c.body}
-              </p>
-
-              {/* Source citation */}
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "auto" }}>
-                <div
-                  style={{ width: "20px", height: "1px", backgroundColor: c.accent, flexShrink: 0 }}
-                />
-                <span
-                  className="font-mono"
-                  style={{
-                    fontSize: "12px",
-                    letterSpacing: "0.10em",
-                    textTransform: "uppercase",
-                    color: "#a9bdf8ff",    // ← pure white (was C.faint)
-                  }}
-                >
-                  Source: {c.source}
-                </span>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* ── Compressed strip ── */}
-      <div
-        style={{
-          position: "absolute", inset: 0,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          opacity: isCompressed ? 1 : 0,
-          transition: "opacity 0.28s ease",
-          pointerEvents: "none",
-          zIndex: 2,
-        }}
-      >
-        <span
-          className="font-mono"
-          style={{
-            fontSize: "12px",
-            letterSpacing: "0.17em",
-            textTransform: "uppercase",
-            color: "#a9bdf8ff",            // ← pure white (was `${c.accent}52`)
-            writingMode: "vertical-rl",
-            transform: "rotate(180deg)",
-          }}
-        >
-          {c.id} · {c.org}
-        </span>
-      </div>
-
-      {/* Bottom accent line */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0, left: 0, right: 0,
-          height: "2px",
-          backgroundColor: c.accent,
-          opacity: isActive ? 0.55 : 0.12,
-          transformOrigin: "left",
-          transform: `scaleX(${isActive ? 1 : 0.32})`,
-          transition: `opacity 0.4s ease, transform 0.65s ${SPRING}`,
-        }}
-      />
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────────────────
-   Mobile card – click to expand (metric boxes removed, text white)
-───────────────────────────────────────────────────────────────────────── */
-function MobileCard({ c }: { c: RealCase }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div
-      onClick={() => setOpen(!open)}
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        backgroundColor: C.bgCard,
-        border: `1px solid ${open ? C.borderHi : C.border}`,
-        transition: "border-color 0.35s ease",
-        cursor: "pointer",
-      }}
-    >
-      {/* Left accent bar */}
-      <div
-        style={{
-          position: "absolute", left: 0, top: 0, bottom: 0, width: "3px",
-          backgroundColor: open ? c.accent : `${c.accent}40`,
-          transition: "background-color 0.4s ease",
         }}
       />
 
@@ -359,49 +143,83 @@ function MobileCard({ c }: { c: RealCase }) {
       <div
         aria-hidden
         style={{
-          position: "absolute", bottom: "-16px", right: "-6px",
-          fontSize: "clamp(90px,24vw,140px)",
-          color: C.ghost, fontFamily: "serif", lineHeight: 1,
-          letterSpacing: "-0.05em", pointerEvents: "none", userSelect: "none",
+          position: "absolute",
+          bottom: isExpanded ? "-36px" : "-18px",
+          right: "-4px",
+          fontSize: isExpanded ? "clamp(140px,16vw,260px)" : "clamp(110px,12vw,200px)",
+          color: C.ghost,
+          fontFamily: "serif",
+          lineHeight: 1,
+          letterSpacing: "-0.05em",
+          pointerEvents: "none",
+          userSelect: "none",
+          transition: `all 0.65s ${SPRING}`,
         }}
       >
         {c.id}
       </div>
 
-      {/* Glow */}
+      {/* Left accent bar */}
       <div
         style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
-          opacity: open ? 1 : 0,
-          transition: "opacity 0.45s ease",
-          background: `radial-gradient(ellipse at top left, ${c.accent}0D 0%, transparent 55%)`,
+          position: "absolute",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: "3px",
+          backgroundColor: isExpanded ? c.accent : `${c.accent}40`,
+          transition: "background-color 0.45s ease",
         }}
       />
 
-      {/* Mobile card content */}
-      <div style={{ padding: "32px 24px 32px 32px", position: "relative", zIndex: 1 }}>
-        {/* Tag row */}
-        <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "16px", flexWrap: "wrap" }}>
-          <span
-            className="font-mono"
-            style={{
-              fontSize: "12.5px",
-              letterSpacing: "0.18em", textTransform: "uppercase",
-              padding: "5px 12px",
-              border: `1px solid ${c.accent}38`,
-              backgroundColor: `${c.accent}0D`,
-              color: "#a9bdf8ff",         // ← pure white
-            }}
-          >
-            {c.tag}
-          </span>
+      {/* Radial glow */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          opacity: isExpanded ? 1 : 0.35,
+          transition: "opacity 0.55s ease",
+          background: `radial-gradient(ellipse at top left, ${c.accent}0D 0%, transparent 58%)`,
+        }}
+      />
+
+      {/* Inner content – bottom padding increased to make room for the absolute source */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          padding: isExpanded
+            ? "48px 40px 72px 48px" // enough bottom padding so text doesn't slip under the source
+            : "24px 24px",
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          justifyContent: "flex-start",
+          transition: `padding 0.65s ${SPRING}`,
+        }}
+      >
+        {/* Domain (visible only when expanded) */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            marginBottom: isExpanded ? "24px" : "16px",
+            flexWrap: "wrap",
+            transition: `margin-bottom 0.65s ${SPRING}`,
+          }}
+        >
           <span
             className="font-mono"
             style={{
               fontSize: "12.5px",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: "#a9bdf8ff",         // ← pure white (was C.faint)
+              color: "#a9bdf8ff",
+              opacity: isExpanded ? 1 : 0,
+              transition: "opacity 0.35s ease",
+              whiteSpace: "nowrap",
             }}
           >
             {c.domain}
@@ -415,109 +233,122 @@ function MobileCard({ c }: { c: RealCase }) {
             fontSize: "13px",
             letterSpacing: "0.22em",
             textTransform: "uppercase",
-            color: "#a9bdf8ff",           // ← pure white (was C.dim)
-            marginBottom: "10px",
+            color: "#a9bdf8ff",
+            marginBottom: "12px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
           }}
         >
           {c.org}
         </div>
 
-        {/* Headline + toggle */}
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px" }}>
-          <h3
-            className="font-serif"
-            style={{
-              fontSize: "clamp(23px, 5.5vw, 31px)",
-              fontWeight: 400,
-              color: "#a9bdf8ff",         // ← pure white (was C.blue)
-              lineHeight: 1.2,
-              letterSpacing: "-0.025em",
-              flex: 1,
-              margin: 0,
-            }}
-          >
-            {c.headline}
-          </h3>
+        {/* Headline (news title) – changed to off‑white */}
+        <h3
+          className="font-sans"
+          style={{
+            fontSize: isExpanded
+              ? "clamp(19px, 2.2vw, 34px)"
+              : "clamp(32px, 4.2vw, 52px)",
+            fontWeight: 600,
+            color: "#f5f5f5c6",           // 👈 off‑white
+            lineHeight: 1.15,
+            letterSpacing: "-0.022em",
+            margin: 0,
+            transition: `font-size 0.65s ${SPRING}`,
+            overflow: "hidden",
+            display: "-webkit-box",
+            WebkitLineClamp: isExpanded ? "unset" : 5, // increased from 4 to 5 rows in collapsed state
+            WebkitBoxOrient: "vertical",
+          }}
+        >
+          {c.headline}
+        </h3>
 
+        {/* Expandable body content */}
+        <div
+          style={{
+            flex: isExpanded ? 1 : "none",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            opacity: isExpanded ? 1 : 0,
+            pointerEvents: isExpanded ? "auto" : "none",
+            transition: `opacity 0.45s ease ${isExpanded ? "0.28s" : "0s"}, max-height 0.65s ${SPRING}`,
+            maxHeight: isExpanded ? "1000px" : "0px",
+            overflow: "hidden",
+            marginTop: isExpanded ? "24px" : "0px",
+          }}
+        >
           <div
             style={{
-              flexShrink: 0, width: 28, height: 28,
-              border: `1px solid ${open ? C.borderHi : C.border}`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              marginTop: "3px",
-              transition: `transform 0.38s ${SPRING}, border-color 0.3s ease`,
-              transform: open ? "rotate(45deg)" : "none",
+              height: "1px",
+              backgroundColor: C.border,
+              marginBottom: "24px",
+              transform: isExpanded ? "scaleX(1)" : "scaleX(0)",
+              transformOrigin: "left",
+              transition: `transform 0.5s ${SPRING} ${isExpanded ? "0.32s" : "0s"}`,
+            }}
+          />
+
+          <p
+            className="font-sans"
+            style={{
+              fontSize: "17px",
+              fontWeight: 300,
+              color: "#a9bdf8ff",
+              lineHeight: 1.75,
+              marginBottom: "28px",
             }}
           >
-            <span
-              className="font-mono"
-              style={{
-                color: "#a9bdf8ff",       // ← pure white (was open ? C.blue : C.faint)
-                fontSize: "20px",
-                lineHeight: 1,
-                transition: "color 0.3s ease",
-              }}
-            >
-              +
-            </span>
-          </div>
+            {c.body}
+          </p>
         </div>
-
-        {/* Expanded body */}
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.42, ease: EASE_FM }}
-              style={{ overflow: "hidden" } as CSSProperties}
-            >
-              <div style={{ paddingTop: "20px" }}>
-                <div style={{ height: "1px", backgroundColor: C.border, marginBottom: "20px" }} />
-
-                <p
-                  className="font-sans"
-                  style={{
-                    fontSize: "17px",
-                    fontWeight: 300,
-                    color: "#a9bdf8ff",     // ← pure white (was C.dim)
-                    lineHeight: 1.75,
-                    marginBottom: "20px",
-                  }}
-                >
-                  {c.body}
-                </p>
-
-                {/* Source */}
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <div style={{ width: "20px", height: "1px", backgroundColor: c.accent, flexShrink: 0 }} />
-                  <span
-                    className="font-mono"
-                    style={{
-                      fontSize: "12px",
-                      letterSpacing: "0.10em",
-                      textTransform: "uppercase",
-                      color: "#a9bdf8ff",   // ← pure white (was C.faint)
-                    }}
-                  >
-                    Source: {c.source}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
-      {/* Bottom accent */}
+      {/* Source – absolutely positioned at the bottom, left-aligned */}
       <div
         style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 2,
+          display: "flex",
+          justifyContent: "flex-start",        // align left
+          alignItems: "center",
+          padding: "16px 24px 16px 48px",     // left padding matches content left padding
+          opacity: isExpanded ? 1 : 0,
+          pointerEvents: isExpanded ? "auto" : "none",
+          transition: `opacity 0.45s ease ${isExpanded ? "0.28s" : "0s"}`,
+        }}
+      >
+        <span
+          className="font-mono"
+          style={{
+            fontSize: "12px",
+            letterSpacing: "0.10em",
+            textTransform: "uppercase",
+            color: "#a9bdf8ff",
+          }}
+        >
+          Source: {c.source}
+        </span>
+      </div>
+
+      {/* Bottom accent line */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1,
           height: "2px",
           backgroundColor: c.accent,
-          opacity: open ? 0.55 : 0.12,
+          opacity: isExpanded ? 0.55 : 0.12,
           transformOrigin: "left",
-          transform: `scaleX(${open ? 1 : 0.32})`,
+          transform: `scaleX(${isExpanded ? 1 : 0.32})`,
           transition: `opacity 0.4s ease, transform 0.65s ${SPRING}`,
         }}
       />
@@ -526,10 +357,14 @@ function MobileCard({ c }: { c: RealCase }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Main export
+   Main section
 ───────────────────────────────────────────────────────────────────────── */
 export function CaseStudies() {
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  const handleHover = (id: string | null) => {
+    setActiveId(id);
+  };
 
   return (
     <section
@@ -552,7 +387,15 @@ export function CaseStudies() {
           <div className="flex items-end justify-between mb-8 gap-12 max-md:flex-col max-md:items-start">
             <div>
               <SectionIndex number="04" tag="AI in the Real World" className="mb-6" />
-              <h2 className="font-serif text-display-3 font-normal" style={{ color: C.blue }}>
+              <h2
+                className="font-sans font-bold"
+                style={{
+                  fontSize: "clamp(31px, 4.2vw, 57px)",
+                  color: C.blue,
+                  letterSpacing: "-0.026em",
+                  lineHeight: 1.1,
+                }}
+              >
                 Think AI is still far away?
                 <br />
                 <em className="not-italic" style={{ color: C.dim }}>
@@ -573,25 +416,47 @@ export function CaseStudies() {
 
         <FadeIn delay={0.2}>
           <div
-            className="hidden md:flex gap-[1px]"
-            style={{ height: "clamp(620px,64vh,760px)" }}
-            onMouseLeave={() => setActiveId(null)}
+            className="marquee-container"
+            style={{
+              height: "clamp(550px, 60vh, 760px)",
+              overflow: "hidden",
+              width: "100%",
+            }}
           >
-            {CASES.map((c) => (
-              <CaseCard
-                key={c.id}
-                c={c}
-                isActive={activeId === c.id}
-                isCompressed={activeId !== null && activeId !== c.id}
-                onEnter={() => setActiveId(c.id)}
-              />
-            ))}
-          </div>
+            <style>{`
+              @keyframes marquee-scroll {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+              .marquee-track {
+                display: flex;
+                gap: 1px;
+                height: 100%;
+                animation: marquee-scroll 30s linear infinite;
+              }
+              .marquee-container:hover .marquee-track {
+                animation-play-state: paused;
+              }
+            `}</style>
 
-          <div className="flex md:hidden flex-col gap-[1px]">
-            {CASES.map((c) => (
-              <MobileCard key={c.id} c={c} />
-            ))}
+            <div className="marquee-track">
+              {CASES.map((c) => (
+                <MarqueeExpandingCard
+                  key={c.id}
+                  c={c}
+                  isExpanded={activeId === c.id}
+                  onHover={handleHover}
+                />
+              ))}
+              {CASES.map((c) => (
+                <MarqueeExpandingCard
+                  key={`dup-${c.id}`}
+                  c={c}
+                  isExpanded={activeId === c.id}
+                  onHover={handleHover}
+                />
+              ))}
+            </div>
           </div>
         </FadeIn>
       </div>
