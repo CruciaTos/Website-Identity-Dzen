@@ -61,38 +61,8 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
       id="hero"
       aria-label="DZen hero — Intelligent Workflow Integration"
       className={`min-h-screen flex flex-col items-start justify-center relative overflow-hidden ${className ?? ""}`}
-      style={{ backgroundColor: "#000b12ff" }}
     >
-      {/* ── 1. Background video (behind everything) ────────────────────── */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        aria-hidden="true"
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{
-          objectPosition: "center 30%",
-          transform: "scaleX(1.15)",
-          transformOrigin: "center",
-        }}
-      >
-        <source src="/videos/hero.mp4" type="video/mp4" />
-      </video>
-
-      {/* ── 2. Full‑screen glassmorphism blur overlay ──────────────────── */}
-      <div
-        className="absolute inset-0 pointer-events-none z-10"
-        aria-hidden="true"
-        style={{
-          backdropFilter: "blur(12px) saturate(130%)",
-          WebkitBackdropFilter: "blur(12px) saturate(130%)",
-          background:
-            "linear-gradient(180deg, rgba(1,11,19,0.4) 0%, rgba(1,11,19,0.65) 60%, rgba(1,11,19,0.9) 100%)",
-        }}
-      />
-
-      {/* ── 3. DotField (interactive, above the glass) ──────────────────── */}
+      {/* ── 1. DotField (interactive, behind content) ─────────────────── */}
       <div className="absolute inset-0 z-20" aria-hidden="true">
         <DotField
           gap={60}
@@ -107,7 +77,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
         />
       </div>
 
-      {/* ── 4. Text content (allows pointer events to pass through to dots) ──────── */}
+      {/* ── 2. Text content (allows pointer events to pass through to dots) ──────── */}
       <div
         className="absolute z-30 pointer-events-none"
         style={{
@@ -143,7 +113,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
               ref={headlineRef}
               className="font-zaslia m-0 p-0 leading-none select-none"
               style={{
-                fontSize: "clamp(82px, 25vw, 202px)",   // size for the Svayatta part
+                fontSize: "clamp(82px, 25vw, 202px)",
                 fontWeight: 500,
                 color: "#7ec3e2ff",
                 letterSpacing: "-0.025em",
@@ -154,7 +124,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
               {/* DZEN – smaller, sits next to Svayatta */}
               <span
                 style={{
-                  fontSize: "0.7em",        // reduced relative to h1 size
+                  fontSize: "0.7em",
                   verticalAlign: "baseline",
                   fontWeight: 500,
                 }}
@@ -178,7 +148,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
                     style={{
                       display: "inline-block",
                       verticalAlign: "baseline",
-                      fontSize: isDevanagari ? "0.9em" : "1em", // relative to h1 size
+                      fontSize: isDevanagari ? "0.9em" : "1em",
                       fontWeight: isDevanagari ? 300 : 500,
                     }}
                     initial={{ opacity: 0, y: 10 }}
@@ -260,21 +230,21 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
         </div>
       </div>
 
-      {/* ── 5. Subtle noise grain (above everything, very low opacity) ── */}
+      {/* ── 3. Subtle noise grain (above everything, very low opacity) ── */}
       <div
         className="absolute inset-0 pointer-events-none z-40"
         style={{ opacity: 0.025 }}
         aria-hidden="true"
       />
 
-      {/* ── 6. Top horizontal rule ──────────────────────────────────────── */}
+      {/* ── 4. Top horizontal rule ──────────────────────────────────────── */}
       <div
         className="absolute left-0 right-0 h-px z-50"
         style={{ top: "64px", backgroundColor: "rgba(178, 213, 229, 0.1)" }}
         aria-hidden="true"
       />
 
-      {/* ── 7. Vertical divider (bottom left) ──────────────────────────── */}
+      {/* ── 5. Vertical divider (bottom left) ──────────────────────────── */}
       <motion.div
         className="absolute bottom-0 left-12 w-px z-50"
         style={{ height: "80px", backgroundColor: "rgba(178, 213, 229, 0.12)" }}
@@ -284,7 +254,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
         transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
       />
 
-      {/* ── 8. Scroll indicator (bottom left) ──────────────────────────── */}
+      {/* ── 6. Scroll indicator (bottom left) ──────────────────────────── */}
       <motion.div
         className="absolute bottom-6 left-6 flex items-center gap-[10px] z-50 pointer-events-none"
         initial={{ opacity: 0 }}

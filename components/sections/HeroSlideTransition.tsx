@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { Hero } from "@/components/sections/Hero";
-import { TargetMarkets } from "@/components/sections/TargetMarkets";
+import { CaseStudies } from "@/components/sections/CaseStudies";
 
 const SCROLL_DISTANCE_VH = 120;
 
@@ -62,7 +62,7 @@ export function HeroSlideTransition() {
         }}
       />
 
-      {/* TargetMarkets slides up as a cover panel. It is translucent, not an
+      {/* CaseStudies slides up as a cover panel. It is translucent, not an
           opaque background swap — the same global video reads through it,
           preserving the single continuous environment as sections change. */}
       <motion.div
@@ -90,7 +90,7 @@ export function HeroSlideTransition() {
           }}
         />
 
-        <TargetMarkets />
+        <CaseStudies />
       </motion.div>
     </div>
   );

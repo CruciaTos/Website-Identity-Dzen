@@ -8,10 +8,11 @@ import { FadeIn } from "@/components/ui/FadeIn";
 /* ─────────────────────────────────────────────────────────────────────────
    Hero-exact colour tokens
    #00080eff  onyx bg  ·  #B2D5E5 candy blue  ·  #7ec3e2 headline blue
+   (backgrounds now transparent)
 ───────────────────────────────────────────────────────────────────────── */
 const C = {
-  bg: "#000b12ff",
-  bgCard: "#14171aff",
+  bg: "transparent",
+  bgCard: "transparent",
   blue: "#B2D5E5",
   blueMid: "#7ec3e2",
   blueDeep: "#5aabce",
@@ -83,21 +84,10 @@ const CASES: RealCase[] = [
   },
 ];
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Pulsing dot
-───────────────────────────────────────────────────────────────────────── */
-function PulseDot({ delay }: { delay: number }) {
-  return (
-    <motion.div
-      style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: C.blue, flexShrink: 0 } as CSSProperties}
-      animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
-      transition={{ duration: 2.4, delay, repeat: Infinity, ease: "easeInOut" }}
-    />
-  );
-}
+
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Desktop horizontal expandable card
+   Desktop horizontal expandable card (metric boxes removed, text white)
 ───────────────────────────────────────────────────────────────────────── */
 function CaseCard({
   c,
@@ -124,7 +114,6 @@ function CaseCard({
         minWidth: 0,
         display: "flex",
         flexDirection: "column",
-        // No borderRadius – already rectangular
       }}
     >
       {/* Dot-grid texture */}
@@ -194,13 +183,13 @@ function CaseCard({
           <span
             className="font-mono"
             style={{
-              fontSize: "12.5px", // +3
+              fontSize: "12.5px",
               letterSpacing: "0.18em",
               textTransform: "uppercase",
               padding: "5px 12px",
               border: `1px solid ${c.accent}38`,
               backgroundColor: `${c.accent}0D`,
-              color: c.accent,
+              color: "#a9bdf8ff",          // ← pure white
             }}
           >
             {c.tag}
@@ -208,10 +197,10 @@ function CaseCard({
           <span
             className="font-mono"
             style={{
-              fontSize: "12.5px", // +3
+              fontSize: "12.5px",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: C.faint,
+              color: "#a9bdf8ff",          // ← pure white (was C.faint)
             }}
           >
             {c.domain}
@@ -222,23 +211,23 @@ function CaseCard({
         <div
           className="font-mono"
           style={{
-            fontSize: "13px", // +3 (was 10px)
+            fontSize: "13px",
             letterSpacing: "0.22em",
             textTransform: "uppercase",
-            color: C.dim,
+            color: "#a9bdf8ff",            // ← pure white (was C.dim)
             marginBottom: "12px",
           }}
         >
           {c.org}
         </div>
 
-        {/* Headline – larger clamp +3 */}
+        {/* Headline */}
         <h3
           className="font-serif"
           style={{
-            fontSize: "clamp(23px, 2.5vw, 39px)", // +3 on min & max
+            fontSize: "clamp(23px, 2.5vw, 39px)",
             fontWeight: 400,
-            color: C.blue,
+            color: "#a9bdf8ff",            // ← pure white (was C.blue)
             lineHeight: 1.2,
             letterSpacing: "-0.025em",
             maxWidth: "520px",
@@ -248,7 +237,7 @@ function CaseCard({
           {c.headline}
         </h3>
 
-        {/* ── Expanded content ── */}
+        {/* ── Expanded content (no metric boxes) ── */}
         <AnimatePresence>
           {isActive && (
             <motion.div
@@ -263,9 +252,9 @@ function CaseCard({
               <p
                 className="font-sans"
                 style={{
-                  fontSize: "17px", // +3 (was 14px)
+                  fontSize: "17px",
                   fontWeight: 300,
-                  color: C.dim,
+                  color: "#a9bdf8ff",      // ← pure white (was C.dim)
                   lineHeight: 1.75,
                   marginBottom: "28px",
                   maxWidth: "520px",
@@ -273,52 +262,6 @@ function CaseCard({
               >
                 {c.body}
               </p>
-
-              {/* Metrics strip – hero numbers +3 */}
-              <div
-                style={{
-                  display: "flex",
-                  border: `1px solid ${C.border}`,
-                  marginBottom: "24px",
-                }}
-              >
-                {c.metrics.map((m, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      flex: 1,
-                      padding: "20px 22px",
-                      borderLeft: i > 0 ? `1px solid ${C.border}` : "none",
-                    }}
-                  >
-                    <div
-                      className="font-serif"
-                      style={{
-                        fontSize: "clamp(27px, 2.8vw, 39px)", // +3
-                        fontWeight: 400,
-                        color: c.accent,
-                        lineHeight: 1,
-                        letterSpacing: "-0.03em",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      {m.value}
-                    </div>
-                    <div
-                      className="font-mono"
-                      style={{
-                        fontSize: "12px", // +3 (was 9px)
-                        letterSpacing: "0.14em",
-                        textTransform: "uppercase",
-                        color: C.faint,
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      {m.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
 
               {/* Source citation */}
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "auto" }}>
@@ -328,10 +271,10 @@ function CaseCard({
                 <span
                   className="font-mono"
                   style={{
-                    fontSize: "12px", // +3 (was 9px)
+                    fontSize: "12px",
                     letterSpacing: "0.10em",
                     textTransform: "uppercase",
-                    color: C.faint,
+                    color: "#a9bdf8ff",    // ← pure white (was C.faint)
                   }}
                 >
                   Source: {c.source}
@@ -356,10 +299,10 @@ function CaseCard({
         <span
           className="font-mono"
           style={{
-            fontSize: "12px", // +3 (was 9px)
+            fontSize: "12px",
             letterSpacing: "0.17em",
             textTransform: "uppercase",
-            color: `${c.accent}52`,
+            color: "#a9bdf8ff",            // ← pure white (was `${c.accent}52`)
             writingMode: "vertical-rl",
             transform: "rotate(180deg)",
           }}
@@ -386,7 +329,7 @@ function CaseCard({
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Mobile card – click to expand
+   Mobile card – click to expand (metric boxes removed, text white)
 ───────────────────────────────────────────────────────────────────────── */
 function MobileCard({ c }: { c: RealCase }) {
   const [open, setOpen] = useState(false);
@@ -401,7 +344,6 @@ function MobileCard({ c }: { c: RealCase }) {
         border: `1px solid ${open ? C.borderHi : C.border}`,
         transition: "border-color 0.35s ease",
         cursor: "pointer",
-        // No borderRadius – already rectangular
       }}
     >
       {/* Left accent bar */}
@@ -443,12 +385,12 @@ function MobileCard({ c }: { c: RealCase }) {
           <span
             className="font-mono"
             style={{
-              fontSize: "12.5px", // +3
+              fontSize: "12.5px",
               letterSpacing: "0.18em", textTransform: "uppercase",
               padding: "5px 12px",
               border: `1px solid ${c.accent}38`,
               backgroundColor: `${c.accent}0D`,
-              color: c.accent,
+              color: "#a9bdf8ff",         // ← pure white
             }}
           >
             {c.tag}
@@ -456,9 +398,10 @@ function MobileCard({ c }: { c: RealCase }) {
           <span
             className="font-mono"
             style={{
-              fontSize: "12.5px", // +3
+              fontSize: "12.5px",
               letterSpacing: "0.12em",
-              textTransform: "uppercase", color: C.faint,
+              textTransform: "uppercase",
+              color: "#a9bdf8ff",         // ← pure white (was C.faint)
             }}
           >
             {c.domain}
@@ -469,23 +412,28 @@ function MobileCard({ c }: { c: RealCase }) {
         <div
           className="font-mono"
           style={{
-            fontSize: "13px", // +3 (was 10px)
+            fontSize: "13px",
             letterSpacing: "0.22em",
-            textTransform: "uppercase", color: C.dim, marginBottom: "10px",
+            textTransform: "uppercase",
+            color: "#a9bdf8ff",           // ← pure white (was C.dim)
+            marginBottom: "10px",
           }}
         >
           {c.org}
         </div>
 
-        {/* Headline – larger clamp +3 */}
+        {/* Headline + toggle */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "16px" }}>
           <h3
             className="font-serif"
             style={{
-              fontSize: "clamp(23px, 5.5vw, 31px)", // +3
-              fontWeight: 400, color: C.blue,
-              lineHeight: 1.2, letterSpacing: "-0.025em",
-              flex: 1, margin: 0,
+              fontSize: "clamp(23px, 5.5vw, 31px)",
+              fontWeight: 400,
+              color: "#a9bdf8ff",         // ← pure white (was C.blue)
+              lineHeight: 1.2,
+              letterSpacing: "-0.025em",
+              flex: 1,
+              margin: 0,
             }}
           >
             {c.headline}
@@ -504,8 +452,8 @@ function MobileCard({ c }: { c: RealCase }) {
             <span
               className="font-mono"
               style={{
-                color: open ? C.blue : C.faint,
-                fontSize: "20px", // +3 (was 17px)
+                color: "#a9bdf8ff",       // ← pure white (was open ? C.blue : C.faint)
+                fontSize: "20px",
                 lineHeight: 1,
                 transition: "color 0.3s ease",
               }}
@@ -531,49 +479,15 @@ function MobileCard({ c }: { c: RealCase }) {
                 <p
                   className="font-sans"
                   style={{
-                    fontSize: "17px", // +3 (was 14px)
+                    fontSize: "17px",
                     fontWeight: 300,
-                    color: C.dim, lineHeight: 1.75,
+                    color: "#a9bdf8ff",     // ← pure white (was C.dim)
+                    lineHeight: 1.75,
                     marginBottom: "20px",
                   }}
                 >
                   {c.body}
                 </p>
-
-                {/* Metrics – hero numbers +3 */}
-                <div style={{ display: "flex", border: `1px solid ${C.border}`, marginBottom: "20px" }}>
-                  {c.metrics.map((m, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        flex: 1, padding: "16px 14px",
-                        borderLeft: i > 0 ? `1px solid ${C.border}` : "none",
-                      }}
-                    >
-                      <div
-                        className="font-serif"
-                        style={{
-                          fontSize: "clamp(23px, 5vw, 31px)", // +3
-                          fontWeight: 400, color: c.accent,
-                          lineHeight: 1, letterSpacing: "-0.03em",
-                          marginBottom: "6px",
-                        }}
-                      >
-                        {m.value}
-                      </div>
-                      <div
-                        className="font-mono"
-                        style={{
-                          fontSize: "11px", // +3 (was 8px)
-                          letterSpacing: "0.12em",
-                          textTransform: "uppercase", color: C.faint, lineHeight: 1.5,
-                        }}
-                      >
-                        {m.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
 
                 {/* Source */}
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -581,9 +495,10 @@ function MobileCard({ c }: { c: RealCase }) {
                   <span
                     className="font-mono"
                     style={{
-                      fontSize: "12px", // +3 (was 9px)
+                      fontSize: "12px",
                       letterSpacing: "0.10em",
-                      textTransform: "uppercase", color: C.faint,
+                      textTransform: "uppercase",
+                      color: "#a9bdf8ff",   // ← pure white (was C.faint)
                     }}
                   >
                     Source: {c.source}
@@ -622,11 +537,10 @@ export function CaseStudies() {
       aria-label="Real-world AI deployments"
       style={{
         padding: "120px 0",
-        backgroundColor: "transparent", // ← transparent background
+        backgroundColor: C.bg,
         borderTop: `1px solid ${C.border}`,
       }}
     >
-      {/* ── Wider container with reduced side padding ── */}
       <div
         style={{
           maxWidth: "1440px",
@@ -634,7 +548,6 @@ export function CaseStudies() {
           padding: "0 clamp(20px, 3vw, 40px)",
         }}
       >
-        {/* ── Section header ── */}
         <FadeIn>
           <div className="flex items-end justify-between mb-8 gap-12 max-md:flex-col max-md:items-start">
             <div>
@@ -658,25 +571,6 @@ export function CaseStudies() {
           </div>
         </FadeIn>
 
-        {/* ── Animated separator ── */}
-        <FadeIn delay={0.15}>
-          <div className="flex items-center gap-3 mb-14">
-            <div className="flex items-center gap-1.5">
-              <PulseDot delay={0} />
-              <PulseDot delay={0.4} />
-              <PulseDot delay={0.8} />
-            </div>
-            <div className="flex-1 h-px" style={{ backgroundColor: C.border }} />
-            <span
-              className="font-mono text-[12px] tracking-[0.18em] uppercase" // +3 (was 9px)
-              style={{ color: C.faint }}
-            >
-              Production · Active
-            </span>
-          </div>
-        </FadeIn>
-
-        {/* ── Desktop: horizontal expandable cards ── */}
         <FadeIn delay={0.2}>
           <div
             className="hidden md:flex gap-[1px]"
@@ -694,44 +588,10 @@ export function CaseStudies() {
             ))}
           </div>
 
-          {/* ── Mobile: vertical click-to-expand cards ── */}
           <div className="flex md:hidden flex-col gap-[1px]">
             {CASES.map((c) => (
               <MobileCard key={c.id} c={c} />
             ))}
-          </div>
-        </FadeIn>
-
-        {/* ── Footer provenance ── */}
-        <FadeIn delay={0.25}>
-          <div
-            className="flex items-center gap-6 mt-16 pt-12 flex-wrap"
-            style={{ borderTop: `1px solid ${C.border}` }}
-          >
-            <div className="flex items-center gap-[10px]">
-              <div
-                style={{ width: 6, height: 6, backgroundColor: C.blue, flexShrink: 0 }}
-                aria-hidden
-              />
-              <span
-                className="font-mono text-[13px] tracking-[0.14em] uppercase" // +3 (was 10px)
-                style={{ color: C.faint }}
-              >
-                All examples in active production deployment
-              </span>
-            </div>
-            <div className="flex items-center gap-[10px]">
-              <div
-                style={{ width: 6, height: 6, backgroundColor: `${C.blue}50`, flexShrink: 0 }}
-                aria-hidden
-              />
-              <span
-                className="font-mono text-[13px] tracking-[0.14em] uppercase" // +3
-                style={{ color: C.faint }}
-              >
-                Sources: public reporting &amp; government announcements
-              </span>
-            </div>
           </div>
         </FadeIn>
       </div>
