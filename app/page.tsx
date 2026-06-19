@@ -7,6 +7,7 @@ import { IntegrationMarquee } from "@/components/sections/IntegrationMarquee";
 import { GrowthImpact } from "@/components/sections/GrowthImpact";
 import { OptimisationComparison } from "@/components/sections/OptimisationComparison";
 import { Contact } from "@/components/sections/Contact";
+import FoundingPrinciples from "@/components/sections/FoundingPrinciples";
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
       <main id="main-content">
         {/* Hero + PPT-slide transition into CaseStudies */}
         <HeroSlideTransition />
+        <FoundingPrinciples />
 
         {/* 2. Target Markets — now follows Case Studies */}
         <CapabilitiesSection />    {/* 3. Methodology (6 Phase) */}

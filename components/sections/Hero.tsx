@@ -82,14 +82,14 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
         className="absolute z-30 pointer-events-none"
         style={{
           top: "50%",
-          left: "1.5rem",
-          transform: "translateY(-50%)",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           width: "calc(100% - 3rem)",
           maxWidth: "860px",
           padding: "2.5rem 2rem",
         }}
       >
-        <div className="flex flex-col items-start text-left w-full">
+        <div className="flex flex-col items-center text-center w-full">
           {/* Eyebrow */}
           <motion.p
             className="font-mono uppercase tracking-[0.22em]"
@@ -111,33 +111,22 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
           >
             <h1
               ref={headlineRef}
-              className="font-zaslia m-0 p-0 leading-none select-none"
+              className="font-zaslia m-0 p-0 select-none inline-flex items-center justify-center"
               style={{
-                fontSize: "clamp(82px, 25vw, 202px)",
+                fontSize: "clamp(100px, 25vw, 250px)", // Increased size
                 fontWeight: 500,
                 color: "#7ec3e2ff",
                 letterSpacing: "-0.025em",
-                lineHeight: 0.95,
+                lineHeight: 1, // Perfect vertical centering
               }}
-              aria-label="DZEN Svayatta"
+              aria-label="DZ Svayatta"
             >
-              {/* DZEN – smaller, sits next to Svayatta */}
-              <span
-                style={{
-                  fontSize: "0.7em",
-                  verticalAlign: "baseline",
-                  fontWeight: 500,
-                }}
-              >
-                DZEN{" "}
-              </span>
-
-              {/* Svayatta – large, toggles between Devanagari and Latin */}
+              {/* Svayatta – toggles between Devanagari and Latin (centered) */}
               <span
                 style={{
                   display: "inline-block",
                   minWidth: "4.8em",
-                  textAlign: "left",
+                  textAlign: "center",
                   verticalAlign: "baseline",
                 }}
               >
@@ -184,7 +173,7 @@ export function Hero({ textPosition = { preset: "center" }, className }: HeroPro
 
           {/* CTA buttons – re‑enable pointer events so they remain clickable */}
           <motion.div
-            className="flex gap-3 flex-wrap justify-start"
+            className="flex gap-3 flex-wrap justify-center"
             style={{
               marginTop: "clamp(2rem, calc(var(--h1-size) * 0.2), 4rem)",
             }}

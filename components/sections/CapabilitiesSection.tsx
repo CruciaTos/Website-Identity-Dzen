@@ -1,7 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useInView, useScroll, useTransform } from "motion/react";
-import { SectionIndex } from "../ui/SectionIndex";
 import { cn } from "@/lib/utils";
 
 interface Phase {
@@ -88,7 +87,7 @@ const PHASES: Phase[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────────
-// PhaseBlock — individual phase row with scroll-driven animations
+// PhaseBlock — individual phase row (reduced height)
 // ─────────────────────────────────────────────────────────────────
 function PhaseBlock({
   phase,
@@ -100,21 +99,15 @@ function PhaseBlock({
   isActive: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-
-  // Drives content fade/slide
   const inView = useInView(ref, { margin: "-25% 0px -25% 0px", once: false });
-
-  // Drives the background number parallax — moves at a different rate than content
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const numY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
 
   return (
     <div
       ref={ref}
       id={`phase-${index}`}
-      className="phase-block relative py-20 overflow-hidden"
+      className="phase-block relative py-8 md:py-12 overflow-hidden"
     >
-      {/* Animated top rule — draws in from left on scroll entry */}
+      {/* Animated top rule */}
       <motion.div
         className="absolute top-0 left-0 h-px bg-stone-800"
         initial={{ width: "0%" }}
@@ -122,18 +115,9 @@ function PhaseBlock({
         transition={{ duration: 0.7, ease: "easeInOut" }}
       />
 
-      {/* Parallax background number — independent scroll rate creates depth */}
+      {/* Foreground content — reduced vertical spacing */}
       <motion.div
-        style={{ y: numY, fontSize: "clamp(110px, 17vw, 210px)" }}
-        className="absolute right-0 top-1/2 -translate-y-1/2 font-mono font-black leading-none select-none pointer-events-none text-stone-950"
-        aria-hidden
-      >
-        {phase.index}
-      </motion.div>
-
-      {/* Foreground content — fades and lifts into view */}
-      <motion.div
-        className="relative z-10 max-w-[56ch] space-y-7 select-text"
+        className="relative z-10 max-w-[56ch] space-y-5 select-text"
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: inView ? 1 : 0.18, y: inView ? 0 : 12 }}
         transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
@@ -152,11 +136,12 @@ function PhaseBlock({
           <span className="text-stone-500 tracking-[2px] font-normal">{phase.tag}</span>
         </div>
 
-        {/* Title — brightens when active */}
+        {/* Title */}
         <h3
           className={cn(
             "font-serif font-bold tracking-[-0.04em] leading-[0.97] transition-colors duration-700",
-            "text-[clamp(2rem,3.8vw,3.4rem)]",
+            "text-[clamp(1.6rem,5vw,2.2rem)]",
+            "md:text-[clamp(2rem,3.8vw,3.4rem)]",
             isActive ? "text-stone-50" : "text-stone-400"
           )}
         >
@@ -169,7 +154,7 @@ function PhaseBlock({
           legacy interfaces undisturbed throughout the entire deployment lifecycle.
         </p>
 
-        {/* Deliverables — staggered reveal */}
+        {/* Deliverables */}
         <div className="flex flex-wrap gap-2 pt-1">
           {phase.deliverables.map((item, i) => (
             <motion.span
@@ -178,7 +163,7 @@ function PhaseBlock({
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.28 + i * 0.07 }}
               className={cn(
-                "font-mono text-[9px] tracking-wider uppercase px-3 py-1.5 border transition-all duration-500",
+                "font-mono text-[9px] tracking-wider uppercase px-3 py-1.5 border transition-all duration-500 max-md:text-[8px] max-md:px-2 max-md:py-1",
                 isActive
                   ? "border-[#8F7860]/30 text-stone-300 bg-[#8F7860]/5"
                   : "border-stone-900 text-stone-600"
@@ -194,13 +179,13 @@ function PhaseBlock({
 }
 
 // ─────────────────────────────────────────────────────────────────
-// CapabilitiesSection — main export
+// CapabilitiesSection — main export (section padding reduced)
 // ─────────────────────────────────────────────────────────────────
 export function CapabilitiesSection() {
   const [activePhase, setActivePhase] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Scroll spy — tracks which phase block sits in the viewport sweet spot
+  // Scroll spy
   useEffect(() => {
     const handleScroll = () => {
       const container = containerRef.current;
@@ -228,7 +213,6 @@ export function CapabilitiesSection() {
     document.getElementById(`phase-${idx}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  // ── Scroll-driven section background opacity ──
   const { scrollYProgress } = useScroll({ target: containerRef });
   const overlayOpacity = useTransform(
     scrollYProgress,
@@ -241,9 +225,9 @@ export function CapabilitiesSection() {
       ref={containerRef}
       id="capabilities"
       aria-label="How We Operate"
-      className="relative border-t border-stone-900 py-24 select-none"
+      className="relative border-t border-stone-900 py-12 md:py-20 select-none"
     >
-      {/* Scroll-driven background overlay — fades in/out with section progress */}
+      {/* Background overlay */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
@@ -254,8 +238,8 @@ export function CapabilitiesSection() {
         aria-hidden
       />
 
-      {/* Corner watermarks */}
-      <div aria-hidden className="absolute top-4 left-6 font-mono text-[7px] text-stone-800 pointer-events-none">
+      {/* Watermarks */}
+      <div aria-hidden className="absolute top-4 left-6 font-mono text-[7px] text-stone-800 pointer-events-none z-10">
         + SEQUENCE_FLOW_TERMINAL
       </div>
       <div aria-hidden className="absolute bottom-4 right-6 font-mono text-[7px] text-stone-800 pointer-events-none">
@@ -263,9 +247,8 @@ export function CapabilitiesSection() {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-12 max-md:px-6 flex gap-16 relative">
-
-        {/* ── Sticky side navigation ── */}
-        <aside className="hidden min-[1100px]:flex flex-col w-[120px] shrink-0 sticky top-[180px] h-fit z-25 leading-none">
+        {/* Sticky nav */}
+        <aside className="hidden min-[1100px]:flex flex-col w-[120px] shrink-0 sticky top-[180px] h-fit z-25 leading-none -ml-36">
           <div className="font-mono text-[8px] tracking-[2px] uppercase text-stone-600 font-bold mb-6">
             Execution Path
           </div>
@@ -288,22 +271,8 @@ export function CapabilitiesSection() {
           </nav>
         </aside>
 
-        {/* ── Main content ── */}
+        {/* Main content */}
         <div className="flex-1 min-w-0">
-
-          {/* Section header */}
-          <div className="mb-28">
-            <SectionIndex number="03" tag="Methodology" className="mb-8" />
-            <h2 className="font-serif text-[clamp(3.2rem,7.5vw,7rem)] font-bold text-stone-100 leading-[0.95] tracking-[-0.04em] mb-8">
-              From operational<br />chaos to automated<br />clarity.
-            </h2>
-            <p className="font-sans text-[14px] text-stone-500 leading-relaxed max-w-sm">
-              Six rigid milestones — no loose retainers, no open-ended timelines.
-              Success is mapped numerically from Day One.
-            </p>
-          </div>
-
-          {/* Phase blocks */}
           {PHASES.map((phase, i) => (
             <PhaseBlock
               key={phase.index}
@@ -312,7 +281,6 @@ export function CapabilitiesSection() {
               isActive={activePhase === i}
             />
           ))}
-
         </div>
       </div>
     </section>

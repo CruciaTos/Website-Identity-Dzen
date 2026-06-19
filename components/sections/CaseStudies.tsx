@@ -9,8 +9,17 @@ import { FadeIn } from "@/components/ui/FadeIn";
    Colour tokens
 ───────────────────────────────────────────────────────────────────────── */
 const C = {
-  bg: "transparent",
-  bgCard: "transparent",
+  // Layer 1 — Case Studies SECTION background only.
+  // Paints behind the header + marquee + cards. Swap to a solid color,
+  // gradient, or image url() — completely independent of cardBg below.
+  sectionBg: "transparent", // ← current visual is preserved
+
+  // Layer 2 — individual CARD background only.
+  // Fully decoupled from sectionBg. As long as this stays "transparent"
+  // (today's value), cards paint nothing of their own, so you see straight
+  // through to the page's GlobalVideoBackground underneath everything.
+  cardBg: "#0d0d0cff",
+
   blue: "#B2D5E5",
   blueMid: "#7ec3e2",
   blueDeep: "#5aabce",
@@ -117,7 +126,7 @@ function MarqueeExpandingCard({
         transition: `flex 0.65s ${SPRING}, border-color 0.45s ease`,
         position: "relative",
         overflow: "hidden",
-        backgroundColor: C.bgCard,
+        backgroundColor: C.cardBg,
         border: `1px solid ${isExpanded ? C.borderHi : C.border}`,
         cursor: "default",
         display: "flex",
@@ -190,7 +199,7 @@ function MarqueeExpandingCard({
           position: "relative",
           zIndex: 1,
           padding: isExpanded
-            ? "48px 40px 72px 48px" // enough bottom padding so text doesn't slip under the source
+            ? "48px 40px 72px 48px"
             : "24px 24px",
           display: "flex",
           flexDirection: "column",
@@ -251,14 +260,14 @@ function MarqueeExpandingCard({
               ? "clamp(19px, 2.2vw, 34px)"
               : "clamp(32px, 4.2vw, 52px)",
             fontWeight: 600,
-            color: "#f5f5f5c6",           // 👈 off‑white
+            color: "#e5f3e5ff",
             lineHeight: 1.15,
             letterSpacing: "-0.022em",
             margin: 0,
             transition: `font-size 0.65s ${SPRING}`,
             overflow: "hidden",
             display: "-webkit-box",
-            WebkitLineClamp: isExpanded ? "unset" : 5, // increased from 4 to 5 rows in collapsed state
+            WebkitLineClamp: isExpanded ? "unset" : 5,
             WebkitBoxOrient: "vertical",
           }}
         >
@@ -315,9 +324,9 @@ function MarqueeExpandingCard({
           right: 0,
           zIndex: 2,
           display: "flex",
-          justifyContent: "flex-start",        // align left
+          justifyContent: "flex-start",
           alignItems: "center",
-          padding: "16px 24px 16px 48px",     // left padding matches content left padding
+          padding: "16px 24px 16px 48px",
           opacity: isExpanded ? 1 : 0,
           pointerEvents: isExpanded ? "auto" : "none",
           transition: `opacity 0.45s ease ${isExpanded ? "0.28s" : "0s"}`,
@@ -371,13 +380,29 @@ export function CaseStudies() {
       id="cases"
       aria-label="Real-world AI deployments"
       style={{
+        position: "relative", // anchors the new background layer below
         padding: "120px 0",
-        backgroundColor: C.bg,
         borderTop: `1px solid ${C.border}`,
+        borderRadius: "24px",
+        overflow: "hidden",
       }}
     >
+      {/* Layer 1: section background — sits behind everything below */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          background: C.sectionBg,
+          pointerEvents: "none",
+        }}
+      />
+
       <div
         style={{
+          position: "relative",
+          zIndex: 1,
           maxWidth: "1440px",
           margin: "0 auto",
           padding: "0 clamp(20px, 3vw, 40px)",
