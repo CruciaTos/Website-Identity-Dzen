@@ -4,13 +4,10 @@ import { useState } from "react";
 import { SectionIndex } from "@/components/ui/SectionIndex";
 import { FadeIn } from "@/components/ui/FadeIn";
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Colour tokens
-───────────────────────────────────────────────────────────────────────── */
+/* ── Design tokens ── */
 const C = {
   sectionBg: "transparent",
   cardBg: "#0d0d0cff",
-
   blue: "#B2D5E5",
   blueMid: "#7ec3e2",
   blueDeep: "#5aabce",
@@ -23,9 +20,7 @@ const C = {
 
 const SPRING = "cubic-bezier(0.22,1,0.36,1)";
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Data
-───────────────────────────────────────────────────────────────────────── */
+/* ── Data ── */
 interface CaseMetric { value: string; label: string }
 interface RealCase {
   id: string; org: string; tag: string; domain: string;
@@ -35,70 +30,40 @@ interface RealCase {
 
 const CASES: RealCase[] = [
   {
-    id: "01",
-    org: "BMC Mumbai",
-    tag: "Municipal AI Enforcement",
+    id: "01", org: "BMC Mumbai", tag: "Municipal AI Enforcement",
     domain: "Infrastructure · Governance",
     headline: "₹19.25 Cr in contractor penalties recovered via AI site monitoring.",
     body: "AI detected image reuse, missing videos, and code mismatches — violations that previously went unnoticed. Penalties were deducted directly from contractor bills.",
-    metrics: [
-      { value: "₹19.25Cr", label: "Penalties enforced" },
-      { value: "Real-time", label: "AI site monitoring" },
-      { value: "Zero", label: "Manual audit reliance" },
-    ],
-    accent: "#B2D5E5",
-    source: "Hindustan Times — June 2025",
+    metrics: [{ value: "₹19.25Cr", label: "Penalties enforced" }, { value: "Real-time", label: "AI site monitoring" }, { value: "Zero", label: "Manual audit reliance" }],
+    accent: "#B2D5E5", source: "Hindustan Times — June 2025"
   },
   {
-    id: "02",
-    org: "Kerala Police",
-    tag: "Law Enforcement AI",
+    id: "02", org: "Kerala Police", tag: "Law Enforcement AI",
     domain: "Public Safety · Child Protection",
     headline: "India's first AI system tracks CSAM perpetrators across the dark web.",
     body: "Katalyst cross‑references victim signatures in hours, not weeks, enabling faster identification and intervention.",
-    metrics: [
-      { value: "#1", label: "First in India" },
-      { value: "Hours", label: "vs. Weeks (manual)" },
-      { value: "Katalyst", label: "AI tool deployed" },
-    ],
-    accent: "#7ec3e2",
-    source: "The News Minute — 2025",
+    metrics: [{ value: "#1", label: "First in India" }, { value: "Hours", label: "vs. Weeks (manual)" }, { value: "Katalyst", label: "AI tool deployed" }],
+    accent: "#7ec3e2", source: "The News Minute — 2025"
   },
   {
-    id: "03",
-    org: "FTITTP · Indian Airports",
-    tag: "Biometric AI Systems",
+    id: "03", org: "FTITTP · Indian Airports", tag: "Biometric AI Systems",
     domain: "Border Control · Government",
     headline: "Airport immigration: 30 minutes down to 15 seconds with AI biometrics.",
     body: "Travellers bypass officers — facial recognition and fingerprint scanners clear them in 15 seconds against government databases.",
-    metrics: [
-      { value: "15s", label: "Clearance time" },
-      { value: "120×", label: "Faster than manual" },
-      { value: "FTITTP", label: "Govt. programme" },
-    ],
-    accent: "#5aabce",
-    source: "NDTV Travel — 2025",
+    metrics: [{ value: "15s", label: "Clearance time" }, { value: "120×", label: "Faster than manual" }, { value: "FTITTP", label: "Govt. programme" }],
+    accent: "#5aabce", source: "NDTV Travel — 2025"
   },
   {
-    id: "04",
-    org: "Bengaluru Traffic Police",
-    tag: "AI Public Shaming",
+    id: "04", org: "Bengaluru Traffic Police", tag: "AI Public Shaming",
     domain: "Traffic Enforcement · Smart City",
     headline: "AI‑powered billboard shames drivers with pending challans in real‑time.",
     body: "A digital board on MG Road displays vehicle photos, registration numbers, and pending fine amounts. Updated live from traffic databases, it uses public accountability to nudge violators into paying their dues.",
-    metrics: [
-      { value: "Real‑time", label: "Challan updates" },
-      { value: "Public", label: "Display board" },
-      { value: "MG Road", label: "Pilot location" },
-    ],
-    accent: "#6fc5e0",
-    source: "NDTV Auto — 2026",
-  },
+    metrics: [{ value: "Real‑time", label: "Challan updates" }, { value: "Public", label: "Display board" }, { value: "MG Road", label: "Pilot location" }],
+    accent: "#6fc5e0", source: "NDTV Auto — 2026"
+  }
 ];
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Marquee card
-───────────────────────────────────────────────────────────────────────── */
+/* ── Marquee card – black 65% background, rounded corners & border like Capabilities ── */
 function MarqueeExpandingCard({
   c,
   isExpanded,
@@ -117,8 +82,9 @@ function MarqueeExpandingCard({
         transition: `flex 0.65s ${SPRING}, border-color 0.45s ease`,
         position: "relative",
         overflow: "hidden",
-        backgroundColor: C.cardBg,
-        border: `1px solid ${isExpanded ? C.borderHi : C.border}`,
+        backgroundColor: "rgba(0,0,0,0.65)",                 // black at 65% opacity
+        border: `1px solid ${isExpanded ? "rgba(126,195,226,0.28)" : "rgba(126,195,226,0.20)"}`, // same border logic as Capabilities
+        borderRadius: "16px",                               // rounded-2xl
         cursor: "default",
         display: "flex",
         flexDirection: "column",
@@ -133,8 +99,7 @@ function MarqueeExpandingCard({
           inset: 0,
           pointerEvents: "none",
           opacity: 0.4,
-          backgroundImage:
-            "radial-gradient(circle, rgba(178,213,229,0.9) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, rgba(178,213,229,0.9) 1px, transparent 1px)",
           backgroundSize: "22px 22px",
         }}
       />
@@ -189,9 +154,7 @@ function MarqueeExpandingCard({
         style={{
           position: "relative",
           zIndex: 1,
-          padding: isExpanded
-            ? "48px 40px 72px 48px"
-            : "24px 24px",
+          padding: isExpanded ? "48px 40px 72px 48px" : "24px 24px",
           display: "flex",
           flexDirection: "column",
           flex: 1,
@@ -199,7 +162,7 @@ function MarqueeExpandingCard({
           transition: `padding 0.65s ${SPRING}`,
         }}
       >
-        {/* Domain (visible only when expanded) */}
+        {/* Domain (only when expanded) */}
         <div
           style={{
             display: "flex",
@@ -247,9 +210,7 @@ function MarqueeExpandingCard({
         <h3
           className="font-sans"
           style={{
-            fontSize: isExpanded
-              ? "clamp(19px, 2.2vw, 34px)"
-              : "clamp(32px, 4.2vw, 52px)",
+            fontSize: isExpanded ? "clamp(19px, 2.2vw, 34px)" : "clamp(32px, 4.2vw, 52px)",
             fontWeight: 600,
             color: "#e5f3e5ff",
             lineHeight: 1.15,
@@ -290,7 +251,6 @@ function MarqueeExpandingCard({
               transition: `transform 0.5s ${SPRING} ${isExpanded ? "0.32s" : "0s"}`,
             }}
           />
-
           <p
             className="font-sans"
             style={{
@@ -356,9 +316,7 @@ function MarqueeExpandingCard({
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Main section
-───────────────────────────────────────────────────────────────────────── */
+/* ── Main section (no grey box, marquee directly on page) ── */
 export function CaseStudies() {
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -429,61 +387,49 @@ export function CaseStudies() {
         </FadeIn>
 
         <FadeIn delay={0.2}>
-          {/* ── Grey rounded centered box behind the marquee ── */}
+          {/* Marquee directly in section */}
           <div
+            className="marquee-container"
             style={{
-              background: "#1c1c20ff",          // grey
-              borderRadius: "24px",           // rounded corners
-              padding: "40px",                // internal spacing
-              marginTop: "40px",              // space from heading
-              boxShadow: "0 12px 40px rgba(0,0,0,0.25)",
-              overflow: "hidden",             // keeps rounded corners clipping content
-              position: "relative",
-              width: "100%",                  // centered via margin auto inside the max-width wrapper
+              height: "clamp(550px, 60vh, 760px)",
+              overflow: "hidden",
+              width: "100%",
+              marginTop: "40px",
             }}
           >
-            <div
-              className="marquee-container"
-              style={{
-                height: "clamp(550px, 60vh, 760px)",
-                overflow: "hidden",
-                width: "100%",
-              }}
-            >
-              <style>{`
-                @keyframes marquee-scroll {
-                  0% { transform: translateX(0); }
-                  100% { transform: translateX(-50%); }
-                }
-                .marquee-track {
-                  display: flex;
-                  gap: 1px;
-                  height: 100%;
-                  animation: marquee-scroll 30s linear infinite;
-                }
-                .marquee-container:hover .marquee-track {
-                  animation-play-state: paused;
-                }
-              `}</style>
+            <style>{`
+              @keyframes marquee-scroll {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+              .marquee-track {
+                display: flex;
+                gap: 16px;
+                height: 100%;
+                animation: marquee-scroll 30s linear infinite;
+              }
+              .marquee-container:hover .marquee-track {
+                animation-play-state: paused;
+              }
+            `}</style>
 
-              <div className="marquee-track">
-                {CASES.map((c) => (
-                  <MarqueeExpandingCard
-                    key={c.id}
-                    c={c}
-                    isExpanded={activeId === c.id}
-                    onHover={handleHover}
-                  />
-                ))}
-                {CASES.map((c) => (
-                  <MarqueeExpandingCard
-                    key={`dup-${c.id}`}
-                    c={c}
-                    isExpanded={activeId === c.id}
-                    onHover={handleHover}
-                  />
-                ))}
-              </div>
+            <div className="marquee-track">
+              {CASES.map((c) => (
+                <MarqueeExpandingCard
+                  key={c.id}
+                  c={c}
+                  isExpanded={activeId === c.id}
+                  onHover={handleHover}
+                />
+              ))}
+              {CASES.map((c) => (
+                <MarqueeExpandingCard
+                  key={`dup-${c.id}`}
+                  c={c}
+                  isExpanded={activeId === c.id}
+                  onHover={handleHover}
+                />
+              ))}
             </div>
           </div>
         </FadeIn>

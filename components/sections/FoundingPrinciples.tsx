@@ -175,7 +175,7 @@ export default function FoundingPrinciples() {
       ref={sectionRef}
       id="who-are-we"
       aria-label="Who we are"
-      className="relative bg-[#0d0d0c] border-t border-border"
+      className="relative bg-black/95 border-t border-border"
       style={{ height: `${SCROLL_DISTANCE_VH}vh` }}
     >
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">

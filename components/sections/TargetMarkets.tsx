@@ -134,7 +134,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         position: "relative",
         backgroundColor: isExpanded ? C.cardBgHover : C.cardBg,
         border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`,
-        borderRadius: "0px",
+        borderRadius: "16px",   // ← rounded corners added
         overflow: "hidden",
         cursor: "default",
         isolation: "isolate",

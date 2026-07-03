@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -28,6 +28,31 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
 
+  // ── Scroll direction hide/show logic ──
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      // Always show navbar at the very top
+      if (currentY < 100) {
+        setHidden(false);
+        lastScrollY.current = currentY;
+        return;
+      }
+      // Buffer of 5px to avoid flickering
+      if (currentY > lastScrollY.current + 5) {
+        setHidden(true); // scrolling down → hide
+      } else if (currentY < lastScrollY.current - 5) {
+        setHidden(false); // scrolling up → show
+      }
+      lastScrollY.current = currentY;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const scrollToCta = () => {
     router.push("/discovery");
   };
@@ -37,8 +62,11 @@ export function Navbar() {
       <motion.div
         className="fixed top-0 left-0 right-0 z-50"
         initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: EASE }}
+        animate={{
+          opacity: hidden ? 0 : 1,
+          y: hidden ? -80 : 0,
+        }}
+        transition={{ duration: 1.0, ease: EASE }}  // ← 1 second for super smooth motion
       >
         <NavbarShell
           className={`

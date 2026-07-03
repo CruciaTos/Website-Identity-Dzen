@@ -76,7 +76,7 @@ const PHASES: Phase[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────────
-// PhaseBlock – alternates left / right alignment with breathing room
+// PhaseBlock – black background with 65% opacity
 // ─────────────────────────────────────────────────────────────────
 function PhaseBlock({
   phase,
@@ -101,9 +101,9 @@ function PhaseBlock({
       ref={ref}
       id={`phase-${index}`}
       className={cn(
-        "phase-block relative min-h-[50vh] flex flex-col justify-center overflow-hidden",
-        // ── horizontal breathing room ──
-        "px-6 md:px-12 lg:px-16",
+        "phase-block relative min-h-[50vh] flex flex-col justify-center overflow-hidden rounded-2xl border border-[#7EC3E2]/20 bg-black/65",
+        // ── horizontal breathing room + right‑side margin ──
+        "px-6 md:px-12 lg:px-16 mr-4",
         isLeft ? "items-start" : "items-end"
       )}
       style={{
@@ -114,7 +114,7 @@ function PhaseBlock({
         backgroundSize: `${size}px ${size}px`,
       }}
     >
-      {/* Animated top rule – still spans full container width */}
+      {/* Animated top rule – now clipped by rounded corners */}
       <motion.div
         className="absolute top-0 left-0 h-px bg-[#7EC3E2]/30"
         initial={{ width: "0%" }}
@@ -270,8 +270,8 @@ export function CapabilitiesSection() {
           </nav>
         </aside>
 
-        {/* Main content */}
-        <div className="flex-1 min-w-0">
+        {/* Main content – flex column with gap */}
+        <div className="flex-1 min-w-0 flex flex-col gap-6">
           {PHASES.map((phase, i) => (
             <PhaseBlock
               key={phase.navLabel}
