@@ -16,6 +16,11 @@ const C = {
   cardBorderHover: "rgba(126,195,226,0.28)",
   divider: "rgba(178,213,229,0.10)",
   glowSpot: "rgba(126,195,226,0.08)",
+  // Glass morphism tokens
+  glassBg: "transparent",
+  glassHighlight: "rgba(255,255,255,0.06)",
+  glassBorder: "rgba(178,213,229,0.15)",
+  glassShadow: "0 12px 40px rgba(0,0,0,0.2)",
 } as const;
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -86,7 +91,7 @@ function getColumnSiblingId(id: string): string | null {
   return pairs[id] ?? null;
 }
 
-// ── SpotlightCard ─────────────────────────────────────────────────────────────
+// ── SpotlightCard (unchanged) ────────────────────────────────────────────────
 interface CardProps {
   card: MarketCard;
   index: number;
@@ -111,9 +116,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
 
   const handleMouseLeave = useCallback(() => {
     onLeave();
-    if (spotRef.current) {
-      spotRef.current.style.background = "transparent";
-    }
+    if (spotRef.current) spotRef.current.style.background = "transparent";
   }, [onLeave]);
 
   return (
@@ -134,7 +137,7 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         position: "relative",
         backgroundColor: isExpanded ? C.cardBgHover : C.cardBg,
         border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`,
-        borderRadius: "16px",   // ← rounded corners added
+        borderRadius: "16px",
         overflow: "hidden",
         cursor: "default",
         isolation: "isolate",
@@ -142,169 +145,43 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
         flexDirection: "column",
       }}
     >
-      <div
-        ref={spotRef}
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          pointerEvents: "none",
-          transition: isExpanded ? "none" : "background 0.5s ease",
-          zIndex: 0,
-        }}
-      />
+      <div ref={spotRef} aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", transition: isExpanded ? "none" : "background 0.5s ease", zIndex: 0 }} />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: "1px", background: `linear-gradient(90deg, transparent, ${C.accent}${isExpanded ? "55" : "18"}, transparent)`, transition: `background ${TRANSITION}`, zIndex: 1 }} />
 
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: "10%",
-          right: "10%",
-          height: "1px",
-          background: `linear-gradient(90deg, transparent, ${C.accent}${isExpanded ? "55" : "18"}, transparent)`,
-          transition: `background ${TRANSITION}`,
-          zIndex: 1,
-        }}
-      />
-
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          padding: "clamp(22px, 2.8vw, 36px)",
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          overflow: "hidden",
-        }}
-      >
-        <h3
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "clamp(18px, 1.5vw, 24px)",
-            fontWeight: 600,
-            color: C.textPrimary,
-            letterSpacing: "-0.022em",
-            lineHeight: "1.18",
-            marginBottom: "10px",
-            flexShrink: 0,
-          }}
-        >
+      <div style={{ position: "relative", zIndex: 1, padding: "clamp(22px, 2.8vw, 36px)", display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
+        <h3 style={{
+          fontFamily: "var(--font-sans)",
+          fontSize: "clamp(28px, 2vw, 38px)",
+          fontWeight: 500,
+          color: C.textPrimary,
+          letterSpacing: "-0.022em",
+          lineHeight: "1.15",
+          marginBottom: "12px",
+          flexShrink: 0,
+        }}>
           {card.title}
         </h3>
-
-        <p
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "16px",
-            fontWeight: 300,
-            color: C.textMuted,
-            lineHeight: "1.72",
-            margin: 0,
-            flexShrink: 0,
-          }}
-        >
+        <p style={{ fontFamily: "var(--font-sans)", fontSize: "16px", fontWeight: 300, color: C.textMuted, lineHeight: "1.72", margin: 0, flexShrink: 0 }}>
           {card.description}
         </p>
 
         <AnimatePresence>
           {isExpanded && (
-            <motion.div
-              key={`expand-${card.id}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.22, ease: EASE }}
-              style={{
-                marginTop: "20px",
-                flex: 1,
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <div
-                style={{
-                  height: "1px",
-                  backgroundColor: C.divider,
-                  marginBottom: "14px",
-                  flexShrink: 0,
-                }}
-              />
-
+            <motion.div key={`expand-${card.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22, ease: EASE }} style={{ marginTop: "20px", flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ height: "1px", backgroundColor: C.divider, marginBottom: "14px", flexShrink: 0 }} />
               <div style={{ flex: 1, overflow: "hidden" }}>
                 {card.hoverItems.map((item, i) => (
-                  <motion.div
-                    key={item}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.22, delay: 0.05 + i * 0.06, ease: EASE }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      padding: "6px 0",
-                    }}
-                  >
-                    <span
-                      aria-hidden="true"
-                      style={{
-                        display: "inline-block",
-                        width: "3px",
-                        height: "3px",
-                        borderRadius: "50%",
-                        background: C.accent,
-                        flexShrink: 0,
-                        opacity: 0.85,
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "14px",
-                        letterSpacing: "0.07em",
-                        color: "rgba(178,213,229,0.75)",
-                        lineHeight: 1,
-                      }}
-                    >
+                  <motion.div key={item} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.22, delay: 0.05 + i * 0.06, ease: EASE }} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "6px 0" }}>
+                    <span aria-hidden="true" style={{ display: "inline-block", width: "3px", height: "3px", borderRadius: "50%", background: C.accent, flexShrink: 0, opacity: 0.85 }} />
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "14px", letterSpacing: "0.07em", color: "rgba(178,213,229,0.75)", lineHeight: 1 }}>
                       {item}
                     </span>
                   </motion.div>
                 ))}
               </div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-                style={{
-                  marginTop: "auto",
-                  paddingTop: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  flexShrink: 0,
-                }}
-              >
-                <div
-                  style={{
-                    width: "20px",
-                    height: "1px",
-                    background: C.accent,
-                    opacity: 0.45,
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "12px",
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                    color: "rgba(178,213,229,0.38)",
-                  }}
-                >
-                </span>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.3 }} style={{ marginTop: "auto", paddingTop: "12px", display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+                <div style={{ width: "20px", height: "1px", background: C.accent, opacity: 0.45 }} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(178,213,229,0.38)" }} />
               </motion.div>
             </motion.div>
           )}
@@ -312,32 +189,9 @@ function SpotlightCard({ card, index, isExpanded, isCompressed, onEnter, onLeave
 
         <AnimatePresence>
           {isCompressed && (
-            <motion.div
-              key={`compress-${card.id}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              style={{
-                marginTop: "auto",
-                paddingTop: "8px",
-                display: "flex",
-                gap: "4px",
-                flexShrink: 0,
-              }}
-            >
+            <motion.div key={`compress-${card.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} style={{ marginTop: "auto", paddingTop: "8px", display: "flex", gap: "4px", flexShrink: 0 }}>
               {[0, 1, 2].map((i) => (
-                <span
-                  key={i}
-                  aria-hidden="true"
-                  style={{
-                    display: "inline-block",
-                    width: "3px",
-                    height: "3px",
-                    borderRadius: "50%",
-                    background: `rgba(178,213,229,${0.12 + i * 0.05})`,
-                  }}
-                />
+                <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "3px", height: "3px", borderRadius: "50%", background: `rgba(178,213,229,${0.12 + i * 0.05})` }} />
               ))}
             </motion.div>
           )}
@@ -358,14 +212,7 @@ interface ColumnProps {
 
 function CardColumn({ cards, indices, hoveredId, onEnter, onLeave }: ColumnProps) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "clamp(8px, 1.2vw, 14px)",
-        height: "100%",
-      }}
-    >
+    <div style={{ display: "flex", flexDirection: "column", gap: "clamp(8px, 1.2vw, 14px)", height: "100%" }}>
       {cards.map((card, i) => {
         const siblingId = getColumnSiblingId(card.id);
         const isExpanded = hoveredId === card.id;
@@ -386,7 +233,7 @@ function CardColumn({ cards, indices, hoveredId, onEnter, onLeave }: ColumnProps
   );
 }
 
-// ── TargetMarkets section ─────────────────────────────────────────────────────
+// ── TargetMarkets with grid lines added ──────────────────────────────────────
 export function TargetMarkets() {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true, amount: 0.3 });
@@ -412,6 +259,7 @@ export function TargetMarkets() {
         overflow: "hidden",
       }}
     >
+      {/* ambient glow */}
       <div
         aria-hidden="true"
         style={{
@@ -421,110 +269,136 @@ export function TargetMarkets() {
           transform: "translateX(-50%)",
           width: "900px",
           height: "420px",
-          background:
-            "radial-gradient(ellipse at center top, rgba(126,195,226,0.045) 0%, transparent 62%)",
+          background: "radial-gradient(ellipse at center top, rgba(126,195,226,0.045) 0%, transparent 62%)",
           filter: "blur(1px)",
           pointerEvents: "none",
         }}
       />
 
+      {/* ★ Super‑wide wrapper ★ */}
       <div
         style={{
-          maxWidth: "1440px",
+          maxWidth: "100%",
           margin: "0 auto",
-          padding: "0 clamp(20px, 3vw, 40px)",
+          padding: "0 clamp(12px, 1.5vw, 24px)",
           position: "relative",
           zIndex: 1,
         }}
       >
-        {/* ── Section header ── */}
-        <motion.div
-          ref={headerRef}
-          initial={{ opacity: 0, y: 22 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.75, ease: EASE }}
-          style={{ marginBottom: "clamp(52px, 8vw, 80px)" }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "14px",
-              marginBottom: "26px",
-            }}
-          >
-            <div
-              aria-hidden="true"
-              style={{ width: "28px", height: "1px", background: C.accent, flexShrink: 0 }}
-            />
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "13px",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: C.accent,
-              }}
-            >
-              Target Markets
-            </span>
-          </div>
-
-          <h2
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: "clamp(31px, 4.2vw, 57px)",
-              fontWeight: 700,
-              color: C.textPrimary,
-              letterSpacing: "-0.026em",
-              lineHeight: "1.1",
-              marginBottom: "20px",
-              maxWidth: "700px",
-            }}
-          >
-            Built Around How Businesses Actually Operate
-          </h2>
-
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: "18px",
-              fontWeight: 300,
-              color: C.textMuted,
-              lineHeight: "1.72",
-              maxWidth: "540px",
-              margin: 0,
-            }}
-          >
-            We optimize the business functions where repetitive work, disconnected systems,
-            and operational inefficiencies create measurable costs.
-          </p>
-        </motion.div>
-
-        {/* ── Column grid ── */}
+        {/* ── Glass container ── */}
         <div
-          className="tm-grid"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "clamp(10px, 1.4vw, 18px)",
-            height: "clamp(520px, 58vh, 660px)",
+            position: "relative",
+            borderRadius: "40px",
+            overflow: "hidden",
+            boxShadow: C.glassShadow,
           }}
         >
-          {columns.map((col, ci) => (
-            <CardColumn
-              key={ci}
-              cards={col.cards}
-              indices={col.indices}
-              hoveredId={hoveredId}
-              onEnter={handleEnter}
-              onLeave={handleLeave}
-            />
-          ))}
+          {/* Transparent blur layer */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundColor: C.glassBg,
+              backdropFilter: "blur(80px)",
+              WebkitBackdropFilter: "blur(80px)",
+              zIndex: 0,
+            }}
+          />
+
+          {/* Grid lines overlay */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 0,
+              backgroundImage: `
+                linear-gradient(rgba(178,213,229,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(178,213,229,0.06) 1px, transparent 1px)
+              `,
+              backgroundSize: "40px 40px",
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Top glossy reflection */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "1px",
+              background: `linear-gradient(90deg, transparent, ${C.glassHighlight}, transparent)`,
+              zIndex: 2,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Gradient border */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: "40px",
+              padding: "1px",
+              background: "linear-gradient(135deg, rgba(178,213,229,0.25) 0%, rgba(178,213,229,0.05) 100%)",
+              WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude",
+              pointerEvents: "none",
+              zIndex: 1,
+            }}
+          />
+
+          {/* Content */}
+          <div style={{ position: "relative", zIndex: 3, padding: "clamp(56px, 7vw, 96px) clamp(40px, 5vw, 72px)" }}>
+            {/* ── Section header (no label) ── */}
+            <motion.div
+              ref={headerRef}
+              initial={{ opacity: 0, y: 22 }}
+              animate={headerInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.75, ease: EASE }}
+              style={{ marginBottom: "clamp(52px, 8vw, 80px)" }}
+            >
+              <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(31px, 4.2vw, 57px)", fontWeight: 700, color: C.textPrimary, letterSpacing: "-0.026em", lineHeight: "1.1", marginBottom: "20px", maxWidth: "700px" }}>
+                Built Around How Businesses Actually Operate
+              </h2>
+              <p style={{ fontFamily: "var(--font-sans)", fontSize: "18px", fontWeight: 300, color: C.textMuted, lineHeight: "1.72", maxWidth: "540px", margin: 0 }}>
+                We optimize the business functions where repetitive work, disconnected systems,
+                and operational inefficiencies create measurable costs.
+              </p>
+            </motion.div>
+
+            {/* ── Column grid ── */}
+            <div
+              className="tm-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "clamp(10px, 1.4vw, 18px)",
+                height: "clamp(520px, 58vh, 660px)",
+              }}
+            >
+              {columns.map((col, ci) => (
+                <CardColumn
+                  key={ci}
+                  cards={col.cards}
+                  indices={col.indices}
+                  hoveredId={hoveredId}
+                  onEnter={handleEnter}
+                  onLeave={handleLeave}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Responsive: on tablet/mobile, collapse to stacked layout */}
+      {/* Responsive */}
       <style>{`
         @media (max-width: 900px) {
           .tm-grid {

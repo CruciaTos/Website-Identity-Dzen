@@ -5,7 +5,8 @@ import { TargetMarkets } from "@/components/sections/TargetMarkets";
 import { CapabilitiesSection } from "@/components/sections/CapabilitiesSection";
 import { IntegrationMarquee } from "@/components/sections/IntegrationMarquee";
 import FoundingPrinciples from "@/components/sections/FoundingPrinciples";
-import { Testimonials } from "@/components/sections";
+import { TargetAreas, Testimonials } from "@/components/sections";
+import { WhyUs } from "@/components/sections/WhyUs";
 
 export default function HomePage() {
   return (
@@ -15,9 +16,13 @@ export default function HomePage() {
       <main id="main-content">
         {/* Hero + PPT-slide transition into CaseStudies */}
         <HeroSlideTransition />
-        <IntegrationMarquee />
+
+
         <FoundingPrinciples />
+
         <TargetMarkets />
+        <TargetAreas />
+        <WhyUs />
 
         {/* 2. Target Markets — now follows Case Studies */}
         <CapabilitiesSection />    {/* 3. Methodology (6 Phase) */}

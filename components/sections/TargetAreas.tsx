@@ -1,140 +1,381 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { Container } from "@/components/ui/Container";
-import { SectionIndex } from "@/components/ui/SectionIndex";
-import { FadeIn } from "@/components/ui/FadeIn";
-import { StaggerContainer, StaggerItem } from "@/components/ui/StaggerContainer";
-import {
-  BarChartIcon,
-  EnvelopeIcon,
-  ChatIcon,
-  ClockCircleIcon,
-  LayersIcon,
-  LineChartIcon,
-} from "@/components/ui/Icons";
-import { TARGET_AREAS } from "@/lib/data";
-import type { TargetArea } from "@/types";
+import { useRef, useState, useCallback } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+// ── Design tokens ────────────────────────────────────────────────────────────
+const C = {
+  bg: "#000b12ff",
+  accent: "#7EC3E2",
+  accentSoft: "#B2D5E5",
+  textPrimary: "#e5f3e5ff",
+  textMuted: "rgba(229,243,229,0.65)",
+  cardBg: "#0d0d0cff",
+  cardBgHover: "#141413ff",
+  cardBorder: "rgba(178,213,229,0.10)",
+  cardBorderHover: "rgba(126,195,226,0.28)",
+  divider: "rgba(178,213,229,0.10)",
+  glowSpot: "rgba(126,195,226,0.08)",
+  // Glass container tokens – no dark tint
+  glassBg: "transparent",
+  glassHighlight: "rgba(255,255,255,0.06)",
+  glassBorder: "rgba(178,213,229,0.15)",
+  glassShadow: "0 12px 40px rgba(0,0,0,0.2)",
+} as const;
 
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  "bar-chart":    BarChartIcon,
-  "envelope":     EnvelopeIcon,
-  "chat":         ChatIcon,
-  "clock-circle": ClockCircleIcon,
-  "layers":       LayersIcon,
-  "line-chart":   LineChartIcon,
-};
+const EASE = [0.22, 1, 0.36, 1] as const;
+const TRANSITION = `0.42s cubic-bezier(0.22,1,0.36,1)`;
 
-function PotentialBar({ percent }: { percent: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.4 });
+// ── Content: 6 service areas (icons removed) ─────────────────────────────────
+interface TargetArea {
+  id: string;
+  title: string;
+  description: string;
+  painPoints: string[];
+}
+
+const TARGET_AREAS: TargetArea[] = [
+  {
+    id: "agentic",
+    title: "Agentic Systems",
+    description: "Autonomous AI agents that perceive, decide, and act — from workflow automation to multi‑step task execution.",
+    painPoints: ["Multi‑agent orchestration", "Tool‑using reasoning chains", "Continuous learning loops", "Goal‑driven decision making"],
+  },
+  {
+    id: "ml-analytics",
+    title: "ML & Data Analytics",
+    description: "Custom machine learning models and analytics pipelines that turn raw data into actionable intelligence.",
+    painPoints: ["Predictive modeling", "Natural language processing", "Anomaly detection", "Real‑time dashboards"],
+  },
+  {
+    id: "app-build",
+    title: "System Build (Apps)",
+    description: "End‑to‑end application development — from internal tools to customer‑facing platforms — built for scale.",
+    painPoints: ["Full‑stack web & mobile", "API & micro‑service design", "Cloud infrastructure", "Automated testing & CI/CD"],
+  },
+  {
+    id: "chatbot",
+    title: "Client‑Handling AI",
+    description: "AI chatbots, virtual receptionists, and intelligent assistants that handle inquiries, bookings, and support.",
+    painPoints: ["24/7 conversational AI", "Natural language understanding", "CRM & scheduling integration", "Multi‑channel deployment"],
+  },
+  {
+    id: "website",
+    title: "Brand & Personal Websites",
+    description: "High‑performance websites that tell your story — from personal portfolios to full brand experiences.",
+    painPoints: ["Responsive design", "SEO & performance optimization", "Content management systems", "E‑commerce integration"],
+  },
+  {
+    id: "media-marketing",
+    title: "Professional Media Marketing",
+    description: "Data‑driven marketing assets and campaigns — video, graphics, and strategy that amplify your reach.",
+    painPoints: ["Brand strategy & identity", "Social media content", "Video production & editing", "Analytics & ROI tracking"],
+  },
+];
+
+// ── Column sibling mapping ────────────────────────────────────────────────────
+function getColumnSiblingId(id: string): string | null {
+  const pairs: Record<string, string> = {
+    agentic: "chatbot",
+    chatbot: "agentic",
+    "ml-analytics": "website",
+    website: "ml-analytics",
+    "app-build": "media-marketing",
+    "media-marketing": "app-build",
+  };
+  return pairs[id] ?? null;
+}
+
+// ── SpotlightCard (icons removed) ────────────────────────────────────────────
+interface CardProps {
+  area: TargetArea;
+  index: number;
+  isExpanded: boolean;
+  isCompressed: boolean;
+  onEnter: (id: string) => void;
+  onLeave: () => void;
+}
+
+function SpotlightCard({ area, index, isExpanded, isCompressed, onEnter, onLeave }: CardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const spotRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(cardRef, { once: true, amount: 0.1 });
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current || !spotRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    spotRef.current.style.background = `radial-gradient(300px circle at ${x}px ${y}px, ${C.glowSpot} 0%, rgba(126,195,226,0.012) 50%, transparent 72%)`;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    onLeave();
+    if (spotRef.current) spotRef.current.style.background = "transparent";
+  }, [onLeave]);
 
   return (
-    <div ref={ref} className="h-[2px] w-full bg-ink/[.08] rounded-full overflow-hidden">
-      <motion.div
-        className="h-full rounded-full"
-        style={{
-          background: "linear-gradient(90deg, #8F7860, rgba(143,120,96,0.4))",
-          transformOrigin: "left",
-        }}
-        initial={{ scaleX: 0 }}
-        animate={inView ? { scaleX: percent / 100 } : {}}
-        transition={{ duration: 0.8, ease: EASE_OUT }}
-      />
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => onEnter(area.id)}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 1.0, delay: index * 0.35, ease: EASE }}
+      style={{
+        flexGrow: isExpanded ? 1.36 : isCompressed ? 0.64 : 1,
+        flexShrink: 0,
+        flexBasis: 0,
+        minHeight: 0,
+        transition: `flex-grow ${TRANSITION}, border-color 0.35s ease, background-color 0.35s ease`,
+        position: "relative",
+        backgroundColor: isExpanded ? C.cardBgHover : C.cardBg,
+        border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`,
+        borderRadius: "16px",
+        overflow: "hidden",
+        cursor: "default",
+        isolation: "isolate",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div ref={spotRef} aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", transition: isExpanded ? "none" : "background 0.5s ease", zIndex: 0 }} />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: "1px", background: `linear-gradient(90deg, transparent, ${C.accent}${isExpanded ? "55" : "18"}, transparent)`, transition: `background ${TRANSITION}`, zIndex: 1 }} />
+
+      <div style={{ position: "relative", zIndex: 1, padding: "clamp(28px, 3vw, 40px)", display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
+        <h3 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(28px, 2vw, 38px)", fontWeight: 500, color: C.textPrimary, letterSpacing: "-0.022em", lineHeight: "1.15", marginBottom: "10px", flexShrink: 0 }}>
+          {area.title}
+        </h3>
+        <p style={{ fontFamily: "var(--font-sans)", fontSize: "16px", fontWeight: 300, color: C.textMuted, lineHeight: "1.72", margin: 0, flexShrink: 0 }}>
+          {area.description}
+        </p>
+
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div key={`expand-${area.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22, ease: EASE }} style={{ marginTop: "20px", flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ height: "1px", backgroundColor: C.divider, marginBottom: "14px", flexShrink: 0 }} />
+              <div style={{ flex: 1, overflow: "hidden" }}>
+                {area.painPoints.map((point, i) => (
+                  <motion.div key={point} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.22, delay: 0.05 + i * 0.06, ease: EASE }} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "6px 0" }}>
+                    <span aria-hidden="true" style={{ display: "inline-block", width: "3px", height: "3px", borderRadius: "50%", background: C.accent, flexShrink: 0, opacity: 0.85 }} />
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "14px", letterSpacing: "0.07em", color: "rgba(178,213,229,0.75)", lineHeight: 1 }}>
+                      {point}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isCompressed && (
+            <motion.div key={`compress-${area.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} style={{ marginTop: "auto", paddingTop: "8px", display: "flex", gap: "4px", flexShrink: 0 }}>
+              {[0, 1, 2].map((i) => (
+                <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "3px", height: "3px", borderRadius: "50%", background: `rgba(178,213,229,${0.12 + i * 0.05})` }} />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+}
+
+// ── CardColumn ────────────────────────────────────────────────────────────────
+interface ColumnProps {
+  areas: TargetArea[];
+  indices: number[];
+  hoveredId: string | null;
+  onEnter: (id: string) => void;
+  onLeave: () => void;
+}
+
+function CardColumn({ areas, indices, hoveredId, onEnter, onLeave }: ColumnProps) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "clamp(12px, 1.6vw, 20px)", height: "100%" }}>
+      {areas.map((area, i) => {
+        const siblingId = getColumnSiblingId(area.id);
+        const isExpanded = hoveredId === area.id;
+        const isCompressed = hoveredId !== null && siblingId === hoveredId;
+        return (
+          <SpotlightCard
+            key={area.id}
+            area={area}
+            index={indices[i]}
+            isExpanded={isExpanded}
+            isCompressed={isCompressed}
+            onEnter={onEnter}
+            onLeave={onLeave}
+          />
+        );
+      })}
     </div>
   );
 }
 
-function AreaCard({ area }: { area: TargetArea }) {
-  const Icon = ICON_MAP[area.icon] ?? LayersIcon;
-
-  return (
-    <motion.article
-      className="bg-bg-panel border border-border p-10 px-9 flex flex-col gap-6 h-full transition-colors duration-300"
-      whileHover={{ borderColor: "rgba(216,211,203,0.16)", backgroundColor: "#1E2024" }}
-    >
-      <div className="w-9 h-9 flex items-center justify-center border border-border-strong text-accent flex-shrink-0">
-        <Icon />
-      </div>
-
-      <div className="flex-1">
-        <h3 className="font-sans text-[16px] font-normal text-stone-100 mb-3 tracking-[-0.01em]">
-          {area.title}
-        </h3>
-        <p className="font-sans text-[13px] font-light text-stone-400 leading-[1.7] mb-6">
-          {area.description}
-        </p>
-        <ul className="flex flex-col gap-2" role="list">
-          {area.painPoints.map((point) => (
-            <li
-              key={point}
-              className="font-sans text-[12px] font-light text-stone-400 flex items-start gap-[10px]"
-            >
-              <span
-                className="w-[3px] h-[3px] bg-stone-500 flex-shrink-0 inline-block mt-[7px]"
-                aria-hidden="true"
-              />
-              {point}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-auto pt-2">
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-mono text-[9px] tracking-[.14em] uppercase text-stone-500">
-            Automation potential
-          </span>
-          <span className="font-mono text-[10px]" style={{ color: "#8F7860" }}>
-            {area.potential}%
-          </span>
-        </div>
-        <PotentialBar percent={area.potential} />
-      </div>
-    </motion.article>
-  );
-}
-
+// ── TargetAreas with grid lines added ─────────────────────────────────────────
 export function TargetAreas() {
+  const headerRef = useRef<HTMLDivElement>(null);
+  const headerInView = useInView(headerRef, { once: true, amount: 0.3 });
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+  const handleEnter = useCallback((id: string) => setHoveredId(id), []);
+  const handleLeave = useCallback(() => setHoveredId(null), []);
+
+  const columns = [
+    { areas: [TARGET_AREAS[0], TARGET_AREAS[3]], indices: [0, 3] },
+    { areas: [TARGET_AREAS[1], TARGET_AREAS[4]], indices: [1, 4] },
+    { areas: [TARGET_AREAS[2], TARGET_AREAS[5]], indices: [2, 5] },
+  ];
+
   return (
     <section
-      id="areas"
-      aria-label="Areas we target"
-      className="py-[120px] bg-bg-secondary border-t border-border"
+      id="target-areas"
+      aria-label="Intelligent systems and digital solutions we build"
+      style={{
+        position: "relative",
+        backgroundColor: "transparent",
+        padding: "clamp(88px, 11vw, 144px) 0",
+        overflow: "hidden",
+      }}
     >
-      <Container>
-        <FadeIn>
-          <div className="flex items-end justify-between mb-20 gap-12 max-md:flex-col max-md:items-start">
-            <div>
-              <SectionIndex number="02" tag="Target Markets" className="mb-6" />
-              <h2 className="font-serif text-display-3 font-normal text-stone-100 max-w-[620px]">
-                Areas where intelligence
-                <br />
-                creates the most value.
+      {/* ambient glow */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "900px",
+          height: "420px",
+          background: "radial-gradient(ellipse at center top, rgba(126,195,226,0.045) 0%, transparent 62%)",
+          filter: "blur(1px)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* ★ Wider outer wrapper ★ */}
+      <div
+        style={{
+          maxWidth: "100%",
+          margin: "0 auto",
+          padding: "0 clamp(12px, 1.5vw, 24px)",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        {/* ── Glass container with grid lines ── */}
+        <div
+          style={{
+            position: "relative",
+            borderRadius: "40px",
+            overflow: "hidden",
+            boxShadow: C.glassShadow,
+          }}
+        >
+          {/* Transparent blur layer */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundColor: C.glassBg,
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              zIndex: 0,
+            }}
+          />
+
+          {/* Subtle grid lines */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 1,
+              backgroundImage: `
+                linear-gradient(rgba(178,213,229,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(178,213,229,0.06) 1px, transparent 1px)
+              `,
+              backgroundSize: "40px 40px",
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Gradient border (moved to zIndex 2) */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: "40px",
+              padding: "1px",
+              background: "linear-gradient(135deg, rgba(178,213,229,0.25) 0%, rgba(178,213,229,0.05) 100%)",
+              WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude",
+              pointerEvents: "none",
+              zIndex: 2,
+            }}
+          />
+
+          {/* Top glossy reflection (moved to zIndex 3) */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "1px",
+              background: `linear-gradient(90deg, transparent, ${C.glassHighlight}, transparent)`,
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Content (bumped to zIndex 4) */}
+          <div style={{ position: "relative", zIndex: 4, padding: "clamp(56px, 7vw, 96px) clamp(40px, 5vw, 72px)" }}>
+            <motion.div
+              ref={headerRef}
+              initial={{ opacity: 0, y: 22 }}
+              animate={headerInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.75, ease: EASE }}
+              style={{ marginBottom: "clamp(52px, 8vw, 80px)" }}
+            >
+              <h2 style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(31px, 4.2vw, 57px)", fontWeight: 700, color: C.textPrimary, letterSpacing: "-0.026em", lineHeight: "1.1", marginBottom: "20px", maxWidth: "700px" }}>
+                Where intelligence meets execution
               </h2>
-            </div>
-            <div className="max-w-[380px] flex-shrink-0">
-              <p className="font-sans text-body font-light text-stone-400 leading-[1.7]">
-                Every function below shares the same pattern: high-volume, rules-based work that consumes hours your team could spend on judgement calls instead.
+              <p style={{ fontFamily: "var(--font-sans)", fontSize: "18px", fontWeight: 300, color: C.textMuted, lineHeight: "1.72", maxWidth: "540px", margin: 0 }}>
+                From autonomous agents to full‑stack platforms, we design and deploy AI‑native systems that cut through operational noise and amplify what makes your business unique.
               </p>
+            </motion.div>
+
+            <div className="ta-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(12px, 1.6vw, 20px)", height: "clamp(560px, 64vh, 720px)" }}>
+              {columns.map((col, ci) => (
+                <CardColumn key={ci} areas={col.areas} indices={col.indices} hoveredId={hoveredId} onEnter={handleEnter} onLeave={handleLeave} />
+              ))}
             </div>
           </div>
-        </FadeIn>
+        </div>
+      </div>
 
-        <StaggerContainer
-          className="grid grid-cols-3 gap-[2px] max-[900px]:grid-cols-2 max-[560px]:grid-cols-1"
-          staggerDelay={0.08}
-        >
-          {TARGET_AREAS.map((area) => (
-            <StaggerItem key={area.title}>
-              <AreaCard area={area} />
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
-      </Container>
+      <style>{`
+        @media (max-width: 900px) {
+          .ta-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            height: auto !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .ta-grid {
+            grid-template-columns: 1fr !important;
+            height: auto !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

@@ -16,6 +16,11 @@ const C = {
   dim: "rgba(178,213,229,0.55)",
   faint: "rgba(178,213,229,0.32)",
   ghost: "rgba(178,213,229,0.018)",
+  // Glass morphism tokens
+  glassBg: "transparent",
+  glassHighlight: "rgba(255,255,255,0.06)",
+  glassBorder: "rgba(178,213,229,0.15)",
+  glassShadow: "0 12px 40px rgba(0,0,0,0.2)",
 } as const;
 
 const SPRING = "cubic-bezier(0.22,1,0.36,1)";
@@ -63,7 +68,7 @@ const CASES: RealCase[] = [
   }
 ];
 
-/* ── Marquee card – black 65% background, rounded corners & border like Capabilities ── */
+/* ── Marquee card – unchanged ── */
 function MarqueeExpandingCard({
   c,
   isExpanded,
@@ -82,9 +87,9 @@ function MarqueeExpandingCard({
         transition: `flex 0.65s ${SPRING}, border-color 0.45s ease`,
         position: "relative",
         overflow: "hidden",
-        backgroundColor: "rgba(0,0,0,0.65)",                 // black at 65% opacity
-        border: `1px solid ${isExpanded ? "rgba(126,195,226,0.28)" : "rgba(126,195,226,0.20)"}`, // same border logic as Capabilities
-        borderRadius: "16px",                               // rounded-2xl
+        backgroundColor: "rgba(0,0,0,0.65)",
+        border: `1px solid ${isExpanded ? "rgba(126,195,226,0.28)" : "rgba(126,195,226,0.20)"}`,
+        borderRadius: "16px",
         cursor: "default",
         display: "flex",
         flexDirection: "column",
@@ -103,7 +108,6 @@ function MarqueeExpandingCard({
           backgroundSize: "22px 22px",
         }}
       />
-
       {/* Ghost number */}
       <div
         aria-hidden
@@ -123,7 +127,6 @@ function MarqueeExpandingCard({
       >
         {c.id}
       </div>
-
       {/* Left accent bar */}
       <div
         style={{
@@ -136,7 +139,6 @@ function MarqueeExpandingCard({
           transition: "background-color 0.45s ease",
         }}
       />
-
       {/* Radial glow */}
       <div
         style={{
@@ -148,7 +150,6 @@ function MarqueeExpandingCard({
           background: `radial-gradient(ellipse at top left, ${c.accent}0D 0%, transparent 58%)`,
         }}
       />
-
       {/* Inner content */}
       <div
         style={{
@@ -162,7 +163,6 @@ function MarqueeExpandingCard({
           transition: `padding 0.65s ${SPRING}`,
         }}
       >
-        {/* Domain (only when expanded) */}
         <div
           style={{
             display: "flex",
@@ -188,8 +188,6 @@ function MarqueeExpandingCard({
             {c.domain}
           </span>
         </div>
-
-        {/* Org */}
         <div
           className="font-mono"
           style={{
@@ -205,8 +203,6 @@ function MarqueeExpandingCard({
         >
           {c.org}
         </div>
-
-        {/* Headline */}
         <h3
           className="font-sans"
           style={{
@@ -225,8 +221,6 @@ function MarqueeExpandingCard({
         >
           {c.headline}
         </h3>
-
-        {/* Expandable body */}
         <div
           style={{
             flex: isExpanded ? 1 : "none",
@@ -265,7 +259,6 @@ function MarqueeExpandingCard({
           </p>
         </div>
       </div>
-
       {/* Source */}
       <div
         style={{
@@ -295,7 +288,6 @@ function MarqueeExpandingCard({
           Source: {c.source}
         </span>
       </div>
-
       {/* Bottom accent line */}
       <div
         style={{
@@ -316,7 +308,7 @@ function MarqueeExpandingCard({
   );
 }
 
-/* ── Main section (no grey box, marquee directly on page) ── */
+/* ── Main section – with grid lines inside the glass container ── */
 export function CaseStudies() {
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -330,109 +322,169 @@ export function CaseStudies() {
       aria-label="Real-world AI deployments"
       style={{
         position: "relative",
-        padding: "120px 0",
-        borderTop: `1px solid ${C.border}`,
-        borderRadius: "24px",
+        padding: "clamp(88px, 11vw, 144px) 0",
         overflow: "hidden",
+        backgroundColor: "transparent",
       }}
     >
-      {/* Section background layer */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 0,
-          background: C.sectionBg,
-          pointerEvents: "none",
-        }}
-      />
-
+      {/* outer wrapper – same width logic as TargetAreas */}
       <div
         style={{
+          maxWidth: "100%",
+          margin: "0 auto",
+          padding: "0 clamp(12px, 1.5vw, 24px)",
           position: "relative",
           zIndex: 1,
-          maxWidth: "1440px",
-          margin: "0 auto",
-          padding: "0 clamp(20px, 3vw, 40px)",
         }}
       >
-        <FadeIn>
-          <div className="flex items-end justify-between mb-8 gap-12 max-md:flex-col max-md:items-start">
-            <div>
-              <SectionIndex number="04" tag="AI in the Real World" className="mb-6" />
-              <h2
-                className="font-sans font-bold"
+        {/* ── Glass container ── */}
+        <div
+          style={{
+            position: "relative",
+            borderRadius: "40px",
+            overflow: "hidden",
+            boxShadow: C.glassShadow,
+          }}
+        >
+          {/* Transparent blur layer */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundColor: C.glassBg,
+              backdropFilter: "blur(28px)",
+              WebkitBackdropFilter: "blur(28px)",
+              zIndex: 0,
+            }}
+          />
+
+          {/* Subtle grid lines */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 1,
+              backgroundImage: `
+                linear-gradient(rgba(178,213,229,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(178,213,229,0.06) 1px, transparent 1px)
+              `,
+              backgroundSize: "40px 40px",
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Gradient border (bumped to zIndex 2) */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              borderRadius: "40px",
+              padding: "1px",
+              background: "linear-gradient(135deg, rgba(178,213,229,0.25) 0%, rgba(178,213,229,0.05) 100%)",
+              WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude",
+              pointerEvents: "none",
+              zIndex: 2,
+            }}
+          />
+
+          {/* Top glossy reflection (bumped to zIndex 3) */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "1px",
+              background: `linear-gradient(90deg, transparent, ${C.glassHighlight}, transparent)`,
+              zIndex: 3,
+              pointerEvents: "none",
+            }}
+          />
+
+          {/* Content (bumped to zIndex 4) */}
+          <div style={{ position: "relative", zIndex: 4, padding: "clamp(56px, 7vw, 96px) clamp(40px, 5vw, 72px)" }}>
+            <FadeIn>
+              <div className="flex items-end justify-between mb-8 gap-12 max-md:flex-col max-md:items-start">
+                <div>
+                  <SectionIndex number="04" tag="AI in the Real World" className="mb-6" />
+                  <h2
+                    className="font-sans font-bold"
+                    style={{
+                      fontSize: "clamp(31px, 4.2vw, 57px)",
+                      color: C.blue,
+                      letterSpacing: "-0.026em",
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    Think AI is still far away?
+                    <br />
+                    <em className="not-italic" style={{ color: C.dim }}>
+                      Think again.
+                    </em>
+                  </h2>
+                </div>
+                <div className="max-w-[400px] flex-shrink-0">
+                  <p
+                    className="font-sans text-body font-light leading-[1.7]"
+                    style={{ color: C.dim }}
+                  ></p>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.2}>
+              <div
+                className="marquee-container"
                 style={{
-                  fontSize: "clamp(31px, 4.2vw, 57px)",
-                  color: C.blue,
-                  letterSpacing: "-0.026em",
-                  lineHeight: 1.1,
+                  height: "clamp(550px, 60vh, 760px)",
+                  overflow: "hidden",
+                  width: "100%",
+                  marginTop: "40px",
                 }}
               >
-                Think AI is still far away?
-                <br />
-                <em className="not-italic" style={{ color: C.dim }}>
-                  Think again.
-                </em>
-              </h2>
-            </div>
-            <div className="max-w-[400px] flex-shrink-0">
-              <p
-                className="font-sans text-body font-light leading-[1.7]"
-                style={{ color: C.dim }}
-              ></p>
-            </div>
-          </div>
-        </FadeIn>
+                <style>{`
+                  @keyframes marquee-scroll {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                  }
+                  .marquee-track {
+                    display: flex;
+                    gap: 16px;
+                    height: 100%;
+                    animation: marquee-scroll 30s linear infinite;
+                  }
+                  .marquee-container:hover .marquee-track {
+                    animation-play-state: paused;
+                  }
+                `}</style>
 
-        <FadeIn delay={0.2}>
-          {/* Marquee directly in section */}
-          <div
-            className="marquee-container"
-            style={{
-              height: "clamp(550px, 60vh, 760px)",
-              overflow: "hidden",
-              width: "100%",
-              marginTop: "40px",
-            }}
-          >
-            <style>{`
-              @keyframes marquee-scroll {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
-              }
-              .marquee-track {
-                display: flex;
-                gap: 16px;
-                height: 100%;
-                animation: marquee-scroll 30s linear infinite;
-              }
-              .marquee-container:hover .marquee-track {
-                animation-play-state: paused;
-              }
-            `}</style>
-
-            <div className="marquee-track">
-              {CASES.map((c) => (
-                <MarqueeExpandingCard
-                  key={c.id}
-                  c={c}
-                  isExpanded={activeId === c.id}
-                  onHover={handleHover}
-                />
-              ))}
-              {CASES.map((c) => (
-                <MarqueeExpandingCard
-                  key={`dup-${c.id}`}
-                  c={c}
-                  isExpanded={activeId === c.id}
-                  onHover={handleHover}
-                />
-              ))}
-            </div>
+                <div className="marquee-track">
+                  {CASES.map((c) => (
+                    <MarqueeExpandingCard
+                      key={c.id}
+                      c={c}
+                      isExpanded={activeId === c.id}
+                      onHover={handleHover}
+                    />
+                  ))}
+                  {CASES.map((c) => (
+                    <MarqueeExpandingCard
+                      key={`dup-${c.id}`}
+                      c={c}
+                      isExpanded={activeId === c.id}
+                      onHover={handleHover}
+                    />
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
           </div>
-        </FadeIn>
+        </div>
       </div>
     </section>
   );
