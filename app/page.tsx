@@ -7,6 +7,7 @@ import { IntegrationMarquee } from "@/components/sections/IntegrationMarquee";
 import FoundingPrinciples from "@/components/sections/FoundingPrinciples";
 import { TargetAreas, Testimonials } from "@/components/sections";
 import { WhyUs } from "@/components/sections/WhyUs";
+import { SectionTransition } from "@/components/sections/SectionTransition";
 
 export default function HomePage() {
   return (
@@ -14,21 +15,34 @@ export default function HomePage() {
       <Navbar />
 
       <main id="main-content">
-        {/* Hero + PPT-slide transition into CaseStudies */}
+        {/* Hero + PPT-slide transition into CaseStudies — untouched, it
+            already owns its own cinematic scroll transition. */}
         <HeroSlideTransition />
 
 
+        {/* "WE ARE DZEN" scroll-scramble reveal — untouched, it already
+            owns its own sticky scroll-progress mechanic. */}
         <FoundingPrinciples />
 
-        <TargetMarkets />
-        <TargetAreas />
+        <SectionTransition>
+          <TargetMarkets />
+        </SectionTransition>
+        <SectionTransition>
+          <TargetAreas />
+        </SectionTransition>
 
 
         {/* 2. Target Markets — now follows Case Studies */}
-        <CapabilitiesSection />    {/* 3. Methodology (6 Phase) */}
+        <SectionTransition>
+          <CapabilitiesSection />    {/* 3. Methodology (6 Phase) */}
+        </SectionTransition>
         {/* 4. Connected Systems */}
-        <Testimonials />
-        <WhyUs />
+        <SectionTransition>
+          <Testimonials />
+        </SectionTransition>
+        <SectionTransition>
+          <WhyUs />
+        </SectionTransition>
 
 
 

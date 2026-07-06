@@ -18,7 +18,6 @@ const C = {
   textMuted: "rgba(229,243,229,0.68)",
   textFaint: "rgba(178,213,229,0.4)",
   divider: "rgba(178,213,229,0.10)",
-  // Darker version of textMuted for the not-yet-highlighted state
   textMutedDark: "rgba(229,243,229,0.18)",
 } as const;
 
@@ -29,12 +28,7 @@ const PARAGRAPHS: string[] = [
 ];
 
 // ── Word-level scroll highlight ──────────────────────────────────────────────
-// Each paragraph is split into words; GSAP scrubs their color from dark to
-// muted as the paragraph crosses the viewport. Paragraph index 1 keeps its
-// forced line break before the closing line, same as before.
-
 type Segment = { type: "word"; text: string } | { type: "break" };
-
 const LINE_BREAK_PHRASE = "We Are For you, If You Are here To Scale.";
 
 function toWordSegments(chunk: string): Segment[] {
@@ -65,6 +59,7 @@ function renderSegments(segments: Segment[]): ReactNode[] {
       return;
     }
 
+    // Inter‑word space (not after a break)
     if (i > 0 && segments[i - 1]?.type === "word") {
       nodes.push(" ");
     }
@@ -94,9 +89,13 @@ function ScrollHighlightParagraph({
   index: number;
   setRef: (el: HTMLParagraphElement | null) => void;
 }) {
+  const segments = buildSegments(text, index);
+
   return (
-    <p ref={setRef} className={className}>
-      {renderSegments(buildSegments(text, index))}
+    <p ref={setRef} className={className} style={{ color: C.textMuted }}>
+      <span style={{ color: C.textMuted }}>“</span>
+      {renderSegments(segments)}
+      <span style={{ color: C.textMuted }}>”</span>
     </p>
   );
 }
@@ -184,7 +183,6 @@ export function WhyUs() {
             </p>
           </FadeIn>
 
-          {/* Full width paragraphs — words highlight in as you scroll */}
           <div className="flex flex-col gap-12 md:gap-14 w-full">
             {PARAGRAPHS.map((p, i) => (
               <ScrollHighlightParagraph

@@ -4,9 +4,10 @@ import localFont from "next/font/local";
 import { siteMetadata, structuredData } from "@/lib/metadata";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { SectionFlowProvider } from "@/components/providers/SectionFlow";
-import { GlobalVideoBackground } from "@/components/ui/GlobalVideoBackground";
+import { GlobalSilkBackground } from "@/components/ui/GlobalSilkBackground";
 import { cn } from "@/lib/utils";
 import "@/app/globals.css";
+import { GlobalVideoBackground } from "@/components/ui/GlobalVideoBackground";
 
 // ─── Font loading ─────────────────────────────────────────────────────────────
 const geist = Geist({
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
         geist.variable,
         dmSerifDisplay.variable,
@@ -69,19 +71,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
         />
       </head>
-      <body className="text-stone-100 font-sans font-light leading-relaxed overflow-x-hidden antialiased">
+      <body
+        suppressHydrationWarning
+        className="text-stone-100 font-sans font-light leading-relaxed overflow-x-hidden antialiased"
+      >
         <SmoothScroll>
-          {/* Relative wrapper – height grows with total page content.
-              The video background inside it stretches to match.
-              SectionFlowProvider mounts the persistent orb overlay
-              inside this same wrapper so its document-relative
-              coordinates line up with actual section positions. */}
           <div className="relative min-h-screen">
-            {/* Persistent video background (now absolute, scrolls with content) */}
             <GlobalVideoBackground />
-
             <SectionFlowProvider>
-              {/* Actual page content – must be above the glass overlay */}
               <div className="relative z-10">{children}</div>
             </SectionFlowProvider>
           </div>

@@ -16,7 +16,7 @@ const C = {
   cardBorderHover: "rgba(126,195,226,0.28)",
   divider: "rgba(178,213,229,0.10)",
   glowSpot: "rgba(126,195,226,0.08)",
-  glassBg: "rgba(2, 7, 21, 0.7)",
+  glassBg: "rgba(9, 9, 9, 0.5)",
   glassHighlight: "rgba(255, 255, 255, 1)",
   glassBorder: "rgba(178,213,229,0.15)",
   glassShadow: "0 12px 40px rgba(0,0,0,0.2)",

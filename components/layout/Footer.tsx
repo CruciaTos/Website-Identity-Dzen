@@ -239,10 +239,16 @@ function FooterLinks({
 }: {
   onLinkClick: (e: React.MouseEvent<HTMLAnchorElement>, label: string) => void;
 }) {
+  // Exclude sections we no longer want
+  const excludedSections = new Set(["Platform", "Resources", "Methodology"]);
+  const filteredEntries = Object.entries(FOOTER_LINKS).filter(
+    ([title]) => !excludedSections.has(title)
+  );
+
   return (
     <Reveal delay={80} className="flex flex-wrap items-start justify-between gap-12 py-16 border-t border-[rgba(178,213,229,0.08)]">
       <div className="flex flex-wrap gap-x-16 gap-y-10 flex-1 min-w-0">
-        {Object.entries(FOOTER_LINKS).map(([title, links]) => (
+        {filteredEntries.map(([title, links]) => (
           <div key={title} className="min-w-[140px]">
             <div className="[font-family:var(--font-mono)] text-[9px] tracking-[0.18em] uppercase text-white/30 mb-5">{title}</div>
             <ul className="list-none flex flex-col gap-[10px]" role="list">
@@ -304,29 +310,12 @@ function FooterLinks({
   );
 }
 
-function FooterBottomBar({ onBackToTop }: { onBackToTop: () => void }) {
+function FooterBottomBar() {
   return (
-    <div className="flex items-center justify-between gap-6 py-7 border-t border-[rgba(178,213,229,0.08)] flex-wrap max-[600px]:flex-col max-[600px]:items-start">
-      <span className="[font-family:var(--font-mono)] text-[10px] tracking-[0.06em] text-white/30">© 2026 DZen Operational Systems</span>
-      <div className="flex items-center gap-7">
-        {["Privacy", "Terms", "Security"].map((item) => (
-          <a
-            key={item}
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            className="[font-family:var(--font-mono)] text-[10px] tracking-[0.06em] text-white/30 no-underline transition-colors duration-200 hover:text-white/70"
-          >
-            {item}
-          </a>
-        ))}
-        <MagButton
-          strength={0.1}
-          onClick={onBackToTop}
-          className="[font-family:var(--font-mono)] text-[10px] tracking-[0.06em] text-white/30 transition-colors duration-200 hover:text-[#7ec3e2ff] bg-transparent border-none cursor-pointer p-0"
-        >
-          Back to top ↑
-        </MagButton>
-      </div>
+    <div className="flex items-center justify-center py-7 border-t border-[rgba(178,213,229,0.08)]">
+      <span className="[font-family:var(--font-mono)] text-[10px] tracking-[0.06em] text-white/30">
+        © 2026 DZen Intelligence
+      </span>
     </div>
   );
 }
@@ -334,7 +323,7 @@ function FooterBottomBar({ onBackToTop }: { onBackToTop: () => void }) {
 // ─── Root export ─────────────────────────────────────────────────────────────
 
 export function Footer() {
-  const footerRef = useRef<HTMLElement>(null); // using HTMLElement for footer
+  const footerRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -391,8 +380,6 @@ export function Footer() {
     }
   };
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
   return (
     <footer
       ref={footerRef}
@@ -428,7 +415,7 @@ export function Footer() {
       <div className="relative z-20 mix-blend-difference max-w-[1320px] mx-auto px-12 max-md:px-6">
         <FooterCTA onStart={() => router.push("/discovery")} />
         <FooterLinks onLinkClick={handleFooterLinkClick} />
-        <FooterBottomBar onBackToTop={scrollToTop} />
+        <FooterBottomBar />
       </div>
 
       <style>{`

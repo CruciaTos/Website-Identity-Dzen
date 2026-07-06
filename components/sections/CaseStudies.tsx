@@ -17,7 +17,7 @@ const C = {
   faint: "rgba(178,213,229,0.32)",
   ghost: "rgba(178,213,229,0.018)",
   // ── Glass container tokens (dark glass, like TargetAreas) ──
-  glassBg: "rgba(2, 7, 29, 0.5)",
+  glassBg: "rgba(9, 9, 9, 0.5)",
   glassHighlight: "rgba(255,255,255,0.06)",
   glassBorder: "rgba(178,213,229,0.15)",
   glassShadow: "0 12px 40px rgba(0,0,0,0.2)",
