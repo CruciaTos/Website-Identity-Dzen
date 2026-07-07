@@ -37,7 +37,7 @@ export function NavBody({ children, className }: NavBodyProps) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  MobileNav – mobile wrapper (visible on small screens)             */
+/*  MobileNav – mobile wrapper                                        */
 /* ------------------------------------------------------------------ */
 interface MobileNavProps {
   children: React.ReactNode;
@@ -86,11 +86,7 @@ export function MobileNavToggle({ isOpen, onClick }: MobileNavToggleProps) {
       <motion.span
         className="block w-full h-[1.5px] rounded-full origin-center"
         style={{ backgroundColor: "#B2D5E5" }}
-        animate={
-          isOpen
-            ? { rotate: 45, y: 7.5 }
-            : { rotate: 0, y: 0 }
-        }
+        animate={isOpen ? { rotate: 45, y: 7.5 } : { rotate: 0, y: 0 }}
         transition={{ duration: 0.25 }}
       />
       <motion.span
@@ -102,11 +98,7 @@ export function MobileNavToggle({ isOpen, onClick }: MobileNavToggleProps) {
       <motion.span
         className="block w-full h-[1.5px] rounded-full origin-center"
         style={{ backgroundColor: "#B2D5E5" }}
-        animate={
-          isOpen
-            ? { rotate: -45, y: -7.5 }
-            : { rotate: 0, y: 0 }
-        }
+        animate={isOpen ? { rotate: -45, y: -7.5 } : { rotate: 0, y: 0 }}
         transition={{ duration: 0.25 }}
       />
     </button>
@@ -134,7 +126,7 @@ export function MobileNavMenu({
         <motion.div
           className={`flex flex-col gap-5 px-5 pb-6 pt-2 ${className ?? ""}`}
           style={{
-            backgroundColor: "rgba(2, 2, 2, 0.95)",
+            backgroundColor: "rgba(0, 11, 18, 0.95)",
             borderTop: "1px solid rgba(178, 213, 229, 0.08)",
           }}
           initial={{ height: 0, opacity: 0 }}

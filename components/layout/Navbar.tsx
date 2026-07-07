@@ -21,6 +21,13 @@ import { NAV_LINKS } from "@/lib/data";
 const SECTION_IDS = ["hero", "areas", "capabilities", "cases", "contact"];
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+const BLUE = {
+  logo: "#B2D5E5",
+  active: "#B2D5E5",
+  idle: "rgba(178, 213, 229, 0.5)",
+  dot: "rgba(178, 213, 229, 0.55)",
+} as const;
+
 export function Navbar() {
   const scrolled = useScrolled(40);
   const activeSection = useActiveSection(SECTION_IDS);
@@ -28,24 +35,21 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
 
-  // ── Scroll direction hide/show logic ──
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
-      // Always show navbar at the very top
       if (currentY < 100) {
         setHidden(false);
         lastScrollY.current = currentY;
         return;
       }
-      // Buffer of 5px to avoid flickering
       if (currentY > lastScrollY.current + 5) {
-        setHidden(true); // scrolling down → hide
+        setHidden(true);
       } else if (currentY < lastScrollY.current - 5) {
-        setHidden(false); // scrolling up → show
+        setHidden(false);
       }
       lastScrollY.current = currentY;
     };
@@ -66,20 +70,20 @@ export function Navbar() {
           opacity: hidden ? 0 : 1,
           y: hidden ? -80 : 0,
         }}
-        transition={{ duration: 1.0, ease: EASE }}  // ← 1 second for super smooth motion
+        transition={{ duration: 1.0, ease: EASE }}
       >
         <NavbarShell
           className={`
             w-full transition-all duration-500
-            ${scrolled
-              ? "bg-black/40 backdrop-blur-xl border-b border-white/10 shadow-sm shadow-black/10"
-              : "bg-transparent border-b border-transparent"
+            ${
+              scrolled
+                ? "bg-[#000b12]/75 backdrop-blur-xl border-b border-[rgba(178,213,229,0.12)] shadow-sm shadow-black/20"
+                : "bg-transparent border-b border-transparent"
             }
           `}
         >
-          {/* ---------- Desktop ---------- */}
+          {/* Desktop */}
           <NavBody>
-            {/* Logo – kept exactly as before */}
             <Link
               href="/"
               aria-label="DZen home"
@@ -87,18 +91,17 @@ export function Navbar() {
             >
               <span
                 className="w-[6px] h-[6px] rounded-full flex-shrink-0"
-                style={{ backgroundColor: "rgba(178, 213, 229, 0.55)" }}
+                style={{ backgroundColor: BLUE.dot }}
                 aria-hidden="true"
               />
               <span
                 className="font-zaslia text-[19px] leading-none tracking-[-0.01em]"
-                style={{ color: "#B2D5E5", fontWeight: 500 }}
+                style={{ color: BLUE.logo, fontWeight: 500 }}
               >
                 DZEN
               </span>
             </Link>
 
-            {/* Navigation links + Founders button – unchanged */}
             <ul className="flex items-center gap-9 list-none">
               {NAV_LINKS.map(({ label, href }) => {
                 const sectionId = href.replace("#", "");
@@ -109,20 +112,19 @@ export function Navbar() {
                       href={href}
                       className="font-mono text-[11px] uppercase tracking-[0.18em] no-underline transition-colors duration-200 flex items-center gap-[7px] py-1"
                       style={{
-                        color: isActive ? "#B2D5E5" : "rgba(178, 213, 229, 0.5)",
+                        color: isActive ? BLUE.active : BLUE.idle,
                       }}
                       onMouseEnter={(e) => {
-                        if (!isActive) e.currentTarget.style.color = "#B2D5E5";
+                        if (!isActive) e.currentTarget.style.color = BLUE.active;
                       }}
                       onMouseLeave={(e) => {
-                        if (!isActive)
-                          e.currentTarget.style.color = "rgba(178, 213, 229, 0.5)";
+                        if (!isActive) e.currentTarget.style.color = BLUE.idle;
                       }}
                     >
                       <span
                         className="w-[3px] h-[3px] rounded-full transition-opacity duration-200"
                         style={{
-                          backgroundColor: "#B2D5E5",
+                          backgroundColor: BLUE.active,
                           opacity: isActive ? 1 : 0,
                         }}
                         aria-hidden="true"
@@ -135,13 +137,12 @@ export function Navbar() {
 
               <li>
                 <button
+                  type="button"
                   onClick={() => setAboutOpen(true)}
                   className="font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0 py-1"
-                  style={{ color: "rgba(178, 213, 229, 0.5)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#B2D5E5")}
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "rgba(178, 213, 229, 0.5)")
-                  }
+                  style={{ color: BLUE.idle }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = BLUE.active)}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = BLUE.idle)}
                   aria-haspopup="dialog"
                   aria-expanded={aboutOpen}
                 >
@@ -150,7 +151,6 @@ export function Navbar() {
               </li>
             </ul>
 
-            {/* Desktop CTA – replaced with NavbarButton from the demo */}
             <NavbarButton
               variant="primary"
               onClick={scrollToCta}
@@ -160,10 +160,9 @@ export function Navbar() {
             </NavbarButton>
           </NavBody>
 
-          {/* ---------- Mobile ---------- */}
+          {/* Mobile */}
           <MobileNav>
             <MobileNavHeader>
-              {/* Mobile logo – unchanged */}
               <Link
                 href="/"
                 aria-label="DZen home"
@@ -171,12 +170,12 @@ export function Navbar() {
               >
                 <span
                   className="w-[6px] h-[6px] rounded-full flex-shrink-0"
-                  style={{ backgroundColor: "rgba(178, 213, 229, 0.55)" }}
+                  style={{ backgroundColor: BLUE.dot }}
                   aria-hidden="true"
                 />
                 <span
                   className="font-zaslia text-[19px] leading-none tracking-[-0.01em]"
-                  style={{ color: "#B2D5E5", fontWeight: 500 }}
+                  style={{ color: BLUE.logo, fontWeight: 500 }}
                 >
                   DZEN
                 </span>
@@ -201,7 +200,7 @@ export function Navbar() {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block font-mono text-[12px] uppercase tracking-[0.18em] no-underline"
                     style={{
-                      color: isActive ? "#B2D5E5" : "rgba(178, 213, 229, 0.55)",
+                      color: isActive ? BLUE.active : "rgba(178, 213, 229, 0.55)",
                     }}
                   >
                     {label}
@@ -210,6 +209,7 @@ export function Navbar() {
               })}
 
               <button
+                type="button"
                 onClick={() => {
                   setAboutOpen(true);
                   setIsMobileMenuOpen(false);
@@ -221,7 +221,6 @@ export function Navbar() {
               </button>
 
               <div className="flex w-full flex-col gap-4 mt-4">
-                {/* Mobile CTA – replaced with NavbarButton */}
                 <NavbarButton
                   variant="primary"
                   onClick={() => {

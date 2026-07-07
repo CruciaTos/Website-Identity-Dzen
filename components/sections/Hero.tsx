@@ -50,7 +50,7 @@ export function Hero({ className }: HeroProps) {
 
     updateSize();
     const observer = new ResizeObserver(updateSize);
-    observer.observe(h1);
+      observer.observe(h1);
 
     return () => observer.disconnect();
   }, []);

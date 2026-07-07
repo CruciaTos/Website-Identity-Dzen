@@ -36,39 +36,75 @@ interface TargetArea {
 const TARGET_AREAS: TargetArea[] = [
   {
     id: "agentic",
-    title: "Agentic Systems",
-    description: "Autonomous AI agents that perceive, decide, and act — from workflow automation to multi‑step task execution.",
-    painPoints: ["Multi‑agent orchestration", "Tool‑using reasoning chains", "Continuous learning loops", "Goal‑driven decision making"],
+    title: "Agentic AI Systems",
+    description:
+      "AI agents that take on real tasks across your tools and workflows, with clear handoffs when a human needs to step in.",
+    painPoints: [
+      "Multi-Agent Orchestration",
+      "Enterprise Tool Integration",
+      "Continuous Learning Loops",
+      "ROI-Driven Automation",
+    ],
   },
   {
     id: "ml-analytics",
-    title: "ML & Data Analytics",
-    description: "Custom machine learning models and analytics pipelines that turn raw data into actionable intelligence.",
-    painPoints: ["Predictive modeling", "Natural language processing", "Anomaly detection", "Real‑time dashboards"],
+    title: "Machine Learning & Analytics",
+    description:
+      "Models and reporting built on your data so your team can see what is happening and respond before small issues grow.",
+    painPoints: [
+      "Predictive Modeling & Forecasting",
+      "NLP & Document Intelligence",
+      "Anomaly Detection & Risk Signals",
+      "Executive Dashboards ",
+    ],
   },
   {
     id: "app-build",
-    title: "System Build (Apps)",
-    description: "End‑to‑end application development — from internal tools to customer‑facing platforms — built for scale.",
-    painPoints: ["Full‑stack web & mobile", "API & micro‑service design", "Cloud infrastructure", "Automated testing & CI/CD"],
+    title: "Custom Applications",
+    description:
+      "Internal tools and customer-facing products, scoped, built, and maintained so they hold up after launch day.",
+    painPoints: [
+      "Full-Stack Product Engineering",
+      "API-First Architecture",
+      "Cloud-Native Deployment",
+      "QA Automation & CI/CD Pipelines",
+    ],
   },
   {
     id: "chatbot",
-    title: "Client‑Handling AI",
-    description: "AI chatbots, virtual receptionists, and intelligent assistants that handle inquiries, bookings, and support.",
-    painPoints: ["24/7 conversational AI", "Natural language understanding", "CRM & scheduling integration", "Multi‑channel deployment"],
+    title: "Conversational AI",
+    description:
+      "Chat and voice assistants for support, booking, and common questions, connected to the systems your team already runs.",
+    painPoints: [
+      "24/7 Intelligent Support Automation",
+      "Natural Language Understanding",
+      "CRM & Scheduling Integration",
+      "Omnichannel Deployment",
+    ],
   },
   {
     id: "website",
-    title: "Brand & Personal Websites",
-    description: "High‑performance websites that tell your story — from personal portfolios to full brand experiences.",
-    painPoints: ["Responsive design", "SEO & performance optimization", "Content management systems", "E‑commerce integration"],
+    title: "Web & Digital Presence",
+    description:
+      "Fast sites for portfolios, product pages, and full brand builds that are straightforward to update as you grow.",
+    painPoints: [
+      "Responsive UX Design",
+      "SEO & Core Web Vitals",
+      "Headless CMS Implementation",
+      "E-Commerce & Payment Integration",
+    ],
   },
   {
     id: "media-marketing",
-    title: "Professional Media Marketing",
-    description: "Data‑driven marketing assets and campaigns — video, graphics, and strategy that amplify your reach.",
-    painPoints: ["Brand strategy & identity", "Social media content", "Video production & editing", "Analytics & ROI tracking"],
+    title: "Content & Growth Marketing",
+    description:
+      "Video, design, and campaign work shaped by what your audience responds to, not templates pulled off a shelf.",
+    painPoints: [
+      "Brand Strategy & Positioning",
+      "Social & Performance Content",
+      "Professional Video Production",
+      "Attribution & ROI Analytics",
+    ],
   },
 ];
 
@@ -365,22 +401,11 @@ export function TargetAreas() {
                 color: C.textPrimary,
                 letterSpacing: "-0.02em",
                 lineHeight: "1.1",
-                marginBottom: "24px",
+                marginBottom: 0,
                 maxWidth: "800px",
               }}>
-                Where intelligence meets execution
+                Our Expertise
               </h2>
-              <p style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: "clamp(20px, 2.2vw, 26px)",
-                fontWeight: 500,
-                color: C.accent,
-                lineHeight: "1.4",
-                maxWidth: "950px",
-                margin: 0,
-              }}>
-                From autonomous agents to full‑stack platforms, we design and deploy AI‑native systems that cut through operational noise and amplify what makes your business unique.
-              </p>
             </motion.div>
 
             <div className="ta-grid" style={{
