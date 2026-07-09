@@ -226,9 +226,10 @@ function FooterCTA({ onStart }: { onStart: () => void }) {
       </div>
 
       <div className="flex flex-col">
-        <ContactRow label="Soham" value="sohamboridkar@gmail.com" href="mailto:sohamboridkar@gmail.com" />
-        <ContactRow label="Smit" value="smit2004mhatre@gmail.com" href="mailto:smit2004mhatre@gmail.com" />
-        <ContactRow label="WhatsApp" value="+91 93215 59182" href="https://wa.me/919321559182" external />
+        <ContactRow label="Svayatta" value="dzensvayatta@gmail.com" href="mailto:dzensvayatta@gmail.com" />
+        <ContactRow label="WhatsApp" value="+91 91520 35526" href="https://wa.me/9152035526" external />
+        <ContactRow label="WhatsApp" value="+91 91520 35527" href="https://wa.me/9152035527" external />
+        <ContactRow label="WhatsApp" value="+91 70219 11997" href="https://wa.me/7021911997" external />
       </div>
     </Reveal>
   );
@@ -271,7 +272,7 @@ function FooterLinks({
       <div className="flex flex-col gap-3 flex-shrink-0">
         <MagLink
           strength={0.1}
-          href="https://linkedin.com/company/wearedzen"
+          href="https://www.linkedin.com/company/dzen-svayatta/"
           target="_blank"
           rel="noopener noreferrer"
           className="group inline-flex items-center gap-2 no-underline"

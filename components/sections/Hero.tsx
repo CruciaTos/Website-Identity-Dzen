@@ -127,7 +127,9 @@ export function Hero({ className }: HeroProps) {
               <span
                 style={{
                   display: "inline-block",
-                  minWidth: "4.8em",
+                  // Controls overall word width during the EN/DEVANAGARI toggle.
+                  // Slightly wider so AMS Calligraphy renders without looking cramped.
+                  minWidth: "5.25em",
                   textAlign: "center",
                   verticalAlign: "baseline",
                 }}
@@ -138,9 +140,11 @@ export function Hero({ className }: HeroProps) {
                     style={{
                       display: "inline-block",
                       verticalAlign: "baseline",
-                      fontSize: isDevanagari ? "0.95em" : "1em",
-                      fontWeight: 500,
-                      letterSpacing: isDevanagari ? "-0.02em" : undefined,
+                      // Devanagari: keep it slim (lower weight feel) and matched to the EN word height.
+                      fontSize: isDevanagari ? "0.86em" : "1em",
+                      fontWeight: isDevanagari ? 400 : 500,
+                      letterSpacing: isDevanagari ? "-0.012em" : undefined,
+                      lineHeight: 1,
                       fontFamily: isDevanagari
                         ? "var(--font-devanagari)"
                         : "var(--font-zaslia), sans-serif",
