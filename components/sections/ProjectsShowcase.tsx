@@ -41,8 +41,8 @@ const PROJECTS: Project[] = [
     name: "CruSam",
     tag: " Deployed - Aarti Enterprises",
     domain: "Windows Desktop · Flutter",
-    headline: "A full operations backbone for employee records, payroll, and finance.",
-    body: "Handles employee records, salary processing, voucher and invoice creation, PDF/Excel export, and an embedded AI assistant built on Ollama and Gemini. Includes bidirectional Google Drive sync, a modular AI chat panel, Gmail integration for sending invoices and salary documents, and a self-updating release pipeline via GitHub.",
+    headline: "An unified ERP for employee records, payroll, and finance.",
+    body: "Designed to replace scattered spreadsheets and disconnected tools, CruSam helps businesses manage employee records, process salaries, create invoices and vouchers, organize documents, and generate reports from a single platform. An integrated AI assistant further streamlines daily operations by helping users find information, automate routine tasks, and work more efficiently.",
     stack: ["Flutter", "SQLite", "Gemini"],
     status: "Live",
     images: [

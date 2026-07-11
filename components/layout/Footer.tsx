@@ -153,13 +153,13 @@ function SpotlightAccentTint() {
 
 function FooterCTA() {
   return (
-    <Reveal className="pt-28 pb-20 max-[900px]:pt-20">
+    <Reveal className="pt-28 pb-12 max-[900px]:pt-20">
       <div className="flex flex-col">
         <div className="flex items-center gap-3 mb-7">
           <span className="w-[5px] h-[5px] rounded-full bg-[#7ec3e2ff]" aria-hidden="true" />
           <span className="[font-family:var(--font-mono)] text-[11px] tracking-[0.2em] uppercase text-[#7ec3e2ff]">Let&apos;s talk</span>
         </div>
-        <h2 className="[font-family:var(--font-sans)] text-[clamp(3rem,6.5vw,5rem)] font-bold text-white leading-[1.06] tracking-[-0.02em] mb-12">
+        <h2 className="[font-family:var(--font-sans)] text-[clamp(4rem,8vw,6rem)] font-bold text-white leading-[1.06] tracking-[-0.02em] mb-12">
           Quality throught Clarity
           <br />
           Lets get <em className="not-italic text-white/45"> working.</em>
@@ -188,7 +188,7 @@ function FooterLinks({
 
   return (
     <Reveal delay={80} className="flex flex-wrap items-start justify-between gap-12 py-16 border-t border-[rgba(178,213,229,0.08)]">
-      {/* Social links – left (+10 px sizing preserved) */}
+      {/* Social links – left (icons unchanged, text smaller + nudged down a bit more) */}
       <div className="flex flex-col gap-4 flex-shrink-0">
         <MagLink
           strength={0.1}
@@ -198,7 +198,7 @@ function FooterLinks({
           className="group inline-flex items-center gap-3 no-underline"
         >
           <BrandIcon path={siLinkedin.path} className="w-[24px] h-[24px] text-white/50 transition-colors duration-200 group-hover:text-[#7ec3e2ff]" />
-          <span className="[font-family:var(--font-mono)] text-[21px] tracking-[0.1em] uppercase text-white/55 transition-colors duration-200 group-hover:text-white">
+          <span className="[font-family:var(--font-mono)] text-[16px] tracking-[0.1em] uppercase text-white/55 transition-colors duration-200 group-hover:text-white relative top-[2px]">
             DzenSvayatta
           </span>
         </MagLink>
@@ -210,7 +210,7 @@ function FooterLinks({
           className="group inline-flex items-center gap-3 no-underline"
         >
           <BrandIcon path={siInstagram.path} className="w-[24px] h-[24px] text-white/50 transition-colors duration-200 group-hover:text-[#7ec3e2ff]" />
-          <span className="[font-family:var(--font-mono)] text-[21px] tracking-[0.1em] uppercase text-white/55 transition-colors duration-200 group-hover:text-white">
+          <span className="[font-family:var(--font-mono)] text-[16px] tracking-[0.1em] uppercase text-white/55 transition-colors duration-200 group-hover:text-white relative top-[2px]">
             @wearedzen
           </span>
         </MagLink>
@@ -222,7 +222,7 @@ function FooterLinks({
           className="group inline-flex items-center gap-3 no-underline"
         >
           <BrandIcon path={siInstagram.path} className="w-[24px] h-[24px] text-white/50 transition-colors duration-200 group-hover:text-[#7ec3e2ff]" />
-          <span className="[font-family:var(--font-mono)] text-[21px] tracking-[0.1em] uppercase text-white/55 transition-colors duration-200 group-hover:text-white">
+          <span className="[font-family:var(--font-mono)] text-[16px] tracking-[0.1em] uppercase text-white/55 transition-colors duration-200 group-hover:text-white relative top-[2px]">
             @dzensvayatta
           </span>
         </MagLink>
@@ -347,6 +347,7 @@ export function Footer() {
 
   return (
     <footer
+      id="contact"
       ref={footerRef}
       className="relative bg-[#00080eff] border-t border-[rgba(178,213,229,0.10)] overflow-hidden"
       style={{ "--mx": "-9999px", "--my": "-9999px" } as React.CSSProperties}

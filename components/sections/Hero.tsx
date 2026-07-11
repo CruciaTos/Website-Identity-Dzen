@@ -50,7 +50,7 @@ export function Hero({ className }: HeroProps) {
 
     updateSize();
     const observer = new ResizeObserver(updateSize);
-      observer.observe(h1);
+    observer.observe(h1);
 
     return () => observer.disconnect();
   }, []);
@@ -127,8 +127,6 @@ export function Hero({ className }: HeroProps) {
               <span
                 style={{
                   display: "inline-block",
-                  // Controls overall word width during the EN/DEVANAGARI toggle.
-                  // Slightly wider so AMS Calligraphy renders without looking cramped.
                   minWidth: "5.25em",
                   textAlign: "center",
                   verticalAlign: "baseline",
@@ -140,7 +138,6 @@ export function Hero({ className }: HeroProps) {
                     style={{
                       display: "inline-block",
                       verticalAlign: "baseline",
-                      // Devanagari: keep it slim (lower weight feel) and matched to the EN word height.
                       fontSize: isDevanagari ? "0.86em" : "1em",
                       fontWeight: isDevanagari ? 400 : 500,
                       letterSpacing: isDevanagari ? "-0.012em" : undefined,
@@ -162,9 +159,9 @@ export function Hero({ className }: HeroProps) {
             </h1>
           </motion.div>
 
-          {/* Body paragraph */}
+          {/* Body paragraph – reworked to fit exactly 3 lines */}
           <motion.p
-            className="font-sans max-w-[560px] leading-[1.75]"
+            className="font-sans max-w-[720px] leading-[1.75]"
             style={{
               color: "white",
               fontWeight: 300,
@@ -175,9 +172,10 @@ export function Hero({ className }: HeroProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            We build AI into how your business actually runs. <br />Connect the systems you
-            already use, automate the work your team already does, and put intelligence where
-            it pays off.
+            We build the infrastructure behind how your business scales. Systems
+            integration, workflow automation, and applied intelligence engineered for
+            execution. As every industry adapts to AI, we help you lead instead of
+            playing catch up.
           </motion.p>
 
           {/* CTA buttons */}
