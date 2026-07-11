@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 import { motion, useInView } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +22,6 @@ interface Phase {
   navLabel: string;
   title: string;
   description: string;
-  
 }
 
 const PHASES: Phase[] = [
@@ -30,33 +30,29 @@ const PHASES: Phase[] = [
     title: "Workflow Audit",
     description:
       "We map your workflows before we write code. That surfaces the integrations, edge cases, and legacy constraints that shape what we build next.",
-
   },
   {
     navLabel: "Blueprint",
     title: "Execution Blueprint",
     description:
       "Every system touchpoint gets documented, sequenced, and risk-rated. Engineering effort goes to the highest-impact work first. Nothing gets built on assumptions.",
-
   },
   {
     navLabel: "Build",
     title: "Build & Testing",
     description:
       "Custom agents trained on your data and business logic. Human review checkpoints sit in every critical pipeline stage from day one.",
-
   },
   {
     navLabel: "Deploy",
     title: "Deploy & Optimization",
     description:
       "Changes ship in small, controlled increments with rollback built in. Users see no disruption while the new system beds in.",
-
   },
 ];
 
 // ─────────────────────────────────────────────────────────────────
-// PhaseBlock – black background with 65% opacity
+// PhaseBlock – two-column layout: text + image panel
 // ─────────────────────────────────────────────────────────────────
 function PhaseBlock({
   phase,
@@ -74,17 +70,39 @@ function PhaseBlock({
   const size = gridSizes[index % gridSizes.length];
   const opacity = gridOpacities[index % gridOpacities.length];
 
+  // isLeft = text is on the left → image goes on the right
   const isLeft = index % 2 === 0;
+
+  const placeholderLabels = ["", "Blueprint", "Build", "Deploy"];
+
+  // ── Image panel ──────────────────────────────────────────────────
+  const ImagePanel = (
+    <motion.div
+      className="hidden md:block flex-shrink-0 w-[300px] lg:w-[340px] xl:w-[400px] self-stretch min-h-[260px] rounded-xl overflow-hidden relative"
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.96 }}
+      transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+    >
+      <Image
+        src="/images/workflow.png"
+        alt={`${phase.title} visual`}
+        fill
+        className="object-cover rounded-xl"
+        sizes="(max-width: 768px) 0px, (max-width: 1280px) 340px, 400px"
+      />
+    </motion.div>
+  );
 
   return (
     <div
       ref={ref}
       id={`phase-${index}`}
       className={cn(
-        "phase-block relative min-h-[50vh] flex flex-col justify-center overflow-hidden rounded-2xl border border-[#7EC3E2]/20 bg-black/65",
-        // ── horizontal breathing room + right‑side margin ──
-        "px-6 md:px-12 lg:px-16 mr-4",
-        isLeft ? "items-start" : "items-end"
+        "phase-block relative min-h-[50vh] flex overflow-hidden rounded-2xl border border-[#7EC3E2]/20 bg-black/65",
+        "px-6 md:px-10 lg:px-14 mr-4 py-10 md:py-14",
+        "items-center gap-8 lg:gap-12",
+        // text-left → image right; text-right → image left
+        isLeft ? "flex-row" : "flex-row-reverse"
       )}
       style={{
         backgroundImage: `
@@ -94,7 +112,7 @@ function PhaseBlock({
         backgroundSize: `${size}px ${size}px`,
       }}
     >
-      {/* Animated top rule – now clipped by rounded corners */}
+      {/* Animated top rule */}
       <motion.div
         className="absolute top-0 left-0 h-px bg-[#7EC3E2]/30"
         initial={{ width: "0%" }}
@@ -102,11 +120,11 @@ function PhaseBlock({
         transition={{ duration: 0.7, ease: "easeInOut" }}
       />
 
-      {/* ── Content – left or right aligned within the padded area ── */}
+      {/* ── Text content ── */}
       <motion.div
         className={cn(
-          "relative z-10 w-full max-w-[900px] space-y-5 select-text",
-          isLeft ? "mr-auto text-left" : "ml-auto text-right"
+          "relative z-10 flex-1 min-w-0 space-y-5 select-text",
+          isLeft ? "text-left" : "text-right"
         )}
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: inView ? 1 : 0.18, y: inView ? 0 : 12 }}
@@ -114,7 +132,7 @@ function PhaseBlock({
       >
         <h3
           className={cn(
-            "font-sans font-bold tracking-[-0.04em] leading-[0.95] whitespace-nowrap",
+            "font-sans font-bold tracking-[-0.04em] leading-[0.95]",
             "text-[clamp(2.4rem,7vw,3.4rem)]",
             "md:text-[clamp(3.2rem,5.5vw,4.8rem)]",
             "text-[#e5f3e5]"
@@ -131,9 +149,10 @@ function PhaseBlock({
         >
           {phase.description}
         </p>
-
-
       </motion.div>
+
+      {/* ── Image / Placeholder (hidden on mobile) ── */}
+      {ImagePanel}
     </div>
   );
 }

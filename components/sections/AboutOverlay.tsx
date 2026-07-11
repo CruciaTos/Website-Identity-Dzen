@@ -28,19 +28,14 @@ const C = {
   headerBg: "rgba(0, 11, 18, 0.95)",
 } as const;
 
-const COMPANY_META = [
-  { label: "Established", value: "2025" },
-  { label: "Operation Scope", value: "Enterprise Workflow Integration" },
-  { label: "Model Architecture", value: "Fixed-Scope, Human-in-the-Loop Integrations" },
-  { label: "Compliance Standard", value: "SOC 2 Compatible · ISO 27001 Ready" },
-];
+
 
 const FOUNDERS = [
   {
     num: "I",
     name: "Soham Boridkar",
-    email: "boridkar24@gmail.com",
-    linkedIn: "https://linkedin.com/in/sohamboridkar",
+    email: "sohamboridkar@svayatta.in",
+    linkedIn: "https://www.linkedin.com/in/soham-boridkar/",
     quote:
       "The real test is when nobody notices the system running. If a pipeline needs constant alerts and fixes, something is wrong. We build things that stay out of the way so managers can focus on outcomes.",
     delay: 0.1,
@@ -48,7 +43,7 @@ const FOUNDERS = [
   {
     num: "II",
     name: "Smit Mhatre",
-    email: "smit2004mhatre@gmail.com",
+    email: "smitmhatre@svayatta.in",
     linkedIn: "https://linkedin.com/in/smit-mhatre",
     quote:
       "We document how your best people match spreadsheets or vet invoices, then turn those steps into pipelines your team can audit.",
@@ -57,7 +52,7 @@ const FOUNDERS = [
   {
     num: "III",
     name: "Varun Pal",
-    email: "varun.pal@dzen.io",
+    email: "varunpal@svayatta.in",
     linkedIn: "https://www.linkedin.com/in/b777varunpal/",
     quote:
       "Integration is half the job. The other half is trust: systems that explain what they did, stay within their limits, and earn a place in daily operations.",
@@ -314,7 +309,7 @@ export function AboutOverlay({ open, onClose }: AboutOverlayProps) {
             role="dialog"
             aria-modal="true"
             aria-label="Founders and company context"
-            className="fixed inset-y-0 right-0 w-full max-w-[680px] z-[101] shadow-2xl flex flex-col h-[100dvh] overflow-hidden"
+            className="fixed inset-y-0 right-0 w-full max-w-[884px] z-[101] shadow-2xl flex flex-col h-[100dvh] overflow-hidden"
             style={{
               backgroundColor: C.panelBg,
               borderLeft: `1px solid ${C.divider}`,
@@ -392,45 +387,20 @@ export function AboutOverlay({ open, onClose }: AboutOverlayProps) {
                 </h2>
 
                 <p
-                  className="font-sans text-[14px] font-normal leading-relaxed max-w-xl"
+                  className="font-sans text-[14px] font-normal leading-relaxed max-w-[740px]"
                   style={{ color: C.textMuted }}
                 >
                   DZen was built to close the operational gaps that drain focus, time, and revenue. We build secure, custom integrations that connect your ERP, comms tools, and the systems you already run.
                 </p>
 
                 <p
-                  className="font-sans text-[14px] font-normal leading-relaxed max-w-xl"
+                  className="font-sans text-[14px] font-normal leading-relaxed max-w-[740px]"
                   style={{ color: C.textMuted }}
                 >
                   We believe technology works best when it is quiet, robust, and completely responsive. No fluff. No fragile mockups. We deploy production-grade software that is governed step-by-step.
                 </p>
               </div>
 
-              <div
-                className="grid grid-cols-2 max-[480px]:grid-cols-1 rounded-[2px] overflow-hidden"
-                style={{ border: `1px solid ${C.divider}`, backgroundColor: "rgba(13,13,12,0.5)" }}
-              >
-                {COMPANY_META.map((meta) => (
-                  <div
-                    key={meta.label}
-                    className="p-5 max-[480px]:border-r-0 max-[480px]:border-b"
-                    style={{ borderBottom: `1px solid ${C.divider}`, borderRight: `1px solid ${C.divider}` }}
-                  >
-                    <div
-                      className="font-mono text-[8px] tracking-widest uppercase font-bold mb-1"
-                      style={{ color: "rgba(178,213,229,0.45)" }}
-                    >
-                      {meta.label}
-                    </div>
-                    <div
-                      className="font-sans text-[13px] font-semibold"
-                      style={{ color: C.accentSoft }}
-                    >
-                      {meta.value}
-                    </div>
-                  </div>
-                ))}
-              </div>
 
               <div className="space-y-6 pb-4">
                 <div

@@ -55,7 +55,7 @@ const TARGET_AREAS: TargetArea[] = [
       "Predictive Modeling & Forecasting",
       "NLP & Document Intelligence",
       "Anomaly Detection & Risk Signals",
-      "Executive Dashboards & KPI Reporting",
+      "Executive Dashboards ",
     ],
   },
   {
@@ -285,7 +285,7 @@ export function TargetAreas() {
 
   return (
     <section
-      id="areas"
+      id="target-areas"
       aria-label="Intelligent systems and digital solutions we build"
       style={{
         position: "relative",
