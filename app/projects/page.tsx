@@ -13,7 +13,7 @@ export default function ProjectsPage() {
     <>
       <Navbar />
 
-      <main id="main-content" className="bg-black min-h-screen">
+      <main id="main-content" className="min-h-screen">
         <ProjectsShowcase />
       </main>
 
