@@ -3,7 +3,7 @@
 import { useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 
-// ── Design tokens (unchanged) ────────────────────────────────────────────────
+// ── Design tokens ──────────────────────────────────────────────────────────────
 const C = {
   bg: "#000b12ff",
   accent: "#7EC3E2",
@@ -25,7 +25,7 @@ const C = {
 const EASE = [0.22, 1, 0.36, 1] as const;
 const TRANSITION = `0.42s cubic-bezier(0.22,1,0.36,1)`;
 
-// ── Data (unchanged) ─────────────────────────────────────────────────────────
+// ── Data ───────────────────────────────────────────────────────────────────────
 interface TargetArea {
   id: string;
   title: string;
@@ -120,17 +120,17 @@ function getColumnSiblingId(id: string): string | null {
   return pairs[id] ?? null;
 }
 
-// ── SpotlightCard (description now grey and smaller) ────────────────────────
+// ── SpotlightCard ──────────────────────────────────────────────────────────────
 interface CardProps {
   area: TargetArea;
   index: number;
-  isExpanded: boolean;
+  isHovered: boolean;
   isCompressed: boolean;
   onEnter: (id: string) => void;
   onLeave: () => void;
 }
 
-function SpotlightCard({ area, index, isExpanded, isCompressed, onEnter, onLeave }: CardProps) {
+function SpotlightCard({ area, index, isHovered, isCompressed, onEnter, onLeave }: CardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const spotRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, amount: 0.1 });
@@ -148,6 +148,12 @@ function SpotlightCard({ area, index, isExpanded, isCompressed, onEnter, onLeave
     if (spotRef.current) spotRef.current.style.background = "transparent";
   }, [onLeave]);
 
+  // Unified border + background + top-line feedback
+  const isActive = isHovered;
+  const borderColor = isActive ? C.cardBorderHover : C.cardBorder;
+  const backgroundColor = isActive ? C.cardBgHover : C.cardBg;
+  const topLineColor = isActive ? `${C.accent}55` : `${C.accent}18`;
+
   return (
     <motion.div
       ref={cardRef}
@@ -158,14 +164,14 @@ function SpotlightCard({ area, index, isExpanded, isCompressed, onEnter, onLeave
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 1.0, delay: index * 0.35, ease: EASE }}
       style={{
-        flexGrow: isExpanded ? 1.36 : isCompressed ? 0.64 : 1,
+        flexGrow: isHovered ? 1.36 : isCompressed ? 0.64 : 1,
         flexShrink: 0,
         flexBasis: 0,
         minHeight: 0,
         transition: `flex-grow ${TRANSITION}, border-color 0.35s ease, background-color 0.35s ease`,
         position: "relative",
-        backgroundColor: isExpanded ? C.cardBgHover : C.cardBg,
-        border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`,
+        backgroundColor,
+        border: `1px solid ${borderColor}`,
         borderRadius: "16px",
         overflow: "hidden",
         cursor: "default",
@@ -174,45 +180,133 @@ function SpotlightCard({ area, index, isExpanded, isCompressed, onEnter, onLeave
         flexDirection: "column",
       }}
     >
-      <div ref={spotRef} aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", transition: isExpanded ? "none" : "background 0.5s ease", zIndex: 0 }} />
-      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: "1px", background: `linear-gradient(90deg, transparent, ${C.accent}${isExpanded ? "55" : "18"}, transparent)`, transition: `background ${TRANSITION}`, zIndex: 1 }} />
+      <div
+        ref={spotRef}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          transition: "background 0.5s ease",
+          zIndex: 0,
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: "10%",
+          right: "10%",
+          height: "1px",
+          background: `linear-gradient(90deg, transparent, ${topLineColor}, transparent)`,
+          transition: `background ${TRANSITION}`,
+          zIndex: 1,
+        }}
+      />
 
-      <div style={{ position: "relative", zIndex: 1, padding: "clamp(28px, 3vw, 40px)", display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
-        {/* Card title – unchanged */}
-        <h3 style={{
-          fontFamily: "var(--font-sans)",
-          fontSize: "clamp(26px, 2.5vw, 34px)",
-          fontWeight: 400,
-          color: C.textPrimary,
-          letterSpacing: "-0.022em",
-          lineHeight: "1.15",
-          marginBottom: "14px",
-          flexShrink: 0,
-        }}>
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          padding: "clamp(28px, 3vw, 40px)",
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          overflow: "hidden",
+        }}
+      >
+        <h3
+          style={{
+            fontFamily: "var(--font-sans)",
+            fontSize: "clamp(26px, 2.5vw, 34px)",
+            fontWeight: 400,
+            color: C.textPrimary,
+            letterSpacing: "-0.022em",
+            lineHeight: "1.15",
+            marginBottom: "14px",
+            flexShrink: 0,
+          }}
+        >
           {area.title}
         </h3>
-        {/* Description – now grey and 2px smaller (16px) */}
-        <p style={{
-          fontFamily: "var(--font-sans)",
-          fontSize: "16px",            // reduced from 18px
-          fontWeight: 300,
-          color: C.textMuted,
-          lineHeight: "1.72",
-          margin: 0,
-          flexShrink: 0,
-        }}>
+        <p
+          style={{
+            fontFamily: "var(--font-sans)",
+            fontSize: "16px",
+            fontWeight: 300,
+            color: C.textMuted,
+            lineHeight: "1.72",
+            margin: 0,
+            flexShrink: 0,
+          }}
+        >
           {area.description}
         </p>
 
         <AnimatePresence>
-          {isExpanded && (
-            <motion.div key={`expand-${area.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22, ease: EASE }} style={{ marginTop: "20px", flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-              <div style={{ height: "1px", backgroundColor: C.divider, marginBottom: "14px", flexShrink: 0 }} />
+          {isHovered && (
+            <motion.div
+              key={`expand-${area.id}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.22, ease: EASE }}
+              style={{
+                marginTop: "20px",
+                flex: 1,
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  height: "1px",
+                  backgroundColor: C.divider,
+                  marginBottom: "14px",
+                  flexShrink: 0,
+                }}
+              />
               <div style={{ flex: 1, overflow: "hidden" }}>
                 {area.painPoints.map((point, i) => (
-                  <motion.div key={point} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.22, delay: 0.05 + i * 0.06, ease: EASE }} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "6px 0" }}>
-                    <span aria-hidden="true" style={{ display: "inline-block", width: "3px", height: "3px", borderRadius: "50%", background: C.accent, flexShrink: 0, opacity: 0.85 }} />
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "14px", letterSpacing: "0.07em", color: "rgba(178,213,229,0.75)", lineHeight: 1 }}>
+                  <motion.div
+                    key={point}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      duration: 0.22,
+                      delay: 0.05 + i * 0.06,
+                      ease: EASE,
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      padding: "6px 0",
+                    }}
+                  >
+                    <span
+                      aria-hidden="true"
+                      style={{
+                        display: "inline-block",
+                        width: "3px",
+                        height: "3px",
+                        borderRadius: "50%",
+                        background: C.accent,
+                        flexShrink: 0,
+                        opacity: 0.85,
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "14px",
+                        letterSpacing: "0.07em",
+                        color: "rgba(178,213,229,0.75)",
+                        lineHeight: 1,
+                      }}
+                    >
                       {point}
                     </span>
                   </motion.div>
@@ -224,9 +318,32 @@ function SpotlightCard({ area, index, isExpanded, isCompressed, onEnter, onLeave
 
         <AnimatePresence>
           {isCompressed && (
-            <motion.div key={`compress-${area.id}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} style={{ marginTop: "auto", paddingTop: "8px", display: "flex", gap: "4px", flexShrink: 0 }}>
+            <motion.div
+              key={`compress-${area.id}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                marginTop: "auto",
+                paddingTop: "8px",
+                display: "flex",
+                gap: "4px",
+                flexShrink: 0,
+              }}
+            >
               {[0, 1, 2].map((i) => (
-                <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "3px", height: "3px", borderRadius: "50%", background: `rgba(178,213,229,${0.12 + i * 0.05})` }} />
+                <span
+                  key={i}
+                  aria-hidden="true"
+                  style={{
+                    display: "inline-block",
+                    width: "3px",
+                    height: "3px",
+                    borderRadius: "50%",
+                    background: `rgba(178,213,229,${0.12 + i * 0.05})`,
+                  }}
+                />
               ))}
             </motion.div>
           )}
@@ -236,7 +353,7 @@ function SpotlightCard({ area, index, isExpanded, isCompressed, onEnter, onLeave
   );
 }
 
-// ── CardColumn (unchanged) ──────────────────────────────────────────────────
+// ── CardColumn ─────────────────────────────────────────────────────────────────
 interface ColumnProps {
   areas: TargetArea[];
   indices: number[];
@@ -247,17 +364,24 @@ interface ColumnProps {
 
 function CardColumn({ areas, indices, hoveredId, onEnter, onLeave }: ColumnProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "clamp(12px, 1.6vw, 20px)", height: "100%" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "clamp(12px, 1.6vw, 20px)",
+        height: "100%",
+      }}
+    >
       {areas.map((area, i) => {
         const siblingId = getColumnSiblingId(area.id);
-        const isExpanded = hoveredId === area.id;
+        const isHovered = hoveredId === area.id;
         const isCompressed = hoveredId !== null && siblingId === hoveredId;
         return (
           <SpotlightCard
             key={area.id}
             area={area}
             index={indices[i]}
-            isExpanded={isExpanded}
+            isHovered={isHovered}
             isCompressed={isCompressed}
             onEnter={onEnter}
             onLeave={onLeave}
@@ -268,7 +392,7 @@ function CardColumn({ areas, indices, hoveredId, onEnter, onLeave }: ColumnProps
   );
 }
 
-// ── TargetAreas (container border now matches phase block style) ────────────
+// ── TargetAreas ────────────────────────────────────────────────────────────────
 export function TargetAreas() {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true, amount: 0.3 });
@@ -294,6 +418,7 @@ export function TargetAreas() {
         overflow: "hidden",
       }}
     >
+      {/* background glow */}
       <div
         aria-hidden="true"
         style={{
@@ -303,7 +428,8 @@ export function TargetAreas() {
           transform: "translateX(-50%)",
           width: "900px",
           height: "420px",
-          background: "radial-gradient(ellipse at center top, rgba(126,195,226,0.045) 0%, transparent 62%)",
+          background:
+            "radial-gradient(ellipse at center top, rgba(126,195,226,0.045) 0%, transparent 62%)",
           filter: "blur(1px)",
           pointerEvents: "none",
         }}
@@ -324,8 +450,7 @@ export function TargetAreas() {
             borderRadius: "40px",
             overflow: "hidden",
             boxShadow: C.glassShadow,
-            // ── Border exactly like the phase blocks ──
-            border: "1px solid rgba(126,195,226,0.2)",   // #7EC3E2 at 20%
+            border: "1px solid rgba(126,195,226,0.2)",
           }}
         >
           <div
@@ -352,10 +477,14 @@ export function TargetAreas() {
               pointerEvents: "none",
             }}
           />
-          {/* The previous gradient‑border pseudo‑elements have been removed.
-              Only the solid border above remains. */}
 
-          <div style={{ position: "relative", zIndex: 4, padding: "clamp(56px, 7vw, 96px) clamp(40px, 5vw, 72px)" }}>
+          <div
+            style={{
+              position: "relative",
+              zIndex: 4,
+              padding: "clamp(56px, 7vw, 96px) clamp(40px, 5vw, 72px)",
+            }}
+          >
             <motion.div
               ref={headerRef}
               initial={{ opacity: 0, y: 22 }}
@@ -363,28 +492,40 @@ export function TargetAreas() {
               transition={{ duration: 0.75, ease: EASE }}
               style={{ marginBottom: "clamp(52px, 8vw, 80px)" }}
             >
-              <h2 style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: "clamp(52px, 5vw, 72px)",
-                fontWeight: 700,
-                color: C.textPrimary,
-                letterSpacing: "-0.02em",
-                lineHeight: "1.1",
-                marginBottom: 0,
-                maxWidth: "800px",
-              }}>
+              <h2
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "clamp(52px, 5vw, 72px)",
+                  fontWeight: 700,
+                  color: C.textPrimary,
+                  letterSpacing: "-0.02em",
+                  lineHeight: "1.1",
+                  marginBottom: 0,
+                  maxWidth: "800px",
+                }}
+              >
                 Our Expertise
               </h2>
             </motion.div>
 
-            <div className="ta-grid" style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "clamp(12px, 1.6vw, 20px)",
-              height: "clamp(600px, 66vh, 780px)",
-            }}>
+            <div
+              className="ta-grid"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "clamp(12px, 1.6vw, 20px)",
+                height: "clamp(600px, 66vh, 780px)",
+              }}
+            >
               {columns.map((col, ci) => (
-                <CardColumn key={ci} areas={col.areas} indices={col.indices} hoveredId={hoveredId} onEnter={handleEnter} onLeave={handleLeave} />
+                <CardColumn
+                  key={ci}
+                  areas={col.areas}
+                  indices={col.indices}
+                  hoveredId={hoveredId}
+                  onEnter={handleEnter}
+                  onLeave={handleLeave}
+                />
               ))}
             </div>
           </div>

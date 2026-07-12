@@ -90,8 +90,7 @@ export function Navbar() {
             <Link
               href="/"
               aria-label="DZen home"
-              className="flex items-center gap-2.5 no-underline"
-              // 👇 Manual vertical offset: negative moves up, positive moves down
+              className="flex items-center gap-0 no-underline"
               style={{ transform: 'translateY(-5px)' }}
             >
               <img
@@ -101,10 +100,10 @@ export function Navbar() {
                 style={{ backgroundColor: "transparent" }}
               />
               <span
-                className="font-zaslia text-[19px] leading-none tracking-[-0.01em]"
+                className="font-zaslia text-[22px] leading-none tracking-[-0.01em]"
                 style={{ color: BLUE.logo, fontWeight: 500 }}
               >
-                DZEN
+                SVAYATTA
               </span>
             </Link>
 
@@ -119,6 +118,7 @@ export function Navbar() {
                       className="font-mono text-[11px] uppercase tracking-[0.18em] no-underline transition-colors duration-200 flex items-center gap-[7px] py-1"
                       style={{
                         color: isActive ? BLUE.active : BLUE.idle,
+                        transform: 'translateY(-3px)',
                       }}
                       onMouseEnter={(e) => {
                         if (!isActive) e.currentTarget.style.color = BLUE.active;
@@ -148,6 +148,7 @@ export function Navbar() {
                   className="font-mono text-[11px] uppercase tracking-[0.18em] no-underline transition-colors duration-200 flex items-center gap-[7px] py-1"
                   style={{
                     color: isProjectsActive ? BLUE.active : BLUE.idle,
+                    transform: 'translateY(-3px)',
                   }}
                   onMouseEnter={(e) => {
                     if (!isProjectsActive) e.currentTarget.style.color = BLUE.active;
@@ -178,6 +179,7 @@ export function Navbar() {
                       className="font-mono text-[11px] uppercase tracking-[0.18em] no-underline transition-colors duration-200 flex items-center gap-[7px] py-1"
                       style={{
                         color: isActive ? BLUE.active : BLUE.idle,
+                        transform: 'translateY(-3px)',
                       }}
                       onMouseEnter={(e) => {
                         if (!isActive) e.currentTarget.style.color = BLUE.active;
@@ -205,7 +207,10 @@ export function Navbar() {
                   type="button"
                   onClick={() => setAboutOpen(true)}
                   className="font-mono text-[11px] uppercase tracking-[0.18em] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0 py-1"
-                  style={{ color: BLUE.idle }}
+                  style={{
+                    color: BLUE.idle,
+                    transform: 'translateY(-3px)',
+                  }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = BLUE.active)}
                   onMouseLeave={(e) => (e.currentTarget.style.color = BLUE.idle)}
                   aria-haspopup="dialog"
@@ -220,6 +225,12 @@ export function Navbar() {
               variant="primary"
               onClick={scrollToCta}
               className="hidden md:inline-flex"
+              style={{
+                transform: 'translateY(-3px)',
+                backgroundColor: '#B2D5E5',
+                color: '#000b12',
+                borderColor: '#B2D5E5',
+              }}
             >
               Get Started →
             </NavbarButton>
@@ -232,7 +243,6 @@ export function Navbar() {
                 href="/"
                 aria-label="DZen home"
                 className="flex items-center gap-2.5 no-underline"
-                // 👇 Same manual offset for mobile header
                 style={{ transform: 'translateY(-2px)' }}
               >
                 <img
@@ -326,6 +336,11 @@ export function Navbar() {
                     scrollToCta();
                   }}
                   className="w-full"
+                  style={{
+                    backgroundColor: '#B2D5E5',
+                    color: '#000b12',
+                    borderColor: '#B2D5E5',
+                  }}
                 >
                   Get Started →
                 </NavbarButton>

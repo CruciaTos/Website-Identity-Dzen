@@ -16,7 +16,7 @@ import type {
 // ─── Navigation ──────────────────────────────────────────────────────────────
 export const NAV_LINKS: NavLink[] = [
   { label: "Platform",    href: "#hero"         },
-  { label: "Services",    href: "#areas"        },
+  { label: "Services",    href: "#target-areas" },
   { label: "Methodology", href: "#capabilities" },
   { label: "Contact",     href: "#contact"      },
 ];

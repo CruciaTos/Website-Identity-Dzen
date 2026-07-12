@@ -3,19 +3,19 @@
 import { useState } from "react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
-/* ── Design tokens ── */
+/* ── Design tokens (identical to TargetAreas & TargetMarkets) ── */
 const C = {
-  sectionBg: "transparent",
+  bg: "#000b12ff",
+  accent: "#7EC3E2",
+  accentSoft: "#B2D5E5",
+  textPrimary: "#e5f3e5ff",
+  textMuted: "rgba(229,243,229,0.65)",
   cardBg: "#0d0d0cff",
-  blue: "#B2D5E5",
-  blueMid: "#7ec3e2",
-  blueDeep: "#5aabce",
-  border: "rgba(178,213,229,0.10)",
-  borderHi: "rgba(178,213,229,0.22)",
-  dim: "rgba(178,213,229,0.55)",
-  faint: "rgba(178,213,229,0.32)",
-  ghost: "rgba(178,213,229,0.018)",
-  // ── Glass container tokens (dark glass, like TargetAreas) ──
+  cardBgHover: "#141413ff",
+  cardBorder: "rgba(178,213,229,0.10)",
+  cardBorderHover: "rgba(126,195,226,0.28)",
+  divider: "rgba(178,213,229,0.10)",
+  glowSpot: "rgba(126,195,226,0.08)",
   glassBg: "rgba(9, 9, 9, 0.5)",
   glassHighlight: "rgba(255,255,255,0.06)",
   glassBorder: "rgba(178,213,229,0.15)",
@@ -67,7 +67,7 @@ const CASES: RealCase[] = [
   }
 ];
 
-/* ── Marquee card – unchanged ── */
+/* ── Marquee card – now uses unified tokens ── */
 function MarqueeExpandingCard({
   c,
   isExpanded,
@@ -77,7 +77,6 @@ function MarqueeExpandingCard({
   isExpanded: boolean;
   onHover: (id: string | null) => void;
 }) {
-  // ... unchanged code ...
   return (
     <div
       onMouseEnter={() => onHover(c.id)}
@@ -87,8 +86,8 @@ function MarqueeExpandingCard({
         transition: `flex 0.65s ${SPRING}, border-color 0.45s ease`,
         position: "relative",
         overflow: "hidden",
-        backgroundColor: "rgba(0,0,0,0.65)",
-        border: `1px solid ${isExpanded ? "rgba(126,195,226,0.28)" : "rgba(126,195,226,0.20)"}`,
+        backgroundColor: C.cardBg,                       // ← unified card background
+        border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`, // ← unified border
         borderRadius: "16px",
         cursor: "default",
         display: "flex",
@@ -116,7 +115,7 @@ function MarqueeExpandingCard({
           bottom: isExpanded ? "-36px" : "-18px",
           right: "-4px",
           fontSize: isExpanded ? "clamp(140px,16vw,260px)" : "clamp(110px,12vw,200px)",
-          color: C.ghost,
+          color: "rgba(178,213,229,0.018)",               // unchanged ghost colour
           fontFamily: "serif",
           lineHeight: 1,
           letterSpacing: "-0.05em",
@@ -208,7 +207,7 @@ function MarqueeExpandingCard({
           style={{
             fontSize: isExpanded ? "clamp(19px, 2.2vw, 34px)" : "clamp(32px, 4.2vw, 52px)",
             fontWeight: 600,
-            color: "#e5f3e5ff",
+            color: C.textPrimary,                    // ← unified headline colour
             lineHeight: 1.15,
             letterSpacing: "-0.022em",
             margin: 0,
@@ -238,7 +237,7 @@ function MarqueeExpandingCard({
           <div
             style={{
               height: "1px",
-              backgroundColor: C.border,
+              backgroundColor: C.divider,           // ← unified divider
               marginBottom: "24px",
               transform: isExpanded ? "scaleX(1)" : "scaleX(0)",
               transformOrigin: "left",
@@ -308,7 +307,7 @@ function MarqueeExpandingCard({
   );
 }
 
-/* ── Main section – container border now matches phase blocks ── */
+/* ── Main section – glass container & heading now match TargetAreas ── */
 export function CaseStudies() {
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -336,14 +335,14 @@ export function CaseStudies() {
           zIndex: 1,
         }}
       >
-        {/* ── Glass container – now with simple solid border ── */}
+        {/* Glass container – identical to TargetAreas */}
         <div
           style={{
             position: "relative",
             borderRadius: "40px",
             overflow: "hidden",
             boxShadow: C.glassShadow,
-            border: "1px solid rgba(126,195,226,0.2)",   // matches phase blocks
+            border: "1px solid rgba(126,195,226,0.2)",
           }}
         >
           {/* Dark semi‑transparent blur layer */}
@@ -374,8 +373,6 @@ export function CaseStudies() {
             }}
           />
 
-          {/* Gradient border and top reflection REMOVED */}
-
           {/* Content */}
           <div style={{ position: "relative", zIndex: 4, padding: "clamp(56px, 7vw, 96px) clamp(40px, 5vw, 72px)" }}>
             <FadeIn>
@@ -384,15 +381,16 @@ export function CaseStudies() {
                   <h2
                     className="font-sans font-bold"
                     style={{
-                      fontSize: "clamp(31px, 4.2vw, 57px)",
-                      color: C.blue,
-                      letterSpacing: "-0.026em",
+                      fontSize: "clamp(52px, 5vw, 72px)",     // ← unified heading size
+                      fontWeight: 700,
+                      color: C.textPrimary,                   // ← unified heading colour
+                      letterSpacing: "-0.02em",
                       lineHeight: 1.1,
                     }}
                   >
                     Think AI is still far away?
                     <br />
-                    <em className="not-italic" style={{ color: C.dim }}>
+                    <em className="not-italic" style={{ color: C.textMuted }}>
                       Think again.
                     </em>
                   </h2>
@@ -400,7 +398,7 @@ export function CaseStudies() {
                 <div className="max-w-[400px] flex-shrink-0">
                   <p
                     className="font-sans text-body font-light leading-[1.7]"
-                    style={{ color: C.dim }}
+                    style={{ color: C.textMuted }}
                   ></p>
                 </div>
               </div>

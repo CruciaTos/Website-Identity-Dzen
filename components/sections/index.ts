@@ -5,4 +5,5 @@ export { CaseStudies } from "./CaseStudies";
 export { IntegrationMarquee } from "./IntegrationMarquee";
 export { WhyUs } from "./WhyUs";
 export { CTA } from "./CTA";
+
 export { Testimonials } from "./Testimonials";

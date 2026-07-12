@@ -81,10 +81,10 @@ function PhaseBlock({
   ];
   const imageSrc = PHASE_IMAGES[index % PHASE_IMAGES.length];
 
-  // ── Image panel ──────────────────────────────────────────────────
+  // ── Image panel (now dynamic width) ─────────────────────────────
   const ImagePanel = (
     <motion.div
-      className="hidden md:block flex-shrink-0 w-[300px] lg:w-[340px] xl:w-[400px] self-stretch min-h-[260px] rounded-xl overflow-hidden relative"
+      className="hidden md:block flex-1 min-w-0 self-stretch min-h-[260px] rounded-xl overflow-hidden relative"
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.96 }}
       transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
@@ -94,7 +94,7 @@ function PhaseBlock({
         alt={`${phase.title} visual`}
         fill
         className="object-cover rounded-xl"
-        sizes="(max-width: 768px) 0px, (max-width: 1280px) 340px, 400px"
+        sizes="(max-width: 768px) 0px, (max-width: 1280px) 50vw, 40vw"
       />
     </motion.div>
   );
@@ -126,10 +126,10 @@ function PhaseBlock({
         transition={{ duration: 0.7, ease: "easeInOut" }}
       />
 
-      {/* ── Text content ── */}
+      {/* ── Text content – max width 50% so image fills the rest ── */}
       <motion.div
         className={cn(
-          "relative z-10 flex-1 min-w-0 space-y-5 select-text",
+          "relative z-10 w-full max-w-[50%] flex-shrink-0 min-w-0 space-y-5 select-text",
           isLeft ? "text-left" : "text-right"
         )}
         initial={{ opacity: 0, y: 28 }}
