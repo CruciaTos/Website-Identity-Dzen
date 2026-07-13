@@ -37,7 +37,7 @@ const TESTIMONIALS: Testimonial[] = [
   {
     id: "bharat-aarti",
     quote:
-      "\u201CDzen Svayatta didn't just automate our operations they gave us complete visibility into how our business runs. What once took constant follow ups and manual coordination is now streamlined, transparent and built to scale. Their approach has fundamentally changed how we operate.\u201D",
+      "\u201CThe biggest change is that we don't have to think about the little things anymore. Everything just works the way it should.\u201D",
     author: "Mr. Bharat Boridkar",
     role: "Senior Accountant",
     company: "Aarti Enterprise",
@@ -98,7 +98,6 @@ function markOf(company: string) {
     .toUpperCase();
 }
 
-
 export function Testimonials() {
   const [index, setIndex] = useState(0);
   const reduce = useReducedMotion();
@@ -141,8 +140,11 @@ export function Testimonials() {
             Don&apos;t Take Our Word For It
           </h2>
 
-          {/* Quote block – text with ScrollReveal, marks fade in together */}
-          <div ref={quoteContainerRef} className="min-h-[260px] sm:min-h-[220px] flex items-center justify-center max-w-[1700px] px-4">
+          {/* Quote block – increased fixed height to prevent layout shift */}
+          <div
+            ref={quoteContainerRef}
+            className="h-[320px] sm:h-[280px] overflow-hidden flex items-center justify-center max-w-[1700px] px-4"
+          >
             <AnimatePresence mode="wait">
               <div key={active.id} className="flex items-center justify-center text-center">
                 {startsWithQuote && (

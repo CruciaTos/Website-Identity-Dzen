@@ -19,7 +19,12 @@ import { useScrolled } from "@/hooks/useScrolled";
 import { AboutOverlay } from "@/components/sections/AboutOverlay";
 import { NAV_LINKS, PROJECTS_LINK } from "@/lib/data";
 
-const SECTION_IDS = ["hero", "areas", "capabilities", "cases", "contact"];
+// Derived from NAV_LINKS so the tracked ids can never drift out of sync
+// with the hrefs actually rendered below (previously hand-typed here as
+// ["hero", "areas", "capabilities", "cases", "contact"] — "areas" didn't
+// match any element's id, it's "target-areas", so that link never lit up
+// and the observer for it silently never attached).
+const SECTION_IDS = NAV_LINKS.map(({ href }) => href.replace("#", ""));
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const BLUE = {
