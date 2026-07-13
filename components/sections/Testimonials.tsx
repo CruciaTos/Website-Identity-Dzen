@@ -30,6 +30,7 @@ interface Testimonial {
   service: string;
   outcome: { value: string; label: string };
   avatar?: string;
+  badgeImage?: string;
   logo?: string;
 }
 
@@ -44,6 +45,8 @@ const TESTIMONIALS: Testimonial[] = [
     industry: "Professional Services",
     service: "Operations Automation",
     outcome: { value: "Full", label: "operational visibility" },
+    avatar: "/images/Testimonials/BharatBoridkar.png",
+    badgeImage: "/images/Testimonials/aarti_logo.png",  
   },
   {
     id: "praful-thakre",
@@ -55,6 +58,9 @@ const TESTIMONIALS: Testimonial[] = [
     industry: "Manufacturing",
     service: "Enterprise Automation",
     outcome: { value: "Company-wide", label: "operational alignment" },
+    badgeImage: "/images/Testimonials/aarti_logo.png",  
+    avatar: "/images/Testimonials/PrafulThakre.png",
+    
   },
   {
     id: "rutuja-nilgunkar",
@@ -62,10 +68,12 @@ const TESTIMONIALS: Testimonial[] = [
       "\u201CThey built an AI voice assistant that answers calls, triages patients and schedules follow-ups automatically. It's the digital front desk our clinic needed.\u201D",
     author: "Dr. Rutuja Nilgunkar",
     role: "Physiotherapist & Clinic Owner",
-    company: "Nilgunkar Clinic",
+    company: "",
     industry: "Healthcare",
     service: "AI Patient Management",
     outcome: { value: "24/7", label: "call handling" },
+    avatar: "/images/Testimonials/DrRutujaNilgunkar.png",
+    badgeImage: "/images/Testimonials/doctorlogo.png",  
   },
   {
     id: "neeta-save",
@@ -77,6 +85,7 @@ const TESTIMONIALS: Testimonial[] = [
     industry: "Healthcare",
     service: "Patient Engagement",
     outcome: { value: "Higher", label: "staff capacity" },
+    badgeImage: "/images/Testimonials/doctorlogo.png",  
   },
 ];
 
@@ -278,19 +287,33 @@ export function Testimonials() {
                       )}
                     </div>
 
+                    {/* Badge – now shows an image (temporarily using the avatar path) */}
                     <span
                       aria-hidden="true"
-                      className="absolute -bottom-2 -right-2 rounded-lg flex items-center justify-center font-mono font-semibold transition-colors duration-500"
+                      className="absolute -bottom-2 -right-2 rounded-lg overflow-hidden flex items-center justify-center transition-colors duration-500"
                       style={{
                         width: 28,
                         height: 28,
-                        fontSize: 10,
                         backgroundColor: "#0a1420",
-                        color: isActive ? C.accentSoft : C.textFaint,
                         border: `1px solid ${isActive ? C.accent : C.hairline}`,
                       }}
                     >
-                      {markOf(t.company)}
+                      {t.badgeImage || t.avatar ? (
+                        <Image
+                          src={t.badgeImage || t.avatar!}
+                          alt={`${t.company} logo`}
+                          width={28}
+                          height={28}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <span
+                          className="font-mono font-semibold text-[10px]"
+                          style={{ color: isActive ? C.accentSoft : C.textFaint }}
+                        >
+                          {markOf(t.company)}
+                        </span>
+                      )}
                     </span>
                   </motion.button>
                 );
