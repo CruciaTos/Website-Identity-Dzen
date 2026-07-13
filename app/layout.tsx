@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Geist, DM_Serif_Display, IBM_Plex_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteMetadata, structuredData } from "@/lib/metadata";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { SectionFlowProvider } from "@/components/providers/SectionFlow";
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </SectionFlowProvider>
           </div>
         </SmoothScroll>
+        <SpeedInsights />
       </body>
     </html>
   );
