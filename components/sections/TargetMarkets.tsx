@@ -32,9 +32,9 @@ interface MarketCard {
 
 const MARKET_CARDS: MarketCard[] = [
   { id: "finance", title: "Financial Operations" },
-  { id: "sales", title: "Revenue Operations" },
-  { id: "support", title: "Customer Experience" },
-  { id: "hr", title: "People & Talent" },
+  { id: "sales", title: "GTM Support" },
+  { id: "support", title: "Customer Engagements" },
+  { id: "hr", title: "People & Talent Management" },
   { id: "ops", title: "Operations & Logistics" },
   { id: "data", title: "Business Intelligence" },
 ];
