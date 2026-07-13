@@ -250,7 +250,7 @@ export function AboutOverlay({ open, onClose }: AboutOverlayProps) {
         <>
           <motion.div
             className="fixed inset-0 z-[100] backdrop-blur-3xl"
-            style={{ 
+            style={{
               backgroundColor: "rgba(0, 11, 18, 0.55)",
               border: "1px solid rgba(255,255,255,0.05)"
             }}
@@ -386,7 +386,7 @@ export function AboutOverlay({ open, onClose }: AboutOverlayProps) {
                   className="font-sans text-[14px] font-normal leading-relaxed max-w-[740px]"
                   style={{ color: C.textMuted }}
                 >
-                  We are here to go beyond just delivering projects. DZEN grows by building alongside ambitious people, not by collecting clients.We see every partnership as opportunities to build something bigger; whether that's new products, new companies, or entirely new ventures. The goal is real infrastructure and reach behind what we build, and a long-term operation you can rely on for years, not a landing page and a pitch deck.
+                  We are here to go beyond just delivering projects. DZEN grows by building alongside ambitious people, not by collecting clients.We see every partnership as opportunities to build something bigger; whether that&apos;s new products, new companies, or entirely new ventures. The goal is real infrastructure and reach behind what we build, and a long-term operation you can rely on for years, not a landing page and a pitch deck.
                 </p>
 
                 <p
