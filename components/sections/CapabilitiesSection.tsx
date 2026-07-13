@@ -84,7 +84,7 @@ function PhaseBlock({
   // ── Image panel (now dynamic width) ─────────────────────────────
   const ImagePanel = (
     <motion.div
-      className="hidden md:block flex-1 min-w-0 self-stretch min-h-[260px] rounded-xl overflow-hidden relative"
+      className="hidden md:block flex-1 min-w-0 self-stretch min-h-[260px] rounded-xl overflow-hidden relative z-10"
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.96 }}
       transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
@@ -104,20 +104,36 @@ function PhaseBlock({
       ref={ref}
       id={`phase-${index}`}
       className={cn(
-        "phase-block relative min-h-[50vh] flex overflow-hidden rounded-2xl border border-[#7EC3E2]/20 bg-black/65",
+        "phase-block relative min-h-[50vh] flex overflow-hidden rounded-2xl border border-[#7EC3E2]/20",
         "px-6 md:px-10 lg:px-14 mr-4 py-10 md:py-14",
         "items-center gap-8 lg:gap-12",
         // text-left → image right; text-right → image left
         isLeft ? "flex-row" : "flex-row-reverse"
       )}
-      style={{
-        backgroundImage: `
-          linear-gradient(rgba(126,195,226,${opacity}) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(126,195,226,${opacity}) 1px, transparent 1px)
-        `,
-        backgroundSize: `${size}px ${size}px`,
-      }}
     >
+      {/* ── Background image – same image with 38% opacity ── */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={imageSrc}
+          alt=""
+          fill
+          className="object-cover opacity-[0.38]"
+          sizes="100vw"
+        />
+      </div>
+
+      {/* ── Dark overlay + grid pattern ── */}
+      <div
+        className="absolute inset-0 z-[1] bg-black/65"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(126,195,226,${opacity}) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(126,195,226,${opacity}) 1px, transparent 1px)
+          `,
+          backgroundSize: `${size}px ${size}px`,
+        }}
+      />
+
       {/* Animated top rule */}
       <motion.div
         className="absolute top-0 left-0 h-px bg-[#7EC3E2]/30"
@@ -157,7 +173,7 @@ function PhaseBlock({
         </p>
       </motion.div>
 
-      {/* ── Image / Placeholder (hidden on mobile) ── */}
+      {/* ── Foreground image panel (hidden on mobile) ── */}
       {ImagePanel}
     </div>
   );

@@ -170,7 +170,7 @@ export function WhyUs() {
               className="font-sans text-[clamp(42px,7vw,84px)] font-bold tracking-[-0.025em] leading-[1.02] mb-6 whitespace-nowrap"
               style={{ color: C.textPrimary }}
             >
-              We Build.You Scale.
+              We Build·You Scale.
             </h2>
           </FadeIn>
 

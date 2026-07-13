@@ -119,7 +119,7 @@ export function CTA() {
               className="font-mono text-[10px] tracking-[0.1em] uppercase mt-10"
               style={{ color: C.textFaint }}
             >
-              Briefings are confidential · NDA available on request
+              · NDA available on request
             </p>
           </div>
         </FadeIn>

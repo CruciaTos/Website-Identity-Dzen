@@ -43,7 +43,7 @@ export const siteMetadata: Metadata = {
     card: "summary_large_image",
     title: "Dzen Svayatta - Quality with Clarity",
     description:
-      "WWe build the infrastructure behind how your business scales.",
+      "We build the infrastructure behind how your business scales.",
     images: ["/og-image.png"],
     creator: "@DZenSvayatta_io",
   },

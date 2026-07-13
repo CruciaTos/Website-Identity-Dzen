@@ -104,7 +104,7 @@ export function Hero({ className }: HeroProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
           >
-            WE BUILD.YOU SCALE
+            WE BUILD·YOU SCALE
           </motion.p>
 
           {/* Headline – extra‑wide fixed container to completely eliminate layout shift */}

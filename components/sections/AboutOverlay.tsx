@@ -28,16 +28,12 @@ const C = {
   headerBg: "rgba(0, 11, 18, 0.95)",
 } as const;
 
-
-
 const FOUNDERS = [
   {
     num: "I",
     name: "Soham Boridkar",
     email: "sohamboridkar@svayatta.in",
     linkedIn: "https://www.linkedin.com/in/soham-boridkar/",
-    quote:
-      "The real test is when nobody notices the system running. If a pipeline needs constant alerts and fixes, something is wrong. We build things that stay out of the way so managers can focus on outcomes.",
     delay: 0.1,
   },
   {
@@ -45,8 +41,6 @@ const FOUNDERS = [
     name: "Smit Mhatre",
     email: "smitmhatre@svayatta.in",
     linkedIn: "https://linkedin.com/in/smit-mhatre",
-    quote:
-      "We document how your best people match spreadsheets or vet invoices, then turn those steps into pipelines your team can audit.",
     delay: 0.2,
   },
   {
@@ -54,8 +48,6 @@ const FOUNDERS = [
     name: "Varun Pal",
     email: "varunpal@svayatta.in",
     linkedIn: "https://www.linkedin.com/in/b777varunpal/",
-    quote:
-      "Integration is half the job. The other half is trust: systems that explain what they did, stay within their limits, and earn a place in daily operations.",
     delay: 0.3,
   },
 ] as const;
@@ -105,7 +97,6 @@ function FounderCard({
   name,
   email,
   linkedIn,
-  quote,
   delay,
   open,
 }: {
@@ -113,7 +104,6 @@ function FounderCard({
   name: string;
   email: string;
   linkedIn: string;
-  quote: string;
   delay: number;
   open: boolean;
 }) {
@@ -141,7 +131,7 @@ function FounderCard({
   return (
     <motion.div
       ref={cardRef}
-      className="relative overflow-hidden flex flex-col justify-center min-h-[340px] px-8 py-10 rounded-[2px]"
+      className="relative overflow-hidden flex flex-col justify-center min-h-[180px] px-8 py-9 rounded-[2px]"
       style={{
         border: `1px solid ${hovered ? "rgba(126,195,226,0.28)" : C.cardBorder}`,
         backgroundColor: C.cardBg,
@@ -203,7 +193,7 @@ function FounderCard({
           Co-Founder & Operator
         </div>
 
-        <div className="space-y-3 mb-8">
+        <div className="space-y-3">
           <a
             href={`mailto:${email}`}
             className="block font-mono text-[13px] tracking-wide no-underline transition-colors duration-200"
@@ -224,18 +214,6 @@ function FounderCard({
           >
             LinkedIn Profile ↗
           </a>
-        </div>
-
-        <div
-          className="border-l-2 pl-4 py-1"
-          style={{ borderColor: "rgba(126,195,226,0.28)" }}
-        >
-          <p
-            className="font-sans text-[13px] font-normal leading-relaxed italic"
-            style={{ color: C.textMuted }}
-          >
-            &ldquo;{quote}&rdquo;
-          </p>
         </div>
       </div>
     </motion.div>
@@ -368,39 +346,77 @@ export function AboutOverlay({ open, onClose }: AboutOverlayProps) {
               data-lenis-prevent
               className="founders-scroll flex-1 min-h-0 overflow-y-auto overscroll-y-contain scrollbar-thin px-8 sm:px-10 py-10 sm:py-12 space-y-12"
             >
+              {/* ── Operating Philosophy section REMOVED ── */}
+
               <div className="space-y-6">
                 <div className="flex items-center gap-2">
                   <span
                     className="h-1.5 w-1.5 rounded-full"
                     style={{ backgroundColor: C.accent }}
                   />
-                  {open && <Typewriter text="Operating Philosophy" delay={200} />}
+                  {open && <Typewriter text="DZen & Svayatta" delay={260} />}
                 </div>
 
                 <h2
                   className="font-sans text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05] tracking-[-0.03em]"
                   style={{ color: C.textPrimary }}
                 >
-                  Enterprise systems need{" "}
-                  <span style={{ color: C.accentSoft }}>clarity</span> and{" "}
-                  <span style={{ color: C.accentSoft }}>control</span>.
+                  DZen is us. <span style={{ color: C.accentSoft }}>Svayatta</span> is how we build.
                 </h2>
 
                 <p
                   className="font-sans text-[14px] font-normal leading-relaxed max-w-[740px]"
                   style={{ color: C.textMuted }}
                 >
-                  DZen was built to close the operational gaps that drain focus, time, and revenue. We build secure, custom integrations that connect your ERP, comms tools, and the systems you already run.
+                  Dzen is the name that sits over everything we do. It&rsquo;s simply us, the founders and the standards behind the work.
                 </p>
 
                 <p
                   className="font-sans text-[14px] font-normal leading-relaxed max-w-[740px]"
                   style={{ color: C.textMuted }}
                 >
-                  We believe technology works best when it is quiet, robust, and completely responsive. No fluff. No fragile mockups. We deploy production-grade software that is governed step-by-step.
+                  Svayatta is the division inside DZen specifically for tech upscalings. The software, the workflow integrations, all applied intelligence is handled here. {" "}
+                  <span style={{ color: C.accentSoft }}>स्वयत्ता</span> means self-governance and that&rsquo;s not for just a gimmik name. It&rsquo;s our Standard: Its the systems that upscales you; the systems that break the tranditional workflow redundancies and hold to their own limits.
+                </p>
+
+                <p
+                  className="font-sans text-[14px] font-normal leading-relaxed max-w-[740px]"
+                  style={{ color: C.textMuted }}
+                >
+                  It&rsquo;s the same idea behind everything else here. Providing remarkable Quality with uncompromised Clarity  
                 </p>
               </div>
 
+              <div className="space-y-6">
+                <div className="flex items-center gap-2">
+                  <span
+                    className="h-1.5 w-1.5 rounded-full"
+                    style={{ backgroundColor: C.accent }}
+                  />
+                  {open && <Typewriter text="Where We're Headed" delay={320} />}
+                </div>
+
+                <h2
+                  className="font-sans text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05] tracking-[-0.03em]"
+                  style={{ color: C.textPrimary }}
+                >
+                  This isn&rsquo;t a <span style={{ color: C.accentSoft }}>side project</span>.
+                </h2>
+
+                <p
+                  className="font-sans text-[14px] font-normal leading-relaxed max-w-[740px]"
+                  style={{ color: C.textMuted }}
+                >
+                  We are here to go beyond just delivering projects. DZEN grows by building alongside ambitious people, not by collecting clients.We see every partnership as opportunities to build something bigger; whether that's new products, new companies, or entirely new ventures. The goal is real infrastructure and reach behind what we build, and a long-term operation you can rely on for years, not a landing page and a pitch deck.
+                </p>
+
+                <p
+                  className="font-sans text-[14px] font-normal leading-relaxed max-w-[740px]"
+                  style={{ color: C.textMuted }}
+                >
+                  If you&rsquo;re passionate for Growth, Shared Ambitions and building something meaningful, that&rsquo;s exactly the conversation we&rsquo;re looking to have.
+                </p>
+              </div>
 
               <div className="space-y-6 pb-4">
                 <div
