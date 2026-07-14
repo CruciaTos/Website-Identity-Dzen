@@ -1,0 +1,617 @@
+diff --git a/app/layout.tsx b/app/layout.tsx
+index cee120a..b834fc7 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -68,10 +68,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
+           type="application/ld+json"
+           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+         />
+-        <link
+-          rel="stylesheet"
+-          href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+-        />
+       </head>
+       <body
+         suppressHydrationWarning
+diff --git a/components/ScrollReveal.tsx b/components/ScrollReveal.tsx
+index 26576fc..16825db 100644
+--- a/components/ScrollReveal.tsx
++++ b/components/ScrollReveal.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import React, { useRef } from "react";
+-import { motion, useInView } from "framer-motion";
++import { motion, useInView } from "motion/react";
+ import { cn } from "@/lib/utils";
+ 
+ interface ScrollRevealProps {
+diff --git a/components/layout/Navbar.tsx b/components/layout/Navbar.tsx
+index 3472da4..e0a92d8 100644
+--- a/components/layout/Navbar.tsx
++++ b/components/layout/Navbar.tsx
+@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
+ import { useRouter, usePathname } from "next/navigation";
+ import Link from "next/link";
+ import Image from "next/image";
+-import { motion } from "framer-motion";
++import { motion } from "motion/react";
+ import {
+   Navbar as NavbarShell,
+   NavBody,
+diff --git a/components/sections/AboutOverlay.tsx b/components/sections/AboutOverlay.tsx
+index ba35478..529efb2 100644
+--- a/components/sections/AboutOverlay.tsx
++++ b/components/sections/AboutOverlay.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import { useEffect, useState, useRef } from "react";
+-import { motion, AnimatePresence } from "framer-motion";
++import { motion, AnimatePresence } from "motion/react";
+ import { LogoMark } from "@/components/ui/Icons";
+ import { useLenis } from "@/components/providers/SmoothScroll";
+ 
+diff --git a/components/sections/CTA.tsx b/components/sections/CTA.tsx
+index 3172798..025aa5e 100644
+--- a/components/sections/CTA.tsx
++++ b/components/sections/CTA.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import Link from "next/link";
+-import { motion, useScroll, useTransform } from "framer-motion";
++import { motion, useScroll, useTransform } from "motion/react";
+ import { useRef } from "react";
+ import { Container } from "@/components/ui/Container";
+ import { FadeIn } from "@/components/ui/FadeIn";
+diff --git a/components/sections/CapabilitiesSection.tsx b/components/sections/CapabilitiesSection.tsx
+index 346fefa..1b33987 100644
+--- a/components/sections/CapabilitiesSection.tsx
++++ b/components/sections/CapabilitiesSection.tsx
+@@ -136,9 +136,10 @@ function PhaseBlock({
+ 
+       {/* Animated top rule */}
+       <motion.div
+-        className="absolute top-0 left-0 h-px bg-[#7EC3E2]/30"
+-        initial={{ width: "0%" }}
+-        animate={{ width: inView ? "100%" : "0%" }}
++        className="absolute top-0 left-0 w-full h-px bg-[#7EC3E2]/30"
++        style={{ transformOrigin: "left" }}
++        initial={{ scaleX: 0 }}
++        animate={{ scaleX: inView ? 1 : 0 }}
+         transition={{ duration: 0.7, ease: "easeInOut" }}
+       />
+ 
+diff --git a/components/sections/DiscoveryForm.tsx b/components/sections/DiscoveryForm.tsx
+index 58f931d..bde3135 100644
+--- a/components/sections/DiscoveryForm.tsx
++++ b/components/sections/DiscoveryForm.tsx
+@@ -2,7 +2,7 @@
+ 
+ import { useState } from "react";
+ import Link from "next/link";
+-import { motion } from "framer-motion";
++import { motion } from "motion/react";
+ 
+ interface FormData {
+   companyName: string;
+diff --git a/components/sections/Hero.tsx b/components/sections/Hero.tsx
+index aec3239..96ff463 100644
+--- a/components/sections/Hero.tsx
++++ b/components/sections/Hero.tsx
+@@ -1,6 +1,6 @@
+ "use client";
+ 
+-import { motion, AnimatePresence } from "framer-motion";
++import { motion, AnimatePresence } from "motion/react";
+ import { useState, useEffect, useRef } from "react";
+ import { DotField } from "@/components/ui/DotField";
+ 
+@@ -285,10 +285,24 @@ export function Hero({ className }: HeroProps) {
+           overflow/clip on narrow viewports, so we shrink them here. The
+           --h1-size custom property (read by every fluid child: eyebrow,
+           body copy, CTA buttons) is derived from the h1's *rendered*
+-          font-size via a ResizeObserver, so overriding font-size here
+-          automatically cascades to everything else. */}
++          font-size via a ResizeObserver — but that only exists once React
++          has hydrated and the effect has run, which is *after* first
++          paint. Until then, calc(var(--h1-size) * X) is invalid, so every
++          dependent element rendered at its unstyled default and then
++          snapped to the right size/margin/padding a moment later — a
++          whole-hero layout shift on every load. Defining --h1-size here in
++          plain CSS, mirroring the same clamp() math the ResizeObserver
++          would otherwise compute, gives it a correct value from the very
++          first frame; the ResizeObserver below just keeps it in sync with
++          the h1's actual rendered size afterward (e.g. across resizes). */}
+       <style>{`
++        #hero {
++          --h1-size: clamp(100px, 25vw, 250px);
++        }
+         @media (max-width: 768px) {
++          #hero {
++            --h1-size: clamp(44px, 17vw, 96px);
++          }
+           .hero-text-wrap {
+             width: calc(100% - 2rem) !important;
+             padding: 1.75rem 1.25rem !important;
+@@ -301,6 +315,9 @@ export function Hero({ className }: HeroProps) {
+           }
+         }
+         @media (max-width: 400px) {
++          #hero {
++            --h1-size: clamp(36px, 16vw, 76px);
++          }
+           .hero-headline {
+             font-size: clamp(36px, 16vw, 76px) !important;
+           }
+diff --git a/components/sections/ProjectsShowcase.tsx b/components/sections/ProjectsShowcase.tsx
+index 59bec17..5a7a739 100644
+--- a/components/sections/ProjectsShowcase.tsx
++++ b/components/sections/ProjectsShowcase.tsx
+@@ -3,7 +3,7 @@
+ import Link from "next/link";
+ import Image from "next/image";
+ import { useState, useEffect } from "react";
+-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
++import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+ import { FadeIn } from "@/components/ui/FadeIn";
+ 
+ const C = {
+diff --git a/components/sections/TargetAreas.tsx b/components/sections/TargetAreas.tsx
+index cc63c88..1ecf039 100644
+--- a/components/sections/TargetAreas.tsx
++++ b/components/sections/TargetAreas.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import { useRef, useState, useCallback } from "react";
+-import { motion, AnimatePresence, useInView } from "framer-motion";
++import { motion, AnimatePresence, useInView } from "motion/react";
+ 
+ // ── Design tokens ──────────────────────────────────────────────────────────────
+ const C = {
+diff --git a/components/sections/TargetMarkets.tsx b/components/sections/TargetMarkets.tsx
+index 2109a92..e3a2036 100644
+--- a/components/sections/TargetMarkets.tsx
++++ b/components/sections/TargetMarkets.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import { useRef, useCallback } from "react";
+-import { motion, useInView } from "framer-motion";
++import { motion, useInView } from "motion/react";
+ 
+ // ── Design tokens ────────────────────────────────────────────────────────────
+ const C = {
+diff --git a/components/sections/Testimonials.tsx b/components/sections/Testimonials.tsx
+index d36eae7..cf34100 100644
+--- a/components/sections/Testimonials.tsx
++++ b/components/sections/Testimonials.tsx
+@@ -2,7 +2,7 @@
+ 
+ import { useState, useRef } from "react";
+ import Image from "next/image";
+-import { AnimatePresence, motion, useReducedMotion, useInView } from "framer-motion";
++import { AnimatePresence, motion, useReducedMotion, useInView } from "motion/react";
+ import { Container } from "@/components/ui/Container";
+ import ScrollReveal from "@/components/ScrollReveal";
+ 
+diff --git a/components/ui/FadeIn.tsx b/components/ui/FadeIn.tsx
+index a54928b..e758407 100644
+--- a/components/ui/FadeIn.tsx
++++ b/components/ui/FadeIn.tsx
+@@ -1,6 +1,6 @@
+ "use client";
+ 
+-import { motion, useInView } from "framer-motion";
++import { motion, useInView } from "motion/react";
+ import { useRef, type ReactNode } from "react";
+ import { cn } from "@/lib/utils";
+ 
+diff --git a/components/ui/resizable-navbar.tsx b/components/ui/resizable-navbar.tsx
+index f5d4030..4de24b3 100644
+--- a/components/ui/resizable-navbar.tsx
++++ b/components/ui/resizable-navbar.tsx
+@@ -1,7 +1,7 @@
+ "use client";
+ 
+ import React from "react";
+-import { motion, AnimatePresence } from "framer-motion";
++import { motion, AnimatePresence } from "motion/react";
+ 
+ /* ------------------------------------------------------------------ */
+ /*  Navbar – top-level wrapper                                        */
+diff --git a/next.config.ts b/next.config.ts
+index b91bb42..aa23088 100644
+--- a/next.config.ts
++++ b/next.config.ts
+@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
+ const nextConfig: NextConfig = {
+   // Enable experimental features for Next.js 15
+   experimental: {
+-    optimizePackageImports: ["framer-motion"],
++    optimizePackageImports: ["motion"],
+   },
+   images: {
+     formats: ["image/avif", "image/webp"],
+diff --git a/package-lock.json b/package-lock.json
+index 180fee3..833d565 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -16,7 +16,6 @@
+         "class-variance-authority": "^0.7.1",
+         "clsx": "^2.1.1",
+         "dotenv": "^17.4.2",
+-        "framer-motion": "^11.18.2",
+         "googleapis": "^173.0.0",
+         "gsap": "^3.15.0",
+         "ics": "^3.12.0",
+@@ -1198,9 +1197,6 @@
+       "cpu": [
+         "arm"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+@@ -1217,9 +1213,6 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+@@ -1236,9 +1229,6 @@
+       "cpu": [
+         "ppc64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+@@ -1255,9 +1245,6 @@
+       "cpu": [
+         "riscv64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+@@ -1274,9 +1261,6 @@
+       "cpu": [
+         "s390x"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+@@ -1293,9 +1277,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+@@ -1312,9 +1293,6 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+@@ -1331,9 +1309,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+@@ -1350,9 +1325,6 @@
+       "cpu": [
+         "arm"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+@@ -1375,9 +1347,6 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+@@ -1400,9 +1369,6 @@
+       "cpu": [
+         "ppc64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+@@ -1425,9 +1391,6 @@
+       "cpu": [
+         "riscv64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+@@ -1450,9 +1413,6 @@
+       "cpu": [
+         "s390x"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+@@ -1475,9 +1435,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+@@ -1500,9 +1457,6 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+@@ -1525,9 +1479,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+@@ -1861,9 +1812,6 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1880,9 +1828,6 @@
+       "cpu": [
+         "arm64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1899,9 +1844,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -1918,9 +1860,6 @@
+       "cpu": [
+         "x64"
+       ],
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2702,9 +2641,6 @@
+         "arm64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2719,9 +2655,6 @@
+         "arm64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2736,9 +2669,6 @@
+         "loong64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2753,9 +2683,6 @@
+         "loong64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2770,9 +2697,6 @@
+         "ppc64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2787,9 +2711,6 @@
+         "riscv64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2804,9 +2725,6 @@
+         "riscv64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2821,9 +2739,6 @@
+         "s390x"
+       ],
+       "dev": true,
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2838,9 +2753,6 @@
+         "x64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "glibc"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -2855,9 +2767,6 @@
+         "x64"
+       ],
+       "dev": true,
+-      "libc": [
+-        "musl"
+-      ],
+       "license": "MIT",
+       "optional": true,
+       "os": [
+@@ -5491,33 +5400,6 @@
+         "url": "https://github.com/sponsors/rawify"
+       }
+     },
+-    "node_modules/framer-motion": {
+-      "version": "11.18.2",
+-      "resolved": "https://registry.npmjs.org/framer-motion/-/framer-motion-11.18.2.tgz",
+-      "integrity": "sha512-5F5Och7wrvtLVElIpclDT0CBzMVg3dL22B64aZwHtsIY8RB4mXICLrkajK4G9R+ieSAGcgrLeae2SeUTg2pr6w==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "motion-dom": "^11.18.1",
+-        "motion-utils": "^11.18.1",
+-        "tslib": "^2.4.0"
+-      },
+-      "peerDependencies": {
+-        "@emotion/is-prop-valid": "*",
+-        "react": "^18.0.0 || ^19.0.0",
+-        "react-dom": "^18.0.0 || ^19.0.0"
+-      },
+-      "peerDependenciesMeta": {
+-        "@emotion/is-prop-valid": {
+-          "optional": true
+-        },
+-        "react": {
+-          "optional": true
+-        },
+-        "react-dom": {
+-          "optional": true
+-        }
+-      }
+-    },
+     "node_modules/fresh": {
+       "version": "2.0.0",
+       "resolved": "https://registry.npmjs.org/fresh/-/fresh-2.0.0.tgz",
+@@ -7411,21 +7293,6 @@
+         }
+       }
+     },
+-    "node_modules/motion-dom": {
+-      "version": "11.18.1",
+-      "resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-11.18.1.tgz",
+-      "integrity": "sha512-g76KvA001z+atjfxczdRtw/RXOM3OMSdd1f4DL77qCTF/+avrRJiawSG4yDibEQ215sr9kpinSlX2pCTJ9zbhw==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "motion-utils": "^11.18.1"
+-      }
+-    },
+-    "node_modules/motion-utils": {
+-      "version": "11.18.1",
+-      "resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-11.18.1.tgz",
+-      "integrity": "sha512-49Kt+HKjtbJKLtgO/LKj9Ld+6vw9BjH5d9sc40R/kVyH8GLAXgT42M2NnuPcJNuA3s9ZfZBUcwIgpmZWGEE+hA==",
+-      "license": "MIT"
+-    },
+     "node_modules/motion/node_modules/framer-motion": {
+       "version": "12.42.2",
+       "resolved": "https://registry.npmjs.org/framer-motion/-/framer-motion-12.42.2.tgz",
+diff --git a/package.json b/package.json
+index f441421..7f82f13 100644
+--- a/package.json
++++ b/package.json
+@@ -18,7 +18,6 @@
+     "class-variance-authority": "^0.7.1",
+     "clsx": "^2.1.1",
+     "dotenv": "^17.4.2",
+-    "framer-motion": "^11.18.2",
+     "googleapis": "^173.0.0",
+     "gsap": "^3.15.0",
+     "ics": "^3.12.0",

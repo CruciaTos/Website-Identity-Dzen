@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect, useRef } from "react";
 import { DotField } from "@/components/ui/DotField";
 
@@ -285,10 +285,24 @@ export function Hero({ className }: HeroProps) {
           overflow/clip on narrow viewports, so we shrink them here. The
           --h1-size custom property (read by every fluid child: eyebrow,
           body copy, CTA buttons) is derived from the h1's *rendered*
-          font-size via a ResizeObserver, so overriding font-size here
-          automatically cascades to everything else. */}
+          font-size via a ResizeObserver — but that only exists once React
+          has hydrated and the effect has run, which is *after* first
+          paint. Until then, calc(var(--h1-size) * X) is invalid, so every
+          dependent element rendered at its unstyled default and then
+          snapped to the right size/margin/padding a moment later — a
+          whole-hero layout shift on every load. Defining --h1-size here in
+          plain CSS, mirroring the same clamp() math the ResizeObserver
+          would otherwise compute, gives it a correct value from the very
+          first frame; the ResizeObserver below just keeps it in sync with
+          the h1's actual rendered size afterward (e.g. across resizes). */}
       <style>{`
+        #hero {
+          --h1-size: clamp(100px, 25vw, 250px);
+        }
         @media (max-width: 768px) {
+          #hero {
+            --h1-size: clamp(44px, 17vw, 96px);
+          }
           .hero-text-wrap {
             width: calc(100% - 2rem) !important;
             padding: 1.75rem 1.25rem !important;
@@ -301,6 +315,9 @@ export function Hero({ className }: HeroProps) {
           }
         }
         @media (max-width: 400px) {
+          #hero {
+            --h1-size: clamp(36px, 16vw, 76px);
+          }
           .hero-headline {
             font-size: clamp(36px, 16vw, 76px) !important;
           }

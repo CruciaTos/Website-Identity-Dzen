@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion, useInView } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import ScrollReveal from "@/components/ScrollReveal";
 

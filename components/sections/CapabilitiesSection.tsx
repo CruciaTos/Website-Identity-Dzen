@@ -136,9 +136,10 @@ function PhaseBlock({
 
       {/* Animated top rule */}
       <motion.div
-        className="absolute top-0 left-0 h-px bg-[#7EC3E2]/30"
-        initial={{ width: "0%" }}
-        animate={{ width: inView ? "100%" : "0%" }}
+        className="absolute top-0 left-0 w-full h-px bg-[#7EC3E2]/30"
+        style={{ transformOrigin: "left" }}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: inView ? 1 : 0 }}
         transition={{ duration: 0.7, ease: "easeInOut" }}
       />
 
