@@ -157,9 +157,14 @@ function SpotlightCard({ area, index, isHovered, isCompressed, onEnter, onLeave 
   return (
     <motion.div
       ref={cardRef}
+      className="ta-card"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => onEnter(area.id)}
       onMouseLeave={handleMouseLeave}
+      onClick={() => (isHovered ? onLeave() : onEnter(area.id))}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isHovered}
       initial={{ opacity: 0, y: 24 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 1.0, delay: index * 0.35, ease: EASE }}
@@ -174,7 +179,7 @@ function SpotlightCard({ area, index, isHovered, isCompressed, onEnter, onLeave 
         border: `1px solid ${borderColor}`,
         borderRadius: "16px",
         overflow: "hidden",
-        cursor: "default",
+        cursor: "pointer",
         isolation: "isolate",
         display: "flex",
         flexDirection: "column",
@@ -365,6 +370,7 @@ interface ColumnProps {
 function CardColumn({ areas, indices, hoveredId, onEnter, onLeave }: ColumnProps) {
   return (
     <div
+      className="ta-column"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -539,11 +545,17 @@ export function TargetAreas() {
             grid-template-columns: repeat(2, 1fr) !important;
             height: auto !important;
           }
+          .ta-column {
+            height: auto !important;
+          }
+          .ta-card {
+            flex: 0 0 auto !important;
+            min-height: auto !important;
+          }
         }
         @media (max-width: 600px) {
           .ta-grid {
             grid-template-columns: 1fr !important;
-            height: auto !important;
           }
         }
       `}</style>

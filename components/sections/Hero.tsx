@@ -81,7 +81,7 @@ export function Hero({ className }: HeroProps) {
 
       {/* ── 2. Text content ── */}
       <div
-        className="absolute z-30 pointer-events-none"
+        className="absolute z-30 pointer-events-none hero-text-wrap"
         style={{
           top: "50%",
           left: "50%",
@@ -115,7 +115,7 @@ export function Hero({ className }: HeroProps) {
           >
             <h1
               ref={headlineRef}
-              className="font-zaslia m-0 p-0 select-none inline-flex items-center justify-center"
+              className="font-zaslia m-0 p-0 select-none inline-flex items-center justify-center hero-headline"
               style={{
                 fontSize: "clamp(100px, 25vw, 250px)",
                 fontWeight: 500,
@@ -127,6 +127,7 @@ export function Hero({ className }: HeroProps) {
             >
               {/* Even wider container – plenty of room for Devanagari at 1.25em */}
               <div
+                className="hero-headline-track"
                 style={{
                   width: "clamp(500px, 80vw, 1000px)",   // ← increased a lot more
                   height: "1.25em",                       // matches the larger Devanagari size
@@ -278,6 +279,36 @@ export function Hero({ className }: HeroProps) {
           }}
         />
       </motion.div>
+
+      {/* Mobile-only overrides — desktop (>768px) is completely untouched.
+          The fixed-floor clamp() values below were tuned for desktop and
+          overflow/clip on narrow viewports, so we shrink them here. The
+          --h1-size custom property (read by every fluid child: eyebrow,
+          body copy, CTA buttons) is derived from the h1's *rendered*
+          font-size via a ResizeObserver, so overriding font-size here
+          automatically cascades to everything else. */}
+      <style>{`
+        @media (max-width: 768px) {
+          .hero-text-wrap {
+            width: calc(100% - 2rem) !important;
+            padding: 1.75rem 1.25rem !important;
+          }
+          .hero-headline {
+            font-size: clamp(44px, 17vw, 96px) !important;
+          }
+          .hero-headline-track {
+            width: min(90vw, 460px) !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .hero-headline {
+            font-size: clamp(36px, 16vw, 76px) !important;
+          }
+          .hero-headline-track {
+            width: 94vw !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

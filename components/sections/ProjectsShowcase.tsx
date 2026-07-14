@@ -140,6 +140,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
       transition={{ duration: 0.65, delay: index * 0.08, ease: EASE }}
+      className="project-card"
       style={{
         position: "relative",
         borderRadius: "24px",
@@ -158,6 +159,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     >
       {/* LEFT CONTENT */}
       <div
+        className="project-card-left"
         style={{
           flex: "1 1 55%",
           padding: "clamp(100px, 10vw, 120px)",
@@ -168,6 +170,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       >
         <div
           aria-hidden="true"
+          className="project-card-ghost-num"
           style={{
             position: "absolute",
             top: "-50px",
@@ -251,6 +254,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
       {/* RIGHT IMAGE CAROUSEL with rounded black border */}
       <div
+        className="project-card-right"
         style={{
           flex: "1 1 45%",
           position: "relative",
@@ -297,16 +301,16 @@ export function ProjectsShowcase() {
       }}
     >
       <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
-        {/* Centered heading, forced single line */}
+        {/* Centered heading, forced single line on desktop; wraps on mobile */}
         <FadeIn className="mb-14 md:mb-20 text-center">
           <h1
-            className="font-sans font-bold"
+            className="font-sans font-bold projects-heading"
             style={{
               fontSize: "clamp(48px, 8vw, 96px)",
               color: C.textPrimary,
               letterSpacing: "-0.025em",
               lineHeight: 1.05,
-              whiteSpace: "nowrap",   // ensures single line
+              whiteSpace: "nowrap",   // ensures single line (desktop only — overridden on mobile below)
             }}
           >
             What we&apos;ve{" "}
@@ -363,6 +367,43 @@ export function ProjectsShowcase() {
           </Link>
         </FadeIn>
       </div>
+
+      {/* Mobile-only overrides — desktop (>900px) is completely untouched.
+          On mobile the 55/45 row layout squeezes both the copy and the
+          image into unreadably narrow columns, so we stack them instead. */}
+      <style>{`
+        @media (max-width: 900px) {
+          .project-card {
+            flex-direction: column !important;
+            min-height: auto !important;
+          }
+          .project-card-left {
+            flex: 1 1 auto !important;
+            padding: 48px 24px 40px !important;
+          }
+          .project-card-ghost-num {
+            font-size: 140px !important;
+            top: -20px !important;
+          }
+          .project-card-right {
+            flex: 1 1 auto !important;
+            min-height: 320px !important;
+            padding: 0 16px 24px !important;
+          }
+          .projects-heading {
+            white-space: normal !important;
+            font-size: clamp(36px, 10vw, 64px) !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .project-card-left {
+            padding: 40px 18px 32px !important;
+          }
+          .project-card-right {
+            min-height: 260px !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

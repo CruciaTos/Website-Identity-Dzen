@@ -81,6 +81,10 @@ function MarqueeExpandingCard({
     <div
       onMouseEnter={() => onHover(c.id)}
       onMouseLeave={() => onHover(null)}
+      onClick={() => onHover(isExpanded ? null : c.id)}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isExpanded}
       style={{
         flex: isExpanded ? "0 0 clamp(360px, 42vw, 500px)" : "0 0 clamp(280px, 35vw, 360px)",
         transition: `flex 0.65s ${SPRING}, border-color 0.45s ease`,
@@ -89,7 +93,7 @@ function MarqueeExpandingCard({
         backgroundColor: C.cardBg,                       // ← unified card background
         border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`, // ← unified border
         borderRadius: "16px",
-        cursor: "default",
+        cursor: "pointer",
         display: "flex",
         flexDirection: "column",
         height: "100%",

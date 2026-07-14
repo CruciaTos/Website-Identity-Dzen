@@ -142,11 +142,11 @@ function PhaseBlock({
         transition={{ duration: 0.7, ease: "easeInOut" }}
       />
 
-      {/* ── Text content – max width 50% so image fills the rest ── */}
+      {/* ── Text content – full width on mobile (image is hidden there); max width 50% on md+ so image fills the rest ── */}
       <motion.div
         className={cn(
-          "relative z-10 w-full max-w-[50%] flex-shrink-0 min-w-0 space-y-5 select-text",
-          isLeft ? "text-left" : "text-right"
+          "relative z-10 w-full md:max-w-[50%] flex-shrink-0 min-w-0 space-y-5 select-text",
+          isLeft ? "text-left" : "text-left md:text-right"
         )}
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: inView ? 1 : 0.18, y: inView ? 0 : 12 }}
@@ -166,7 +166,7 @@ function PhaseBlock({
         <p
           className={cn(
             "font-sans text-[15px] md:text-[16px] text-[rgba(229,243,229,0.65)] leading-[1.7] max-w-[520px]",
-            isLeft ? "mr-auto" : "ml-auto"
+            isLeft ? "mr-auto" : "mr-auto md:mr-0 md:ml-auto"
           )}
         >
           {phase.description}

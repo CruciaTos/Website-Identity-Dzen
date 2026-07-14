@@ -65,6 +65,7 @@ function SpotlightCard({ card, index }: CardProps) {
   return (
     <motion.div
       ref={cardRef}
+      className="tm-card"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 24 }}
@@ -123,7 +124,7 @@ interface ColumnProps {
 
 function CardColumn({ cards, indices }: ColumnProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "clamp(8px, 1.2vw, 14px)", height: "100%" }}>
+    <div className="tm-column" style={{ display: "flex", flexDirection: "column", gap: "clamp(8px, 1.2vw, 14px)", height: "100%" }}>
       {cards.map((card, i) => (
         <SpotlightCard key={card.id} card={card} index={indices[i]} />
       ))}
@@ -257,11 +258,17 @@ export function TargetMarkets() {
             grid-template-columns: repeat(2, 1fr) !important;
             height: auto !important;
           }
+          .tm-column {
+            height: auto !important;
+          }
+          .tm-card {
+            flex: 0 0 auto !important;
+            min-height: auto !important;
+          }
         }
         @media (max-width: 600px) {
           .tm-grid {
             grid-template-columns: 1fr !important;
-            height: auto !important;
           }
         }
       `}</style>
