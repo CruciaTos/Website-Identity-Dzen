@@ -267,7 +267,7 @@ export function Navbar() {
                   className="font-zaslia text-[19px] leading-none tracking-[-0.01em]"
                   style={{ color: BLUE.logo, fontWeight: 500 }}
                 >
-                  DZEN
+                  Svayatta
                 </span>
               </Link>
               <MobileNavToggle
