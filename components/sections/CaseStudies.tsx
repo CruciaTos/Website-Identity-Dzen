@@ -395,7 +395,7 @@ export function CaseStudies() {
                     Think AI is still far away?
                     <br />
                     <em className="not-italic" style={{ color: C.textMuted }}>
-                      This isn't hypothetical, it's already happening.
+                      This isn&rsquo;t hypothetical, it&rsquo;s already happening.
                     </em>
                   </h2>
                 </div>
