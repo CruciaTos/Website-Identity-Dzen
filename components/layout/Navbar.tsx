@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   Navbar as NavbarShell,
   NavBody,
@@ -267,7 +267,7 @@ export function Navbar() {
                   className="font-zaslia text-[19px] leading-none tracking-[-0.01em]"
                   style={{ color: BLUE.logo, fontWeight: 500 }}
                 >
-                  DZEN
+                  Svayatta
                 </span>
               </Link>
               <MobileNavToggle

@@ -167,7 +167,7 @@ export function WhyUs() {
 
           <FadeIn delay={0.06}>
             <h2
-              className="font-sans text-[clamp(42px,7vw,84px)] font-bold tracking-[-0.025em] leading-[1.02] mb-6 whitespace-nowrap"
+              className="font-sans text-[clamp(36px,7vw,84px)] font-bold tracking-[-0.025em] leading-[1.02] mb-6 whitespace-normal md:whitespace-nowrap"
               style={{ color: C.textPrimary }}
             >
               We Build·You Scale.

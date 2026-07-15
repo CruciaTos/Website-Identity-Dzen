@@ -309,20 +309,20 @@ function FooterLinks() {
       </div>
 
       {/* Contact column – right */}
-      <div className="flex-shrink-0 min-w-[140px]">
+      <div className="flex-shrink-0 min-w-[140px] w-full sm:w-auto">
         <ul className="list-none flex flex-col gap-[12px]" role="list">
           {contactLinks.map((item) => {
             const isEmail = item.label === "info@svayatta.in";
             return (
-              <li key={item.label} className={isEmail ? "-mt-8" : ""}>
+              <li key={item.label} className={isEmail ? "md:-mt-8" : ""}>
                 <a
                   href={item.href}
                   target={item.external ? "_blank" : undefined}
                   rel={item.external ? "noopener noreferrer" : undefined}
                   className={
                     isEmail
-                      ? "[font-family:var(--font-sans)] text-[60px] font-light no-underline transition-opacity duration-200 hover:opacity-80"
-                      : "[font-family:var(--font-sans)] text-[24px] font-light no-underline transition-colors duration-200 block text-right"
+                      ? "[font-family:var(--font-sans)] text-[28px] sm:text-[40px] md:text-[60px] font-light no-underline transition-opacity duration-200 hover:opacity-80 break-all sm:break-normal"
+                      : "[font-family:var(--font-sans)] text-[20px] md:text-[24px] font-light no-underline transition-colors duration-200 block text-left md:text-right"
                   }
                   style={
                     isEmail

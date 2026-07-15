@@ -182,7 +182,7 @@ export default function FoundingPrinciples() {
         <Container>
           <div className="text-center">
             <h2
-              className="text-[10rem] leading-none font-bold tracking-[-0.02em] text-[#e5f3e5]"
+              className="text-[3rem] sm:text-[5rem] md:text-[10rem] leading-none font-bold tracking-[-0.02em] text-[#e5f3e5]"
               style={{ fontFamily: "var(--font-sans)" }}
             >
               <WordSlot text="WE" playRef={wePlayRef} />{" "}

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion, useInView } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -228,7 +228,8 @@ export function Testimonials() {
           </AnimatePresence>
 
           {/* Controls row – stays fixed in place */}
-          <div className="mt-2 flex items-center justify-center gap-3 sm:gap-4">
+          <div className="mt-2 flex w-full items-center justify-center gap-3 sm:gap-4">
+
             <button
               type="button"
               onClick={() => goTo(index - 1)}
@@ -241,7 +242,8 @@ export function Testimonials() {
               </svg>
             </button>
 
-            <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto max-w-full py-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex min-w-0 items-center gap-3 sm:gap-4 overflow-x-auto max-w-full py-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
               {TESTIMONIALS.map((t, i) => {
                 const isActive = i === index;
                 return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect, useRef } from "react";
 import { DotField } from "@/components/ui/DotField";
 
@@ -81,7 +81,7 @@ export function Hero({ className }: HeroProps) {
 
       {/* ── 2. Text content ── */}
       <div
-        className="absolute z-30 pointer-events-none"
+        className="absolute z-30 pointer-events-none hero-text-wrap"
         style={{
           top: "50%",
           left: "50%",
@@ -115,7 +115,7 @@ export function Hero({ className }: HeroProps) {
           >
             <h1
               ref={headlineRef}
-              className="font-zaslia m-0 p-0 select-none inline-flex items-center justify-center"
+              className="font-zaslia m-0 p-0 select-none inline-flex items-center justify-center hero-headline"
               style={{
                 fontSize: "clamp(100px, 25vw, 250px)",
                 fontWeight: 500,
@@ -127,6 +127,7 @@ export function Hero({ className }: HeroProps) {
             >
               {/* Even wider container – plenty of room for Devanagari at 1.25em */}
               <div
+                className="hero-headline-track"
                 style={{
                   width: "clamp(500px, 80vw, 1000px)",   // ← increased a lot more
                   height: "1.25em",                       // matches the larger Devanagari size
@@ -278,6 +279,53 @@ export function Hero({ className }: HeroProps) {
           }}
         />
       </motion.div>
+
+      {/* Mobile-only overrides — desktop (>768px) is completely untouched.
+          The fixed-floor clamp() values below were tuned for desktop and
+          overflow/clip on narrow viewports, so we shrink them here. The
+          --h1-size custom property (read by every fluid child: eyebrow,
+          body copy, CTA buttons) is derived from the h1's *rendered*
+          font-size via a ResizeObserver — but that only exists once React
+          has hydrated and the effect has run, which is *after* first
+          paint. Until then, calc(var(--h1-size) * X) is invalid, so every
+          dependent element rendered at its unstyled default and then
+          snapped to the right size/margin/padding a moment later — a
+          whole-hero layout shift on every load. Defining --h1-size here in
+          plain CSS, mirroring the same clamp() math the ResizeObserver
+          would otherwise compute, gives it a correct value from the very
+          first frame; the ResizeObserver below just keeps it in sync with
+          the h1's actual rendered size afterward (e.g. across resizes). */}
+      <style>{`
+        #hero {
+          --h1-size: clamp(100px, 25vw, 250px);
+        }
+        @media (max-width: 768px) {
+          #hero {
+            --h1-size: clamp(44px, 17vw, 96px);
+          }
+          .hero-text-wrap {
+            width: calc(100% - 2rem) !important;
+            padding: 1.75rem 1.25rem !important;
+          }
+          .hero-headline {
+            font-size: clamp(44px, 17vw, 96px) !important;
+          }
+          .hero-headline-track {
+            width: min(90vw, 460px) !important;
+          }
+        }
+        @media (max-width: 400px) {
+          #hero {
+            --h1-size: clamp(36px, 16vw, 76px);
+          }
+          .hero-headline {
+            font-size: clamp(36px, 16vw, 76px) !important;
+          }
+          .hero-headline-track {
+            width: 94vw !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
