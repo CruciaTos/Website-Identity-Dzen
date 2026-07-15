@@ -217,7 +217,7 @@ export function Hero({ className }: HeroProps) {
               Request a Discovery Call
             </a>
             <a
-              href="#services"
+              href="/projects"
               className="font-sans tracking-[0.08em] uppercase transition-colors duration-200 pointer-events-auto"
               style={{
                 color: "white",
