@@ -4,6 +4,9 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://svayatta.in";
 
 export const siteMetadata: Metadata = {
   metadataBase: new URL(BASE_URL),
+  verification: {
+    google: "Z43gnpcBFpd17f-oAg8wk084P",
+  },
   title: {
     default: "Dzen Svayatta - Quality with Clarity",
     template: "%s | DZen",
