@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, useInView } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // ── Design tokens (matching TargetMarkets) ─────────────────────────────────
 const C = {
@@ -64,6 +65,10 @@ function PhaseBlock({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: "-25% 0px -25% 0px", once: false });
+  // Mobile: text and rule show directly at full opacity, no continuous
+  // fade-in/out as the block scrolls through the viewport. Desktop keeps
+  // the exact original scrollytelling behavior.
+  const isMobile = useIsMobile();
 
   const gridSizes = [20, 24, 28, 32];
   const gridOpacities = [0.03, 0.05, 0.04, 0.06];
@@ -138,9 +143,9 @@ function PhaseBlock({
       <motion.div
         className="absolute top-0 left-0 w-full h-px bg-[#7EC3E2]/30"
         style={{ transformOrigin: "left" }}
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: inView ? 1 : 0 }}
-        transition={{ duration: 0.7, ease: "easeInOut" }}
+        initial={isMobile ? false : { scaleX: 0 }}
+        animate={{ scaleX: isMobile ? 1 : inView ? 1 : 0 }}
+        transition={isMobile ? { duration: 0 } : { duration: 0.7, ease: "easeInOut" }}
       />
 
       {/* ── Text content – full width on mobile (image is hidden there); max width 50% on md+ so image fills the rest ── */}
@@ -149,9 +154,13 @@ function PhaseBlock({
           "relative z-10 w-full md:max-w-[50%] flex-shrink-0 min-w-0 space-y-5 select-text",
           isLeft ? "text-left" : "text-left md:text-right"
         )}
-        initial={{ opacity: 0, y: 28 }}
-        animate={{ opacity: inView ? 1 : 0.18, y: inView ? 0 : 12 }}
-        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+        initial={isMobile ? false : { opacity: 0, y: 28 }}
+        animate={
+          isMobile
+            ? { opacity: 1, y: 0 }
+            : { opacity: inView ? 1 : 0.18, y: inView ? 0 : 12 }
+        }
+        transition={isMobile ? { duration: 0 } : { duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
       >
         <h3
           className={cn(

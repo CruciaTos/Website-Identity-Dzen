@@ -2,6 +2,7 @@
 
 import { useRef, useCallback } from "react";
 import { motion, useInView } from "motion/react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // ── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -49,6 +50,9 @@ function SpotlightCard({ card, index }: CardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const spotRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, amount: 0.1 });
+  // Mobile: cards appear directly, no fade/slide-up and no per-card stagger
+  // delay. Desktop keeps the exact original scroll-in animation.
+  const isMobile = useIsMobile();
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || !spotRef.current) return;
@@ -68,9 +72,9 @@ function SpotlightCard({ card, index }: CardProps) {
       className="tm-card"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 24 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 1.0, delay: index * 0.35, ease: EASE }}
+      initial={isMobile ? false : { opacity: 0, y: 24 }}
+      animate={isMobile ? { opacity: 1, y: 0 } : isInView ? { opacity: 1, y: 0 } : {}}
+      transition={isMobile ? { duration: 0 } : { duration: 1.0, delay: index * 0.35, ease: EASE }}
       style={{
         flex: 1,
         minHeight: 0,
@@ -136,6 +140,7 @@ function CardColumn({ cards, indices }: ColumnProps) {
 export function TargetMarkets() {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true, amount: 0.3 });
+  const isMobile = useIsMobile();
 
   const columns = [
     { cards: [MARKET_CARDS[0], MARKET_CARDS[3]], indices: [0, 3] },
@@ -216,9 +221,9 @@ export function TargetMarkets() {
           <div style={{ position: "relative", zIndex: 4, padding: "clamp(56px, 7vw, 96px) clamp(40px, 5vw, 72px)" }}>
             <motion.div
               ref={headerRef}
-              initial={{ opacity: 0, y: 22 }}
-              animate={headerInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.75, ease: EASE }}
+              initial={isMobile ? false : { opacity: 0, y: 22 }}
+              animate={isMobile ? { opacity: 1, y: 0 } : headerInView ? { opacity: 1, y: 0 } : {}}
+              transition={isMobile ? { duration: 0 } : { duration: 0.75, ease: EASE }}
               style={{ marginBottom: "clamp(52px, 8vw, 80px)" }}
             >
               <h2 style={{

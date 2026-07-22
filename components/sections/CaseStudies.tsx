@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 /* ── Design tokens (identical to TargetAreas & TargetMarkets) ── */
@@ -72,18 +72,23 @@ function MarqueeExpandingCard({
   c,
   isExpanded,
   onHover,
+  isMobile,
 }: {
   c: RealCase;
   isExpanded: boolean;
   onHover: (id: string | null) => void;
+  isMobile: boolean;
 }) {
+  // Tap to expand disabled on mobile – click simply does nothing
+  const handleClick = isMobile ? undefined : () => onHover(isExpanded ? null : c.id);
+
   return (
     <div
       onMouseEnter={() => onHover(c.id)}
       onMouseLeave={() => onHover(null)}
-      onClick={() => onHover(isExpanded ? null : c.id)}
+      onClick={handleClick}
       role="button"
-      tabIndex={0}
+      tabIndex={isMobile ? -1 : 0}
       aria-expanded={isExpanded}
       style={{
         flex: isExpanded
@@ -92,10 +97,10 @@ function MarqueeExpandingCard({
         transition: `flex 0.65s ${SPRING}, border-color 0.45s ease`,
         position: "relative",
         overflow: "hidden",
-        backgroundColor: C.cardBg,                       // ← unified card background
-        border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`, // ← unified border
+        backgroundColor: C.cardBg,
+        border: `1px solid ${isExpanded ? C.cardBorderHover : C.cardBorder}`,
         borderRadius: "16px",
-        cursor: "pointer",
+        cursor: isMobile ? "default" : "pointer",
         display: "flex",
         flexDirection: "column",
         height: "100%",
@@ -121,7 +126,7 @@ function MarqueeExpandingCard({
           bottom: isExpanded ? "-36px" : "-18px",
           right: "-4px",
           fontSize: isExpanded ? "clamp(140px,16vw,260px)" : "clamp(110px,12vw,200px)",
-          color: "rgba(178,213,229,0.018)",               // unchanged ghost colour
+          color: "rgba(178,213,229,0.018)",
           fontFamily: "serif",
           lineHeight: 1,
           letterSpacing: "-0.05em",
@@ -215,7 +220,7 @@ function MarqueeExpandingCard({
               ? "clamp(19px, 2.2vw, 34px)"
               : "var(--headline-fs, clamp(32px, 4.2vw, 52px))",
             fontWeight: 600,
-            color: C.textPrimary,                    // ← unified headline colour
+            color: C.textPrimary,
             lineHeight: 1.15,
             letterSpacing: "-0.022em",
             margin: 0,
@@ -247,7 +252,7 @@ function MarqueeExpandingCard({
           <div
             style={{
               height: "1px",
-              backgroundColor: C.divider,           // ← unified divider
+              backgroundColor: C.divider,
               marginBottom: "24px",
               transform: isExpanded ? "scaleX(1)" : "scaleX(0)",
               transformOrigin: "left",
@@ -320,8 +325,19 @@ function MarqueeExpandingCard({
 /* ── Main section – glass container & heading now match TargetAreas ── */
 export function CaseStudies() {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile viewport (below 768px) to disable tap-to-expand
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const handleHover = (id: string | null) => {
+    // On mobile, ignore hover expansions entirely – tap does nothing.
+    if (isMobile) return;
     setActiveId(id);
   };
 
@@ -391,9 +407,9 @@ export function CaseStudies() {
                   <h2
                     className="font-sans font-bold"
                     style={{
-                      fontSize: "clamp(52px, 5vw, 72px)",     // ← unified heading size
+                      fontSize: "clamp(52px, 5vw, 72px)",
                       fontWeight: 700,
-                      color: C.textPrimary,                   // ← unified heading colour
+                      color: C.textPrimary,
                       letterSpacing: "-0.02em",
                       lineHeight: 1.1,
                     }}
@@ -447,7 +463,6 @@ export function CaseStudies() {
                   .marquee-container:hover .marquee-track {
                     animation-play-state: paused;
                   }
-                  /* Mobile-only: smaller cards, faster loop, smaller text. Desktop values above are untouched. */
                   @media (max-width: 767px) {
                     .marquee-container {
                       --marquee-h: 380px;
@@ -466,16 +481,18 @@ export function CaseStudies() {
                     <MarqueeExpandingCard
                       key={c.id}
                       c={c}
-                      isExpanded={activeId === c.id}
+                      isExpanded={activeId === c.id && !isMobile}
                       onHover={handleHover}
+                      isMobile={isMobile}
                     />
                   ))}
                   {CASES.map((c) => (
                     <MarqueeExpandingCard
                       key={`dup-${c.id}`}
                       c={c}
-                      isExpanded={activeId === c.id}
+                      isExpanded={activeId === c.id && !isMobile}
                       onHover={handleHover}
+                      isMobile={isMobile}
                     />
                   ))}
                 </div>

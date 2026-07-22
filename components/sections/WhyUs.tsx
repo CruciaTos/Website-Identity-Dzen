@@ -108,6 +108,11 @@ export function WhyUs() {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
+    // Mobile: skip the scroll-scrubbed word-by-word highlight entirely and
+    // just show the final resting color, same as the reduced-motion path.
+    // Desktop is completely untouched.
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    const skipAnimation = prefersReducedMotion || isMobile;
 
     const ctx = gsap.context(() => {
       paragraphRefs.current.forEach((el) => {
@@ -118,7 +123,7 @@ export function WhyUs() {
         );
         if (!words.length) return;
 
-        if (prefersReducedMotion) {
+        if (skipAnimation) {
           gsap.set(words, { color: C.textMuted });
           return;
         }

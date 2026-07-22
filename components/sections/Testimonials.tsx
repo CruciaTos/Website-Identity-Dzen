@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import ScrollReveal from "@/components/ScrollReveal";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const C = {
   accent: "#7EC3E2",
@@ -110,6 +111,9 @@ function markOf(company: string) {
 export function Testimonials() {
   const [index, setIndex] = useState(0);
   const reduce = useReducedMotion();
+  // Mobile: content appears directly, no fade-in/quote-reveal animations.
+  // Desktop keeps the exact original behavior.
+  const isMobile = useIsMobile();
   const active = TESTIMONIALS[index];
 
   const quoteContainerRef = useRef<HTMLDivElement>(null);
@@ -136,10 +140,10 @@ export function Testimonials() {
     >
       <Container>
         <motion.div
-          initial={reduce ? false : { opacity: 0, y: 12 }}
+          initial={isMobile ? false : reduce ? false : { opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: EASE }}
+          transition={isMobile ? { duration: 0 } : { duration: 0.6, ease: EASE }}
           className="flex flex-col items-center text-center"
         >
           <h2
@@ -160,9 +164,9 @@ export function Testimonials() {
                   <motion.span
                     aria-hidden="true"
                     className="flex-shrink-0 self-start"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isQuoteInView ? 1 : 0 }}
-                    transition={{ duration: 0.5 }}
+                    initial={isMobile ? false : { opacity: 0 }}
+                    animate={{ opacity: isMobile ? 1 : isQuoteInView ? 1 : 0 }}
+                    transition={isMobile ? { duration: 0 } : { duration: 0.5 }}
                     style={{
                       color: C.accent,
                       fontSize: "clamp(34px,3vw,44px)",
@@ -191,9 +195,9 @@ export function Testimonials() {
                   <motion.span
                     aria-hidden="true"
                     className="flex-shrink-0 self-end"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: isQuoteInView ? 1 : 0 }}
-                    transition={{ duration: 0.5 }}
+                    initial={isMobile ? false : { opacity: 0 }}
+                    animate={{ opacity: isMobile ? 1 : isQuoteInView ? 1 : 0 }}
+                    transition={isMobile ? { duration: 0 } : { duration: 0.5 }}
                     style={{
                       color: C.accent,
                       fontSize: "clamp(34px,3vw,44px)",
@@ -212,10 +216,10 @@ export function Testimonials() {
           <AnimatePresence mode="wait">
             <motion.div
               key={active.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isQuoteInView ? 1 : 0 }}
+              initial={isMobile ? false : { opacity: 0 }}
+              animate={{ opacity: isMobile ? 1 : isQuoteInView ? 1 : 0 }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={isMobile ? { duration: 0 } : { duration: 0.5, delay: 0.1 }}
               className="mt-20 flex flex-col items-center"
             >
               <p className="font-sans text-[32px] font-bold mb-1" style={{ color: C.textPrimary }}>
@@ -254,7 +258,7 @@ export function Testimonials() {
                     onClick={() => goTo(i)}
                     aria-label={`Show testimonial from ${t.author} at ${t.company}`}
                     aria-current={isActive}
-                    transition={{ duration: reduce ? 0 : 0.4, ease: EASE }}
+                    transition={{ duration: reduce || isMobile ? 0 : 0.4, ease: EASE }}
                     className="relative rounded-2xl overflow-visible flex-shrink-0 w-28 h-28 sm:w-40 sm:h-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300/60"
                   >
                     <div

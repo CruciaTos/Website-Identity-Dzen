@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const C = {
   accent: "#7EC3E2",
@@ -133,13 +134,16 @@ function ImageCarousel({ images }: { images: string[] }) {
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const reduce = useReducedMotion();
+  // Mobile: card appears directly, no fade/slide-up or stagger delay.
+  // Desktop keeps the exact original whileInView animation.
+  const isMobile = useIsMobile();
 
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y: 28 }}
+      initial={isMobile ? false : reduce ? false : { opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration: 0.65, delay: index * 0.08, ease: EASE }}
+      transition={isMobile ? { duration: 0 } : { duration: 0.65, delay: index * 0.08, ease: EASE }}
       className="project-card"
       style={{
         position: "relative",

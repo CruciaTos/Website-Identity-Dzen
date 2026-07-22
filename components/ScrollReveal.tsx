@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import { motion, useInView } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -30,6 +31,9 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   // Trigger animation when the component comes into view
   const isInView = useInView(ref, { once: true, margin: "-10% 0px -10% 0px" });
+  // Mobile: skip the scroll-triggered reveal entirely, content shows directly.
+  // Desktop is completely untouched (isMobile is always false there).
+  const isMobile = useIsMobile();
 
   const initial = {
     opacity: baseOpacity,
@@ -48,9 +52,9 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   return (
     <motion.div
       ref={ref}
-      initial={initial}
-      animate={isInView ? animate : initial}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      initial={isMobile ? false : initial}
+      animate={isMobile ? animate : isInView ? animate : initial}
+      transition={isMobile ? { duration: 0 } : { duration: 0.8, ease: "easeOut" }}
       className={cn(containerClassName, className)}
       style={style}
     >

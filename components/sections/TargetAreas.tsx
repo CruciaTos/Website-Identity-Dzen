@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence, useInView } from "motion/react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 // ── Design tokens ──────────────────────────────────────────────────────────────
 const C = {
@@ -134,6 +135,9 @@ function SpotlightCard({ area, index, isHovered, isCompressed, onEnter, onLeave 
   const cardRef = useRef<HTMLDivElement>(null);
   const spotRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, amount: 0.1 });
+  // Mobile: cards appear directly, no fade/slide-up and no per-card stagger
+  // delay. Desktop keeps the exact original scroll-in animation.
+  const isMobile = useIsMobile();
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || !spotRef.current) return;
@@ -165,9 +169,9 @@ function SpotlightCard({ area, index, isHovered, isCompressed, onEnter, onLeave 
       role="button"
       tabIndex={0}
       aria-expanded={isHovered}
-      initial={{ opacity: 0, y: 24 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 1.0, delay: index * 0.35, ease: EASE }}
+      initial={isMobile ? false : { opacity: 0, y: 24 }}
+      animate={isMobile ? { opacity: 1, y: 0 } : isInView ? { opacity: 1, y: 0 } : {}}
+      transition={isMobile ? { duration: 0 } : { duration: 1.0, delay: index * 0.35, ease: EASE }}
       style={{
         flexGrow: isHovered ? 1.36 : isCompressed ? 0.64 : 1,
         flexShrink: 0,
@@ -402,6 +406,7 @@ function CardColumn({ areas, indices, hoveredId, onEnter, onLeave }: ColumnProps
 export function TargetAreas() {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true, amount: 0.3 });
+  const isMobile = useIsMobile();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const handleEnter = useCallback((id: string) => setHoveredId(id), []);
@@ -494,9 +499,9 @@ export function TargetAreas() {
           >
             <motion.div
               ref={headerRef}
-              initial={{ opacity: 0, y: 22 }}
-              animate={headerInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.75, ease: EASE }}
+              initial={isMobile ? false : { opacity: 0, y: 22 }}
+              animate={isMobile ? { opacity: 1, y: 0 } : headerInView ? { opacity: 1, y: 0 } : {}}
+              transition={isMobile ? { duration: 0 } : { duration: 0.75, ease: EASE }}
               style={{ marginBottom: "clamp(52px, 8vw, 80px)" }}
             >
               <h2

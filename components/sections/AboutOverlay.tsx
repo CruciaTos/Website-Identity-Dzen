@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { LogoMark } from "@/components/ui/Icons";
 import { useLenis } from "@/components/providers/SmoothScroll";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface AboutOverlayProps {
   open: boolean;
@@ -104,6 +105,9 @@ function FounderCard({
 }) {
   const [hovered, setHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  // Mobile: card appears directly with the overlay, no fade/slide-up or
+  // per-card stagger delay. Desktop keeps the exact original animation.
+  const isMobile = useIsMobile();
 
   return (
     <motion.div
@@ -116,9 +120,9 @@ function FounderCard({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      initial={{ opacity: 0, y: 30 }}
-      animate={open ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
+      initial={isMobile ? false : { opacity: 0, y: 30 }}
+      animate={isMobile ? { opacity: 1, y: 0 } : open ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={isMobile ? { duration: 0 } : { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       <motion.div
         className="absolute inset-0 pointer-events-none"
